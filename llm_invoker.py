@@ -8,7 +8,12 @@ from typing import Dict, List
 
 
 class LLM_Bedrock:
-    allowed_llms = ['Claude 3 Haiku', 'Claude 3 Sonnet', 'Claude 2.1', 'Claude Instant 1.2', 'Llama2 13b', 'Llama2 70b', 'Mistral Mixtral 8x7B']
+    allowed_llms = [
+        'Claude 3 Haiku', 'Claude 3 Sonnet', 'Claude 3 Opus',
+        'Claude 2.1', 'Claude Instant 1.2',
+        'Llama2 13b', 'Llama2 70b', 'Mistral Mixtral 8x7B'
+    ]
+
     def get_llm(bedrock_client, llm='Claude 2.1'):
         """ Constructor
         Arguments:
@@ -27,6 +32,8 @@ class LLM_Bedrock:
             return LLM_Llama70b(bedrock_client)
         elif llm == 'Mistral Mixtral 8x7B':
             return LLM_Mixtral8x7b_Bedrock(bedrock_client)
+        elif llm == 'Claude 3 Opus':
+            return LLM_Claude3_Bedrock(bedrock_client, model_size='Opus')
         elif llm == 'Claude 3 Sonnet':
             return LLM_Claude3_Bedrock(bedrock_client, model_size='Sonnet')
         elif llm == 'Claude 3 Haiku':
@@ -88,7 +95,10 @@ class LLM_Claude3_Bedrock(LLM_Bedrock):
             bedrock_client - Instance of boto3.client(service_name='bedrock-runtime')
                 to use when making calls to bedrock models
         """
-        if model_size == "Sonnet":
+        if model_size == "Opus":
+            self.model_id = "anthropic.claude-3-opus-20240229-v1:0"
+            self.llm_description = "Anthropic Claude 3.0 Opus (Large LLM)"
+        elif model_size == "Sonnet":
             self.model_id = "anthropic.claude-3-sonnet-20240229-v1:0"
             self.llm_description = "Anthropic Claude 3.0 Sonnet (Medium-size LLM)"
         elif model_size == "Haiku":
@@ -100,7 +110,7 @@ class LLM_Claude3_Bedrock(LLM_Bedrock):
             # "messages": prompt,
             # "system": sysprompt,
             "max_tokens": 2500,
-            "temperature": 0.3, # 0.5 is default,
+            "temperature": 0.3,  # 0.5 is default,
             # "top_k": 250,
             # "top_p": 1,
             "stop_sequences": [],  # the regular is already implemented
