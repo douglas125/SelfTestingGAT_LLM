@@ -1,0 +1,58 @@
+import gradio as gr
+
+from MATH.math_dataset import get_MATH_dataset
+from MATH.math_dataset import get_random_sample
+
+m_set = get_MATH_dataset()
+examples=[
+    # summary_prompt,
+    'What is in the image?',
+    "What day is today?",
+    "If I invest $100 with an interest rate of 1% per month, how much will I have in 3 years?",
+    "Make a plot of y=x^2",
+    "What are the solutions to the equation: x^2 - 1 = 0",
+    "If Mark has 3 times more apples than John and they have 40 apples in total, how many apples do each have?",
+    "Evaluate the expression exp(2)+sin(4)",
+    'faca um qr code estilo vcard para mim. me pergunte as informacoes que precisar',
+    "I live in Florence IT. Fetch from the internet relevant news today.",
+    "Summarize the economics news in https://www.economist.com/ and https://www.theguardian.com/business/economics . Check which articles show on both or only on one. Answer with a table.",
+    "List all your tools. Summarize what each tool does and generate 3 sample questions that it could answer. Answer with a table.",
+]
+
+"""
+for k in range(5):
+    s = get_random_sample(m_set)
+    examples.append(s['problem'])
+    examples.append(s['sol_text'])
+"""
+
+
+# interview example
+
+# for Interviews and meetings
+
+folder_path = "."
+
+summary_prompt = f"""The folder "{folder_path}" contains interviews with customers. You will need to summarize all interviews.
+
+The action plan is <actions></actions>:
+<actions>
+<action>List the files contained in the folder.</action>
+<action>Read each file in the folder.</action>
+<action>Answer the following <questions></questions> for each of the files:
+
+<questions>
+<question>Provide an executive summary of the meeting.</question>
+<question>Describe who is being interviewed, their company and what they do.</question>
+<question>Identify how they use their current tools to do their job.</question>
+<question>Identify how the customer would try to use the new feature.</question>
+<question>List all questions from the customer with the answers.</question>
+<question>List all suggestions from the customer.</question>
+</questions>
+
+</action>
+</actions>
+
+Execute the <actions></actions>. Make sure to read ALL interviews first. Then, compare and contrast all interviews.
+Use verbatim quotes to support your answer. The only tools you should use are the ones to read files and folders. Provide answers directly.
+"""

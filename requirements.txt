@@ -1,0 +1,3 @@
+gradio
+qrcode
+matplotlib
