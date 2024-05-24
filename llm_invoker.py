@@ -109,8 +109,8 @@ class LLM_Claude3_Bedrock(LLM_Bedrock):
         self.config = {
             # "messages": prompt,
             # "system": sysprompt,
-            "max_tokens": 2500,
-            "temperature": 0.3,  # 0.5 is default,
+            "max_tokens": 3500,
+            "temperature": 0.5,  # 0.5 is default,
             # "top_k": 250,
             # "top_p": 1,
             "stop_sequences": [],  # the regular is already implemented

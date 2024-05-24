@@ -153,7 +153,7 @@ class LLMInterface:
             b64image=image_string,
             system_prompt=self.system_prompt,
             chat_history=history,
-            postpend=self.rpg.post_anti_hallucination,
+            postpend=self.rpg.post_anti_hallucination if self.rpg is not None else "",
             extra_stop_sequences=['</function_calls>']
         )
         with open('ui_debug_prompt.txt', 'w') as f:
@@ -173,7 +173,7 @@ class LLMInterface:
         t0 = time.time()
 
         cur_answer_split = cur_answer.split('<function_calls>')
-        while len(cur_answer_split) > 1:
+        while len(cur_answer_split) > 1 and self.lt is not None:
             cur_func_log = {}
 
             xml_to_parse = cur_answer_split[-1].split('</function_calls>')[0]
