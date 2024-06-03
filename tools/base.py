@@ -5,7 +5,6 @@ import xml.etree.ElementTree as ET
 
 import numpy as np
 import pandas as pd
-rng = np.random.default_rng()
 
 from tools.make_custom_plot import ToolMakeCustomPlot
 from tools.solve_symbolic import ToolSolveSymbolic
@@ -17,6 +16,7 @@ from tools.read_local_file import ToolReadLocalFile
 from tools.read_file_names_in_local_folder import ToolReadLocalFolder
 from tools.do_date_math import ToolDoDateMath
 from tools.update_user_details import ToolUpdateUserDetails
+rng = np.random.default_rng()
 
 
 class LLMTools:
@@ -25,14 +25,17 @@ class LLMTools:
         """
         self.query_llm = query_llm
         self.tools = [
-            ToolUpdateUserDetails(),
-            ToolMakeCustomPlot(),
-            ToolSolveSymbolic(),
-            ToolSolveNumeric(),
-            # ToolSolvePythonCode(),
-            ToolGetUrlContent(self.query_llm),
-            ToolMakeQRCode(),
             ToolDoDateMath(),
+
+            # ToolUpdateUserDetails(),
+            # ToolMakeCustomPlot(),
+            # ToolSolveSymbolic(),
+            # ToolSolveNumeric(),
+            # ToolGetUrlContent(self.query_llm),
+            # ToolMakeQRCode(),
+
+            # Being left out for now
+            # ToolSolvePythonCode(),
             # ToolReadLocalFile(),
             # ToolReadLocalFolder(),
         ]
@@ -86,9 +89,50 @@ class LLMTools:
         """
         desc_list = ['<tools>']
         for x in self.tools:
-            desc_list.append(x.tool_description)
+            desc_list.append(self._parse_tool_description(x.tool_description))
         desc_list.append('</tools>')
         return '\n'.join(desc_list)
+
+    def _parse_tool_description(self, description_dict):
+        """ Given a tool description in JSON, parse its contents
+        """
+        textual_desc = {}
+        textual_desc['tool_name'] = description_dict['name']
+        textual_desc['description'] = description_dict['description']
+
+        # parameters
+        textual_desc['parameters'] = []
+        cur_desc_dict = description_dict['input_schema']['properties']
+        for k in cur_desc_dict:
+            cur_param = {'parameter': {}}
+            cur_param['parameter'] = {'name': k}
+            for k2 in cur_desc_dict[k]:
+                cur_param['parameter'][k2] = str(cur_desc_dict[k][k2])
+            textual_desc['parameters'].append(self._json2xml(cur_param))
+        textual_desc['required_parameters'] = str(description_dict['input_schema']['required'])
+
+        return self._json2xml({'tool_description': textual_desc})
+
+    def _json2xml(self, json_obj, line_padding=""):
+        # https://stackoverflow.com/questions/8988775/convert-json-to-xml-in-python
+        result_list = list()
+
+        json_obj_type = type(json_obj)
+
+        if json_obj_type is list:
+            for sub_elem in json_obj:
+                result_list.append(self._json2xml(sub_elem, line_padding))
+            return "\n".join(result_list)
+
+        if json_obj_type is dict:
+            for tag_name in json_obj:
+                sub_obj = json_obj[tag_name]
+                result_list.append("%s<%s>" % (line_padding, tag_name))
+                result_list.append(self._json2xml(sub_obj, line_padding))
+                result_list.append("%s</%s>" % (line_padding, tag_name))
+            return "\n".join(result_list)
+
+        return "%s%s" % (line_padding, json_obj)
 
     def invoke_tool(self, tool_name, **kwargs):
         try:
@@ -119,13 +163,28 @@ class LLMTools:
 
 
 class RAGPromptGenerator:
-    def __init__(self):
-        with open("prompt_GAT.txt", 'r', encoding='utf-8') as f:
-            self.prompt = f.read()
-        
+    def __init__(self, use_native_tools=False):
+        """ Constructor.
+
+        Arguments:
+
+        - use_native_tools: Use LLM native tool calling abilities. In this case, we do not
+            need to "teach" the LLM about tools
+        """
+        self.prompt = ""
+        if not use_native_tools:
+            with open(os.path.join('prompts', "prompt_GAT.txt"),
+                      'r', encoding='utf-8') as f:
+                self.prompt += f.read()
+
+        # base prompt
+        with open(os.path.join('prompts', "prompt_base.txt"),
+                  'r', encoding='utf-8') as f:
+            self.prompt += f.read()
+
         dt0 = datetime.datetime.today()
         weekday = dt0.strftime('%A')
-        
+
         date_str = f'{weekday}, {dt0.year}-{str(dt0.month).zfill(2)}-{str(dt0.day).zfill(2)} in the format YYYY-MM-DD'
         date_str = f"""
 <today_date>
@@ -136,9 +195,7 @@ class RAGPromptGenerator:
 
 </today_date>
         """
-        
+
         self.prompt = self.prompt.replace('{{DATE}}', date_str)
 
-        # self.post_anti_hallucination = "<scratchpad> I understand I cannot use functions that have not been provided to me to answer this question."
-        # self.post_anti_hallucination = "<scratchpad> I can only use functions that have been explicitly provided to me to answer this question. The names of the functions I can use are: "
         self.post_anti_hallucination = "<scratchpad> I can only use functions that have been explicitly provided. I must follow the <tool_guidelines></tool_guidelines>. I may need the following tools:"

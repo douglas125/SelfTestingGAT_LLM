@@ -12,12 +12,11 @@ class ToolDoDateMath():
 <summary>Adds or subtracts one or more time intervals from a given date in the format YYYY-MM-DD.</summary>
 </tool_summary>"""
 
-        self.tool_description = """
-<tool_description>
-<tool_name>{{TOOLNAME}}</tool_name>
-<description>Adds or subtracts one or more time intervals from a given date in the format YYYY-MM-DD.
+        self.tool_description = {
+            'name': self.name,
+            'description': """Adds or subtracts one or more time intervals from a given date in the format YYYY-MM-DD.
 
-The <deltas> to be added or subtracted should be separated by commas. Use negative values to subtract, as shown in the <example_deltas></example_deltas>:
+The <deltas></deltas> to be added or subtracted should be separated by commas. Use negative values to subtract, as shown in the <example_deltas></example_deltas>:
 
 <example_deltas>
 <example_delta>5<example_delta>
@@ -25,49 +24,33 @@ The <deltas> to be added or subtracted should be separated by commas. Use negati
 <example_delta>5, -6, -8<example_delta>
 </example_deltas>
 
-Raises ValueError: if one of the parameters is invalid.
-</description>
-
-<parameters>
-<parameter>
-<name>base_date</name>
-<type>string</type>
-<description>Base date in the format YYYY-MM-DD.
-</description>
-</parameter>
-
-<parameter>
-<name>deltas</name>
-<type>string</type>
-<description>Interval, as defined in delta_type, to add or subtract from the base date, separated by commas.
-</description>
-</parameter>
-
-<parameter>
-<name>delta_type</name>
-<type>string</type>
-<description>Type of interval to sum or subtract from base_date. Can be one of the following <delta_options>:
-
-<delta_options>
-<option>day</option>
-<option>week</option>
-<option>month</option>
-<option>year</option>
-</delta_options>
-
-</description>
-</parameter>
-
-</parameters>
-
-</tool_description>
-        """.replace('{{TOOLNAME}}', self.name)
+Raises ValueError: if one of the parameters is invalid.""",
+            'input_schema': {
+                'type': 'object',
+                'properties': {
+                    'base_date': {
+                        'type': 'string',
+                        'description': 'Base date in the format YYYY-MM-DD',
+                    },
+                    'deltas': {
+                        'type': 'int',
+                        'description': 'Interval, as defined in delta_type, to add or subtract from the base date, separated by commas',
+                    },
+                    'delta_type': {
+                        'type': 'string',
+                        'enum': ['day', 'week', 'month', 'year'],
+                        'description': 'Type of interval to sum or subtract from base_date. Possible values are listed in enum',
+                    },
+                },
+                'required': ['base_date', 'delta']
+            }
+        }
 
         self.tool_summary = self.tool_description
 
     def __call__(self, base_date, deltas, delta_type, **kwargs):
         allowed_delta_types = ['day', 'week', 'month', 'year']
-        if not delta_type in allowed_delta_types:
+        if delta_type not in allowed_delta_types:
             return f'Error: delta_type must be one of {allowed_delta_types}'
 
         try:
