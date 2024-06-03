@@ -26,13 +26,12 @@ class LLMTools:
         self.query_llm = query_llm
         self.tools = [
             ToolDoDateMath(),
-
-            # ToolUpdateUserDetails(),
-            # ToolMakeCustomPlot(),
-            # ToolSolveSymbolic(),
-            # ToolSolveNumeric(),
-            # ToolGetUrlContent(self.query_llm),
-            # ToolMakeQRCode(),
+            ToolUpdateUserDetails(),
+            ToolMakeCustomPlot(),
+            ToolSolveSymbolic(),
+            ToolSolveNumeric(),
+            ToolGetUrlContent(self.query_llm),
+            ToolMakeQRCode(),
 
             # Being left out for now
             # ToolSolvePythonCode(),

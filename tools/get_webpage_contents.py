@@ -72,47 +72,40 @@ class ToolGetUrlContent():
         self.name = 'get_url_content'
         self.query_llm = query_llm
 
-        self.tool_description = """
-<tool_description>
-<tool_name>{{TOOLNAME}}</tool_name>
-<description>Retrieves the contents of one or more internet URLs specified by internet_urls, separated by commas. For example, use this tool when the user requests you to read a webpage, or find something on the internet. A prompt should be provided to extract only the desired relevant content from the URLs. If the prompt is left empty, the raw contents of the webpage are returned. Note that the prompt will be provided individually to query each URL.
+        self.tool_description = {
+            'name': self.name,
+            'description': f"""Retrieves the contents of one or more internet URLs specified by internet_urls, separated by commas. For example, use this tool when the user requests you to read a webpage, or find something on the internet. A prompt should be provided to extract only the desired relevant content from the URLs. If the prompt is left empty, the raw contents of the webpage are returned. Note that the prompt will be provided individually to query each URL.
 
-You can use {{TOOLNAME}} in these <use_cases></use_cases> and others as needed:
+You can use {self.name} in these <use_cases></use_cases> and others as needed:
 <use_cases>
 <use_case>When it is easy to retrieve up-to-date information from a webpage</use_case>
 <use_case>When it is necessary to navigate internet web pages to retrieve information</use_case>
 </use_cases>
 
-Raises ValueError: if the request is invalid.
-</description>
-
-<parameters>
-<parameter>
-<name>internet_urls</name>
-<type>string</type>
-<description>Website URLs separated by commas, as in the <url_examples></url_examples>:
+Raises ValueError: if the request is invalid.""",
+            'input_schema': {
+                'type': 'object',
+                'properties': {
+                    'internet_urls': {
+                        'type': 'string',
+                        'description': """Website URLs separated by commas, as in the <url_examples></url_examples>:
 <url_examples>
 <url_example>http://www.folha.com</url_example>
 <url_example>http://www.g1.com, https://www.walljournal.com, http://websitename.com.uk</url_example>
-</url_examples>
-
-</description>
-</parameter>
-
-<parameter>
-<name>prompt</name>
-<description>Query prompt to retrieve specific information from a single web page. For example:
+</url_examples>""",
+                    },
+                    'prompt': {
+                        'type': 'string',
+                        'description': """Query prompt to retrieve specific information from a single web page. For example:
 <website_prompt_examples>
 <website_prompt_example>Summarize the contents of this web page. Make sure to include all links in the page.</website_prompt_example>
 <website_prompt_example>Read this web page and extract only the URLs related to economic news.</website_prompt_example>
-</website_prompt_examples>
-</description>
-</parameter>
-</parameters>
-
-Always mention what internet_url was accessed to provide the information requested.
-</tool_description>
-        """.replace('{{TOOLNAME}}', self.name)
+</website_prompt_examples>""",
+                    },
+                },
+                'required': ['internet_urls']
+            }
+        }
 
     def __call__(self, internet_urls, prompt='', **kwargs):
         if len(kwargs) > 0:

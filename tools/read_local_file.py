@@ -5,30 +5,27 @@ class ToolReadLocalFile():
     def __init__(self):
         self.name = 'read_local_files'
 
-        self.tool_description = """
-<tool_description>
-<tool_name>{{TOOLNAME}}</tool_name>
-<description>Reads one or more local file and return its contents. Provide one file per line.
+        self.tool_description = {
+            'name': self.name,
+            'description': """Reads one or more local file and return its contents. Provide one file per line.
 
-Raises ValueError: if the file does not exist.
-</description>
-
-<parameters>
-<parameter>
-<name>path_to_files</name>
-<type>string</type>
-<description>Local path to the files whose contents should be retrieved. Provide one file per line as in the <example></example>:
+Raises ValueError: if the file does not exist.""",
+            'input_schema': {
+                'type': 'object',
+                'properties': {
+                    'path_to_files': {
+                        'type': 'string',
+                        'description': """Local path to the files whose contents should be retrieved. Provide one file per line as in the <example></example>:
 <example>
 file1.txt
 file2.py
 subfolder/file3.docx
-</example>
-</description>
-</parameter>
-</parameters>
-
-</tool_description>
-        """.replace('{{TOOLNAME}}', self.name)
+</example>""",
+                    },
+                },
+                'required': ['path_to_files']
+            }
+        }
 
     def __call__(self, path_to_files, **kwargs):
         if len(kwargs) > 0:

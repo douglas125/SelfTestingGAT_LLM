@@ -9,35 +9,38 @@ class ToolMakeCustomPlot():
         self.name = 'make_custom_plot'
 
         self.save_code = "plt.savefig('media/plot.jpg')"
-        self.tool_description = """
-<tool_description>
-<tool_name>{{TOOLNAME}}</tool_name>
-<description>Generates an image or plot using the provided custom Python code plot_code, whose only dependencies should be numpy and matplotlib. This tool is useful when the user requests plots to be generated from data that was previously retrieved.
+
+        self.tool_description = {
+            'name': self.name,
+            'description': f"""Generates an image or plot using the provided custom Python code plot_code, whose only dependencies should be numpy and matplotlib. This tool is useful when the user requests plots to be generated from data that was previously retrieved.
 
 If the user didn't specifically ask for a plot, confirm is the user wants to generate a plot or visualization before calling this tool.
 
-The last line of the plot code must save the figure to 'media/plot.jpg'. The last line of the code should be: {{SAVECODE}}
+The last line of the plot code must save the figure to 'media/plot.jpg'. The last line of the code should be: {self.save_code}
 
 The user can view the images without exposing the auto-generated file names. Do NOT include actual file names in the answer. Do NOT include the <path_to_image></path_to_image> tag in the answer. Only mention that the image has been generated successfully.
 
-Raises ValueError: if the code to be executed was invalid.
-</description>
-
-<parameters>
-<parameter>
-<name>plot_code</name>
-<type>string</type>
-<description>Python code that, when executed, will generate an image or plot requested by the user.
-</description>
-</parameter>
-</parameters>
-
-</tool_description>
-        """.replace('{{TOOLNAME}}', self.name).replace('{{SAVECODE}}', self.save_code)
-        """
-        Always return the name of the saved image to be displayed to the user in the format: [IMAGE=<path_to_image>],
-        where path_to_image is the path to the generated image returned by the function.
-        """
+Raises ValueError: if the code to be executed was invalid.""",
+            'input_schema': {
+                'type': 'object',
+                'properties': {
+                    'plot_code': {
+                        'type': 'string',
+                        'description': 'Python code that, when executed, will generate an image or plot requested by the user',
+                    },
+                    'deltas': {
+                        'type': 'int',
+                        'description': 'Interval, as defined in delta_type, to add or subtract from the base date, separated by commas',
+                    },
+                    'delta_type': {
+                        'type': 'string',
+                        'enum': ['day', 'week', 'month', 'year'],
+                        'description': 'Type of interval to sum or subtract from base_date. Possible values are listed in enum',
+                    },
+                },
+                'required': ['plot_code']
+            }
+        }
 
     def __call__(self, plot_code, **kwargs):
         os.makedirs('media', exist_ok=True)

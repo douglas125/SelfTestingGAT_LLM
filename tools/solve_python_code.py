@@ -7,32 +7,29 @@ class ToolSolvePythonCode():
     def __init__(self):
         self.name = 'solve_with_python'
 
-        self.tool_description = """
-<tool_description>
-<tool_name>{{TOOLNAME}}</tool_name>
-<description>Runs Python code to answer questions that can be easily solved with basic Python code.
+        self.tool_description = {
+            'name': self.name,
+            'description': f"""Runs Python code to answer questions that can be easily solved with basic Python code.
 Ensure that the code generates the final answer to the problem, without requiring any further analysis. Assign the final answer to the variable "ans".
 
-Use {{TOOLNAME}} in any cases where a simple Python program can give the correct answer. Some examples are provided below in <use_cases></use_cases>:
+Use {self.name} in any cases where a simple Python program can give the correct answer. Some examples are provided below in <use_cases></use_cases>:
 <use_cases>
 <use_case>String manipulation (e.g. reversing or sorting strings)<use_case>
 <use_case>Sorting, ordering, filtering<use_case>
 </use_cases>
 
-Raises ValueError: if the code to be executed was invalid.
-</description>
-
-<parameters>
-<parameter>
-<name>python_code</name>
-<type>string</type>
-<description>Python code that, when executed, will provide the final answer to the problem.
-</description>
-</parameter>
-</parameters>
-
-</tool_description>
-        """.replace('{{TOOLNAME}}', self.name)
+Raises ValueError: if the code to be executed was invalid.""",
+            'input_schema': {
+                'type': 'object',
+                'properties': {
+                    'plot_code': {
+                        'type': 'string',
+                        'description': 'Python code that, when executed, will provide the final answer to the problem',
+                    },
+                },
+                'required': ['python_code']
+            }
+        }
 
     def __call__(self, python_code, **kwargs):
         if len(kwargs) > 0:
