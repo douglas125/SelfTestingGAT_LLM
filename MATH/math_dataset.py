@@ -16,22 +16,23 @@ from tqdm import tqdm
 
 rng = np.random.default_rng()
 
+
 def get_MATH_dataset():
-    math_path = 'MATH/MATH.tar'
+    math_path = "MATH/MATH.tar"
     if not os.path.isfile(math_path):
-        url = 'https://people.eecs.berkeley.edu/~hendrycks/MATH.tar'
+        url = "https://people.eecs.berkeley.edu/~hendrycks/MATH.tar"
         r = requests.get(url, allow_redirects=True)
-        open(math_path, 'wb').write(r.content)
+        open(math_path, "wb").write(r.content)
 
     tar = tarfile.open("MATH/MATH.tar")
     math_dataset = {
-        'test': {},
-        'train': {},
+        "test": {},
+        "train": {},
     }
     for member in tqdm(tar.getmembers()):
         f = tar.extractfile(member)
-        if f is not None and member.name.endswith('.json'):
-            name_split = member.name.split('/')[1:]
+        if f is not None and member.name.endswith(".json"):
+            name_split = member.name.split("/")[1:]
             cur_cat = name_split[1]
             cur_list = math_dataset[name_split[0]].get(cur_cat, [])
 
@@ -43,11 +44,13 @@ def get_MATH_dataset():
     return math_dataset
 
 
-def get_random_sample(math_dataset, chosen_set='train'):
+def get_random_sample(math_dataset, chosen_set="train"):
     categs = math_dataset[chosen_set].keys()
     random_categ = rng.choice(list(categs))
     sample = rng.choice(math_dataset[chosen_set][random_categ])
-    sample['sol_text'] = f"""The expected answer is:
+    sample[
+        "sol_text"
+    ] = f"""The expected answer is:
 <expected_answer>
 {sample['solution']}
 </expected_answer>

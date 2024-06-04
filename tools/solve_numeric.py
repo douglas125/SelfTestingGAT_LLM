@@ -3,13 +3,15 @@ import numpy as np
 
 
 ans = None
-class ToolSolveNumeric():
+
+
+class ToolSolveNumeric:
     def __init__(self):
-        self.name = 'solve_numeric'
+        self.name = "solve_numeric"
 
         self.tool_description = {
-            'name': self.name,
-            'description': f"""Evaluates numerical expressions the Python library numpy. Always use {self.name} to evaluate the numerical expressions instead of doing it manually. Make sure to import numpy before using it in the numpy_code.
+            "name": self.name,
+            "description": f"""Evaluates numerical expressions the Python library numpy. Always use {self.name} to evaluate the numerical expressions instead of doing it manually. Make sure to import numpy before using it in the numpy_code.
 Ensure that the code generates the final answer to the problem, without requiring any further analysis. Assign the final answer to the variable "ans".
 
 Use {self.name} in these <use_cases></use_cases>:
@@ -19,16 +21,16 @@ Use {self.name} in these <use_cases></use_cases>:
 </use_cases>
 
 Raises ValueError: if the code to be executed was invalid.""",
-            'input_schema': {
-                'type': 'object',
-                'properties': {
-                    'numpy_code': {
-                        'type': 'string',
-                        'description': 'Python code that, when executed, will provide the final answer to the problem',
+            "input_schema": {
+                "type": "object",
+                "properties": {
+                    "numpy_code": {
+                        "type": "string",
+                        "description": "Python code that, when executed, will provide the final answer to the problem",
                     },
                 },
-                'required': ['numpy_code']
-            }
+                "required": ["numpy_code"],
+            },
         }
 
     def __call__(self, numpy_code, **kwargs):

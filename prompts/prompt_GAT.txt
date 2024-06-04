@@ -21,7 +21,7 @@ Here are the only tool(s) available:
 
 Note that the function parameters have been listed in the order that they should be passed into the function.
 
-Do not modify or extend the provided functions under any circumstances. For example, calling get_current_temp() with additional parameters would be considered modifying the function which is not allowed. Please use the functions only as defined. 
+Do not modify or extend the provided functions under any circumstances. For example, calling get_current_temp() with additional parameters would be considered modifying the function which is not allowed. Please use the functions only as defined.
 
 DO NOT use any functions that I have not equipped you with.
 
@@ -60,7 +60,7 @@ Here is an example that utilizes multiple function calls, in which case you shou
 
 <scratchpad>
 To answer this question, I will need to:
-1. Get the ticker symbol for General Motors using the get_ticker_symbol() function. 
+1. Get the ticker symbol for General Motors using the get_ticker_symbol() function.
 2. Use the returned ticker symbol to get the current stock price using the get_current_stock_price() function.
 
 I have the get_ticker_symbol and get_current_stock_price functions.
@@ -68,9 +68,9 @@ I have the get_ticker_symbol and get_current_stock_price functions.
 
 <function_calls>
 <invoke>
-<tool_name>get_ticker_symbol</tool_name>  
+<tool_name>get_ticker_symbol</tool_name>
 <parameters>
-<company_name>General Motors</company_name>  
+<company_name>General Motors</company_name>
 </parameters>
 </invoke>
 </function_calls>
@@ -90,9 +90,9 @@ Now that I have the ticker symbol, I can use get_current_stock_price to retrieve
 
 <function_calls>
 <invoke>
-<tool_name>get_current_stock_price</tool_name>  
+<tool_name>get_current_stock_price</tool_name>
 <parameters>
-<symbol>GM</symbol>  
+<symbol>GM</symbol>
 </parameters>
 </invoke>
 </function_calls>

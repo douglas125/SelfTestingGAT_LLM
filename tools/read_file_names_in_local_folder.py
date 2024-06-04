@@ -1,21 +1,21 @@
 import os
 
 
-class ToolReadLocalFolder():
+class ToolReadLocalFolder:
     def __init__(self):
-        self.name = 'read_file_names_in_local_folder'
+        self.name = "read_file_names_in_local_folder"
 
         self.tool_description = {
-            'name': self.name,
-            'description': """Reads the file names contained in a local folder.
+            "name": self.name,
+            "description": """Reads the file names contained in a local folder.
 
 Raises ValueError: if the folder does not exist.""",
-            'input_schema': {
-                'type': 'object',
-                'properties': {
-                    'path_to_folder': {
-                        'type': 'string',
-                        'description': """Local path to the files whose contents should be retrieved. Provide one file per line as in the <example></example>:
+            "input_schema": {
+                "type": "object",
+                "properties": {
+                    "path_to_folder": {
+                        "type": "string",
+                        "description": """Local path to the files whose contents should be retrieved. Provide one file per line as in the <example></example>:
 <example>
 file1.txt
 file2.py
@@ -23,8 +23,8 @@ subfolder/file3.docx
 </example>""",
                     },
                 },
-                'required': ['path_to_folder']
-            }
+                "required": ["path_to_folder"],
+            },
         }
 
     def __call__(self, path_to_folder, **kwargs):

@@ -1,13 +1,13 @@
 ans = None
 
 
-class ToolSolveSymbolic():
+class ToolSolveSymbolic:
     def __init__(self):
-        self.name = 'solve_symbolic'
+        self.name = "solve_symbolic"
 
         self.tool_description = {
-            'name': self.name,
-            'description': f"""Gets the solution to a symbolic mathematics problem using the Python library sympy. Make sure to import sympy before using it in the <sympy_code></sympy_code>.
+            "name": self.name,
+            "description": f"""Gets the solution to a symbolic mathematics problem using the Python library sympy. Make sure to import sympy before using it in the <sympy_code></sympy_code>.
 Ensure that the code generates the final answer to the problem, without requiring any further analysis. Assign the final answer to the variable "ans".
 
 Use {self.name} only in these <use_cases>:
@@ -19,16 +19,16 @@ Use {self.name} only in these <use_cases>:
 Before calling this function, explicitly list out all problem assumptions in the <scratchpad></scratchpad>.
 
 Raises ValueError: if the code to be executed was invalid.""",
-            'input_schema': {
-                'type': 'object',
-                'properties': {
-                    'sympy_code': {
-                        'type': 'string',
-                        'description': 'Python code that, when executed, will provide the final answer to the problem',
+            "input_schema": {
+                "type": "object",
+                "properties": {
+                    "sympy_code": {
+                        "type": "string",
+                        "description": "Python code that, when executed, will provide the final answer to the problem",
                     },
                 },
-                'required': ['sympy_code']
-            }
+                "required": ["sympy_code"],
+            },
         }
 
     def __call__(self, sympy_code, **kwargs):
