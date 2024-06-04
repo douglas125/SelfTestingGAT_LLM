@@ -49,7 +49,7 @@ Raises ValueError: if any parameter was invalid.""",
 </correction_values>""",
                     },
                     "box_size": {
-                        "type": "int",
+                        "type": "integer",
                         "description": """Optional. If specified, controls how many pixels each "box" of the QR code has. The size of the image increases for larger values.
 The default value is 10.
 Only use values from 5 (small image) to 50 (very large image).""",

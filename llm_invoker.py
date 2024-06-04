@@ -60,6 +60,7 @@ class LLM_Bedrock:
         chat_history=[],
         postpend="",
         extra_stop_sequences=[],
+        tools=None,
     ):
         """Calls the LLM in streaming mode
         Arguments:
@@ -75,9 +76,17 @@ class LLM_Bedrock:
         )
         prompt = self._prepare_prompt_from_list(call_list)
         self.last_prompt = str(prompt) + postpend
-        return self.invoke_streaming(
-            prompt, postpend=postpend, extra_stop_sequences=extra_stop_sequences
-        )
+        if tools is None:
+            return self.invoke_streaming(
+                prompt, postpend=postpend, extra_stop_sequences=extra_stop_sequences
+            )
+        else:
+            return self.invoke_streaming(
+                prompt,
+                postpend=postpend,
+                extra_stop_sequences=extra_stop_sequences,
+                tools=tools,
+            )
 
     def _prepare_call_list_from_history(
         self, system_prompt, msg, b64image, chat_history
@@ -161,10 +170,11 @@ class LLM_Claude3_Bedrock(LLM_Bedrock):
         b64image=None,
         postpend="",
         extra_stop_sequences=[],
+        tools=None,
         max_retries=25,
     ):
         """
-        Invokes the Claude 3 Sonnet model to run an inference
+        Invokes the Claude 3 model to run an inference
         using the input provided in the request body.
 
         :param prompt: The prompt to be answered.
@@ -186,7 +196,12 @@ class LLM_Claude3_Bedrock(LLM_Bedrock):
 
         body["system"] = prompt["system"]
         body["messages"] = prompt["messages"].copy()
-        body["messages"].append({"role": "assistant", "content": postpend})
+
+        if tools is None:
+            body["messages"].append({"role": "assistant", "content": postpend})
+        else:
+            body["tools"] = tools
+            assert postpend == "", "When using tools, postpend is not supported"
 
         cur_fail_sleep = 60
         for k in range(max_retries):
@@ -195,9 +210,9 @@ class LLM_Claude3_Bedrock(LLM_Bedrock):
                 response = self.bedrock_client.invoke_model_with_response_stream(
                     modelId=self.model_id, body=json.dumps(body)
                 )
+                # return response
                 word_count = len(re.findall(r"\w+", str(body["messages"])))
                 print(f"Invoking {self.llm_description}. Word count: {word_count}")
-
                 cur_ans = ""
                 for x in response["body"]:
                     out_dict = json.loads(x["chunk"]["bytes"])
