@@ -33,8 +33,8 @@ Raises ValueError: if one of the parameters is invalid.""",
                         "description": "Base date in the format YYYY-MM-DD",
                     },
                     "deltas": {
-                        "type": "integer",
-                        "description": "Interval, as defined in delta_type, to add or subtract from the base date, separated by commas",
+                        "type": "string",
+                        "description": "Intervals, as defined in delta_type, to add or subtract from the base date, separated by commas",
                     },
                     "delta_type": {
                         "type": "string",

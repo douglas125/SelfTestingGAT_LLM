@@ -61,6 +61,7 @@ class LLM_Bedrock:
         postpend="",
         extra_stop_sequences=[],
         tools=None,
+        tool_invoker_fn=None,
     ):
         """Calls the LLM in streaming mode
         Arguments:
@@ -86,6 +87,7 @@ class LLM_Bedrock:
                 postpend=postpend,
                 extra_stop_sequences=extra_stop_sequences,
                 tools=tools,
+                tool_invoker_fn=tool_invoker_fn,
             )
 
     def _prepare_call_list_from_history(
@@ -171,6 +173,7 @@ class LLM_Claude3_Bedrock(LLM_Bedrock):
         postpend="",
         extra_stop_sequences=[],
         tools=None,
+        tool_invoker_fn=None,
         max_retries=25,
     ):
         """
@@ -181,8 +184,15 @@ class LLM_Claude3_Bedrock(LLM_Bedrock):
             In the case of Claude 3, it is a dictionary with keys
             system -> str, messages -> list
         :param postpend: Extra text to append, to `put words in the mouth` of the LLM
+        tools: description of the tools that can be used, Claude format
+        tool_invoker_fn: function that invokes the tools. Arguments are:
+                function name - function to call
+                return_results_only - we set to True because we already use Claude format
+                kwargs - arguments to the tool that will be called
         :return: Inference response from the model.
         """
+        # Messages that had to be added because of function use
+        self.tool_use_added_msgs = []
 
         # try:
         # The different model providers have individual request and response formats.
@@ -202,51 +212,81 @@ class LLM_Claude3_Bedrock(LLM_Bedrock):
         else:
             body["tools"] = tools
             assert postpend == "", "When using tools, postpend is not supported"
+            assert (
+                tool_invoker_fn is not None
+            ), "When using tools, a tool invoker must be provided"
 
         cur_fail_sleep = 60
         for k in range(max_retries):
             try:
                 # print(body)
-                response = self.bedrock_client.invoke_model_with_response_stream(
-                    modelId=self.model_id, body=json.dumps(body)
-                )
-                # return response
-                word_count = len(re.findall(r"\w+", str(body["messages"])))
-                print(f"Invoking {self.llm_description}. Word count: {word_count}")
-                cur_ans = ""
-                for x in response["body"]:
-                    out_dict = json.loads(x["chunk"]["bytes"])
-                    txt = ""
-                    if "content_block" in out_dict.keys():
-                        txt = out_dict["content_block"]["text"]
-                    elif "delta" in out_dict.keys():
-                        txt = out_dict["delta"].get("text", "")
-
-                    cur_ans += txt
-                    yield postpend + cur_ans
-                    stop_reason = (
-                        out_dict["delta"].get("stop_reason", None)
-                        if "delta" in out_dict.keys()
-                        else None
+                llm_body_changed = True
+                while llm_body_changed:
+                    llm_body_changed = False
+                    response = self.bedrock_client.invoke_model_with_response_stream(
+                        modelId=self.model_id, body=json.dumps(body)
                     )
-                    if stop_reason is not None and stop_reason == "stop_sequence":
-                        stop_txt = out_dict["delta"]["stop_sequence"]
-                        yield postpend + cur_ans + stop_txt
-                        break
+                    word_count = len(re.findall(r"\w+", str(body["messages"])))
+                    print(f"Invoking {self.llm_description}. Word count: {word_count}")
 
-                ans_word_count = len(
-                    re.findall(r"\w+", postpend + cur_ans + str(stop_reason))
-                )
-                self.word_counts.append(
-                    {
-                        "request_word_count": word_count,
-                        "answer_word_count": ans_word_count,
-                        "price_estimate": 0.001
-                        * (0.003 * word_count + 0.015 * ans_word_count),
-                        "exec_time_in_s": time.time() - t0,
-                    }
-                )
+                    # stream responses
+                    partial_ans = self._response_gen(response["body"], postpend)
+                    for x in partial_ans:
+                        yield x
+                    cur_ans = x
 
+                    if self.cur_tool_spec is not None:
+                        # tool use has been required. Let's do it
+                        # TODO: update upstream to reflect the inclusion of a response
+                        # TODO: probably rework gradio UI to re-instantiate things every chat, or keep an instance per chat ID
+                        tool_ans = tool_invoker_fn(
+                            self.cur_tool_spec["name"],
+                            return_results_only=True,
+                            **self.cur_tool_spec["input"],
+                        )
+
+                        # append assistant responses
+                        assistant_msg = {
+                            "role": "assistant",
+                            "content": [
+                                {
+                                    "type": "text",
+                                    "text": cur_ans,
+                                },
+                                self.cur_tool_spec,
+                            ],
+                        }
+
+                        next_user_msg = {
+                            "role": "user",
+                            "content": [
+                                {
+                                    "type": "tool_result",
+                                    "tool_use_id": self.cur_tool_spec["id"],
+                                    "content": tool_ans,
+                                }
+                            ],
+                        }
+                        body["messages"].append(assistant_msg)
+                        body["messages"].append(next_user_msg)
+
+                        # keep a log of messages that had to be appended due to tool use
+                        self.tool_use_added_msgs.append(assistant_msg)
+                        self.tool_use_added_msgs.append(next_user_msg)
+                        llm_body_changed = True
+
+                    ans_word_count = len(
+                        re.findall(r"\w+", postpend + cur_ans + str(self.stop_reason))
+                    )
+                    self.word_counts.append(
+                        {
+                            "request_word_count": word_count,
+                            "answer_word_count": ans_word_count,
+                            "price_estimate": 0.001
+                            * (0.003 * word_count + 0.015 * ans_word_count),
+                            "exec_time_in_s": time.time() - t0,
+                        }
+                    )
                 return
             except Exception as e:
                 print(
@@ -261,6 +301,41 @@ class LLM_Claude3_Bedrock(LLM_Bedrock):
         # except ClientError:
         #    logger.error("Couldn't invoke Claude")
         #    raise
+
+    def _response_gen(self, response_body, postpend=""):
+        cur_ans = ""
+        cur_tool_spec = None
+        for x in response_body:
+            out_dict = json.loads(x["chunk"]["bytes"])
+            txt = ""
+            if "content_block" in out_dict.keys():
+                if out_dict["content_block"]["type"] == "text":
+                    txt = out_dict["content_block"]["text"]
+                elif out_dict["content_block"]["type"] == "tool_use":
+                    cur_tool_spec = out_dict["content_block"].copy()
+                    cur_tool_spec["input"] = ""
+
+            elif "delta" in out_dict.keys():
+                txt = out_dict["delta"].get("text", "")
+                if cur_tool_spec is not None:
+                    cur_tool_spec["input"] += out_dict["delta"].get("partial_json", "")
+
+            if txt != "":
+                cur_ans += txt
+                yield postpend + cur_ans
+            stop_reason = (
+                out_dict["delta"].get("stop_reason", None)
+                if "delta" in out_dict.keys()
+                else None
+            )
+            if stop_reason is not None and stop_reason == "stop_sequence":
+                stop_txt = out_dict["delta"]["stop_sequence"]
+                yield postpend + cur_ans + stop_txt
+                break
+        if cur_tool_spec is not None:
+            cur_tool_spec["input"] = json.loads(cur_tool_spec["input"])
+        self.cur_tool_spec = cur_tool_spec
+        self.stop_reason = stop_reason
 
 
 class LLM_Mixtral8x7b_Bedrock(LLM_Bedrock):

@@ -126,7 +126,7 @@ class LLMTools:
 
         return "%s%s" % (line_padding, json_obj)
 
-    def invoke_tool(self, tool_name, **kwargs):
+    def invoke_tool(self, tool_name, return_results_only=False, **kwargs):
         try:
             cur_tool = self.tool_mapping.get(tool_name)
             # if 'error' in cur_tool.keys():
@@ -147,9 +147,12 @@ class LLMTools:
                         "result_length": len(ans),
                     }
                 )
-                return self.call_return_string.replace(
-                    "{{TOOLNAME}}", tool_name
-                ).replace("{{TOOLRESULTS}}", ans)
+                if return_results_only:
+                    return ans
+                else:
+                    return self.call_return_string.replace(
+                        "{{TOOLNAME}}", tool_name
+                    ).replace("{{TOOLRESULTS}}", ans)
             else:
                 return f"Tool {tool_name} not found. Please check tool name. Available tools: {self.tool_mapping.keys()}"
         except Exception as e:
