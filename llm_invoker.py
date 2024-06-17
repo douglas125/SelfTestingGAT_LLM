@@ -93,13 +93,18 @@ class LLM_Bedrock:
     def _prepare_call_list_from_history(
         self, system_prompt, msg, b64image, chat_history
     ):
+        print(chat_history)
+
         """Prepares the prompt for the next interaction with the LLM"""
         history_list = [
             {"role": "system", "content": system_prompt},
         ]
         for x in chat_history:
-            history_list.append({"role": "user", "content": x[0]})
-            history_list.append({"role": "assistant", "content": str(x[1])})
+            if isinstance(x, dict):
+                history_list.append(x)
+            else:
+                history_list.append({"role": "user", "content": x[0]})
+                history_list.append({"role": "assistant", "content": str(x[1])})
 
         if b64image is None:
             history_list.append({"role": "user", "content": msg})
@@ -275,6 +280,7 @@ class LLM_Claude3_Bedrock(LLM_Bedrock):
                         self.tool_use_added_msgs.append(next_user_msg)
                         llm_body_changed = True
 
+                    # TODO: Include proper token count and pricing
                     ans_word_count = len(
                         re.findall(r"\w+", postpend + cur_ans + str(self.stop_reason))
                     )

@@ -69,6 +69,16 @@ class LLMInterface:
         # keep some execution logs
         self.log = []
 
+        # handle native tool use
+        if self.rpg.use_native_tools:
+            self.native_tools = [x.tool_description for x in self.lt.tools]
+            self.tool_invoker_fn = self.lt.invoke_tool
+            self.extra_stop_sequences = []
+        else:
+            self.native_tools = None
+            self.tool_invoker_fn = None
+            self.extra_stop_sequences = ["</function_calls>"]
+
     def _format_msg(
         self, x, message, chat_history, include_logs=False, show_ans_only=False
     ):
@@ -158,8 +168,12 @@ class LLMInterface:
             b64image=image_string,
             system_prompt=self.system_prompt,
             chat_history=history,
-            postpend=self.rpg.post_anti_hallucination if self.rpg is not None else "",
-            extra_stop_sequences=["</function_calls>"],
+            postpend=self.rpg.post_anti_hallucination
+            if (self.rpg is not None and not self.rpg.use_native_tools)
+            else "",
+            extra_stop_sequences=self.extra_stop_sequences,
+            tools=self.native_tools,
+            tool_invoker_fn=self.lt.invoke_tool,
         )
         with open("ui_debug_prompt.txt", "w") as f:
             f.write(str(self.llm.last_prompt))
@@ -178,7 +192,12 @@ class LLMInterface:
         t0 = time.time()
 
         cur_answer_split = cur_answer.split("<function_calls>")
-        while len(cur_answer_split) > 1 and self.lt is not None:
+        while (
+            len(cur_answer_split) > 1
+            and self.lt is not None
+            and not self.rpg.use_native_tools
+        ):
+            # this loop means that manual tool usage is needed
             cur_func_log = {}
 
             xml_to_parse = cur_answer_split[-1].split("</function_calls>")[0]
@@ -192,12 +211,15 @@ class LLMInterface:
             cur_postpend = cur_answer + post_prompt
             # yield self._format_msg(x, msg, ui_history)
 
+            # note: parameters tools and tool_invoker_fn are not used
+            # because this call fulfills manual tool use requests
+            # ie. if there are native tools, this loop should never happen
             ans2 = self.llm(
                 msg,
                 system_prompt=self.system_prompt,
                 chat_history=history,
-                postpend=cur_postpend,
-                extra_stop_sequences=["</function_calls>"],
+                postpend=cur_postpend if not self.rpg.use_native_tools else "",
+                extra_stop_sequences=self.extra_stop_sequences,
             )
 
             for x in ans2:
@@ -218,9 +240,23 @@ class LLMInterface:
             cur_log["Function calls"].append(cur_func_log)
 
         self.log.append(cur_log)
-        final_response_ui = self._format_msg(cur_answer, msg, ui_history)
 
-        self.history_log[chat_id] = history + [[msg, cur_answer]]
+        history_to_append = []
+        tool_results = []
+        if hasattr(self.llm, "tool_use_added_msgs"):
+            history_to_append.append({"role": "user", "content": msg})
+            tool_results.append("\n")
+            for x in self.llm.tool_use_added_msgs:
+                history_to_append.append(x)
+                if x["role"] == "user":
+                    tool_results.append(x["content"][0]["content"])
+            tool_results = "\n".join(tool_results)
+            history_to_append.append({"role": "assistant", "content": cur_answer})
+        else:
+            history_to_append.append([msg, cur_answer])
+        self.history_log[chat_id] = history + history_to_append
+        print(self.history_log)
 
+        final_response_ui = self._format_msg(cur_answer + tool_results, msg, ui_history)
         yield final_response_ui
         print("Final response sent.")
