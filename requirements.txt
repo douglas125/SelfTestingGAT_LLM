@@ -1,3 +1,6 @@
+boto3
 gradio
 qrcode
 matplotlib
+black
+pre-commit
