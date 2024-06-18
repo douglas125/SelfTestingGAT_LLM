@@ -82,6 +82,7 @@ class LLMInterface:
     def _format_msg(
         self, x, message, chat_history, include_logs=False, show_ans_only=False
     ):
+        # the "<path_to_" substring from native tools has to be appended to the final answer for file display
         if self.output_mode == "chat_interface":
             return _adjust_msg_for_gradio_ui(x)
         elif self.output_mode == "chat_bot":
@@ -248,14 +249,17 @@ class LLMInterface:
             tool_results.append("\n")
             for x in self.llm.tool_use_added_msgs:
                 history_to_append.append(x)
+                # enable file display
                 if x["role"] == "user":
-                    tool_results.append(x["content"][0]["content"])
+                    cur_tool_result = x["content"][0]["content"]
+                    tool_results.append(
+                        cur_tool_result if "<path_to_" in cur_tool_result else ""
+                    )
             tool_results = "\n".join(tool_results)
             history_to_append.append({"role": "assistant", "content": cur_answer})
         else:
             history_to_append.append([msg, cur_answer])
         self.history_log[chat_id] = history + history_to_append
-        print(self.history_log)
 
         final_response_ui = self._format_msg(cur_answer + tool_results, msg, ui_history)
         yield final_response_ui

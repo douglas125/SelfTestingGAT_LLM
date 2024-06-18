@@ -8,6 +8,8 @@ class ToolReadLocalFile:
         self.tool_description = {
             "name": self.name,
             "description": """Reads one or more local file and return its contents. Provide one file per line.
+Only read the contents of text files, like files with extensions .txt, .py, .md and others that usually contain only text.
+Do not attempt to read files that are usually in binary format.
 
 Raises ValueError: if the file does not exist.""",
             "input_schema": {
@@ -33,8 +35,7 @@ subfolder/file3.docx
 
         final_ans = ["<files>"]
         all_files = [x for x in path_to_files.splitlines() if x.strip() != ""]
-        for path_to_file in path_to_files.splitlines():
-
+        for path_to_file in all_files:
             if not os.path.isfile(path_to_file):
                 ans = f"Error: Did not find file `{path_to_file}`"
                 ans = f"<error>\n{ans}\n</error>"

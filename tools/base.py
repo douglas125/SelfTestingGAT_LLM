@@ -13,6 +13,7 @@ from tools.read_local_file import ToolReadLocalFile
 from tools.read_file_names_in_local_folder import ToolReadLocalFolder
 from tools.do_date_math import ToolDoDateMath
 from tools.update_user_details import ToolUpdateUserDetails
+from tools.use_ffmpeg import ToolUseFFMPEG
 
 rng = np.random.default_rng()
 
@@ -29,10 +30,11 @@ class LLMTools:
             ToolSolveNumeric(),
             ToolGetUrlContent(self.query_llm),
             ToolMakeQRCode(),
+            ToolReadLocalFile(),
+            ToolReadLocalFolder(),
+            ToolUseFFMPEG()
             # Being left out for now
             # ToolSolvePythonCode(),
-            # ToolReadLocalFile(),
-            # ToolReadLocalFolder(),
         ]
 
         self.tool_mapping = dict(zip([x.name for x in self.tools], self.tools))
