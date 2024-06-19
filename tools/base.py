@@ -19,23 +19,42 @@ rng = np.random.default_rng()
 
 
 class LLMTools:
-    def __init__(self, query_llm=None):
-        """Constructor."""
-        self.query_llm = query_llm
-        self.tools = [
+    def get_all_tools(query_llm):
+        """Returns a list of all tools available"""
+        return [
             ToolDoDateMath(),
             ToolUpdateUserDetails(),
             ToolMakeCustomPlot(),
             ToolSolveSymbolic(),
             ToolSolveNumeric(),
-            ToolGetUrlContent(self.query_llm),
+            ToolGetUrlContent(query_llm),
             ToolMakeQRCode(),
             ToolReadLocalFile(),
             ToolReadLocalFolder(),
-            ToolUseFFMPEG()
-            # Being left out for now
-            # ToolSolvePythonCode(),
+            ToolUseFFMPEG(),
+            ToolSolvePythonCode(),
         ]
+
+    def __init__(self, query_llm=None, desired_tools=None):
+        """Constructor."""
+        self.query_llm = query_llm
+        if desired_tools is None:
+            self.tools = [
+                ToolDoDateMath(),
+                ToolUpdateUserDetails(),
+                ToolMakeCustomPlot(),
+                ToolSolveSymbolic(),
+                ToolSolveNumeric(),
+                ToolGetUrlContent(self.query_llm),
+                ToolMakeQRCode(),
+                ToolReadLocalFile(),
+                ToolReadLocalFolder(),
+                ToolUseFFMPEG(),
+                # Being left out for now
+                # ToolSolvePythonCode(),
+            ]
+        else:
+            self.tools = desired_tools
 
         self.tool_mapping = dict(zip([x.name for x in self.tools], self.tools))
         self.call_return_string = """
