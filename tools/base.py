@@ -10,6 +10,7 @@ from tools.solve_python_code import ToolSolvePythonCode
 from tools.get_webpage_contents import ToolGetUrlContent
 from tools.make_qr_code import ToolMakeQRCode
 from tools.read_local_file import ToolReadLocalFile
+from tools.write_local_file import ToolWriteLocalFile
 from tools.read_file_names_in_local_folder import ToolReadLocalFolder
 from tools.do_date_math import ToolDoDateMath
 from tools.update_user_details import ToolUpdateUserDetails
@@ -30,6 +31,7 @@ class LLMTools:
             ToolGetUrlContent(query_llm),
             ToolMakeQRCode(),
             ToolReadLocalFile(),
+            ToolWriteLocalFile(),
             ToolReadLocalFolder(),
             ToolUseFFMPEG(),
             ToolSolvePythonCode(),
@@ -48,6 +50,7 @@ class LLMTools:
                 ToolGetUrlContent(self.query_llm),
                 ToolMakeQRCode(),
                 ToolReadLocalFile(),
+                ToolWriteLocalFile(),
                 ToolReadLocalFolder(),
                 ToolUseFFMPEG(),
                 # Being left out for now
