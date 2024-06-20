@@ -70,7 +70,7 @@ class LLMInterface:
         self.log = []
 
         # handle native tool use
-        if self.rpg.use_native_tools:
+        if self.rpg is not None and self.rpg.use_native_tools:
             self.native_tools = [x.tool_description for x in self.lt.tools]
             self.tool_invoker_fn = self.lt.invoke_tool
             self.extra_stop_sequences = []
@@ -174,7 +174,7 @@ class LLMInterface:
             else "",
             extra_stop_sequences=self.extra_stop_sequences,
             tools=self.native_tools,
-            tool_invoker_fn=self.lt.invoke_tool,
+            tool_invoker_fn=self.lt.invoke_tool if self.lt is not None else None,
         )
         with open("ui_debug_prompt.txt", "w") as f:
             f.write(str(self.llm.last_prompt))
