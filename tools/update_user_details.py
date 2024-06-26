@@ -50,7 +50,7 @@ Before using WRITE, make sure to show to the user the changes that will be made 
             },
         }
 
-    def __call__(self, action, username, contents="", **kwargs):
+    def __call__(self, action, username="None", contents="", **kwargs):
         debug = [action, username, contents]
         with open("debug.txt", "w") as f:
             f.write(str(debug))
