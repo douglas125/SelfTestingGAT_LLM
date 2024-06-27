@@ -145,9 +145,7 @@ class LLM_Claude3_Anthropic(LLM_Bedrock):
         if model_size == "Sonnet 3.5 Anthropic":
             self.model_id = "claude-3-5-sonnet-20240620"
             self.anthropic_client = anthropic.Anthropic()
-            self.llm_description = (
-                "Anthropic Claude 3.5 Sonnet (Small-size LLM) - directly from Anthropic"
-            )
+            self.llm_description = "Anthropic Claude 3.5 Sonnet (Medium-size LLM) - directly from Anthropic"
 
         self.config = {
             # "messages": prompt,

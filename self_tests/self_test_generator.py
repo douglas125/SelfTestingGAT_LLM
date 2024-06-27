@@ -178,7 +178,10 @@ The questions should be as different as possible from each other. Never generate
 if __name__ == "__main__":
     # configure tests
     n_test_cases = 2
-    llms_to_test = ["Claude 3 Haiku"]  # , "Claude 3 Sonnet"]
+    llms_to_test = [
+        "Claude 3 Haiku",
+        "Claude 3.5 Sonnet - Anthropic",
+    ]  # , "Claude 3 Sonnet"]
     tool_strategies = ["use_all", "only_selected", "selected_with_dummies"]
     for cur_llm_name in llms_to_test:
         stg = SelfTestGenerator(cur_llm_name)
