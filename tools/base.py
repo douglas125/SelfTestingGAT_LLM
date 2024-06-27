@@ -15,6 +15,7 @@ from tools.read_file_names_in_local_folder import ToolReadLocalFolder
 from tools.do_date_math import ToolDoDateMath
 from tools.update_user_details import ToolUpdateUserDetails
 from tools.use_ffmpeg import ToolUseFFMPEG
+from tools.plot_with_graphviz import ToolPlotWithGraphviz
 
 rng = np.random.default_rng()
 
@@ -35,6 +36,7 @@ class LLMTools:
             ToolReadLocalFolder(),
             ToolUseFFMPEG(),
             ToolSolvePythonCode(),
+            ToolPlotWithGraphviz(),
         ]
 
     def __init__(self, query_llm=None, desired_tools=None):
@@ -53,6 +55,7 @@ class LLMTools:
                 ToolWriteLocalFile(),
                 ToolReadLocalFolder(),
                 ToolUseFFMPEG(),
+                ToolPlotWithGraphviz(),
                 # Being left out for now
                 # ToolSolvePythonCode(),
             ]

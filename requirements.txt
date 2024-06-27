@@ -3,6 +3,7 @@ gradio
 qrcode
 ffmpeg
 matplotlib
+pydot
 black
 pre-commit
 tqdm
