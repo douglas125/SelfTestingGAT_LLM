@@ -40,7 +40,7 @@ subfolder/file3.docx
                 ans = f"Error: Did not find file `{path_to_file}`"
                 ans = f"<error>\n{ans}\n</error>"
             else:
-                with open(path_to_file, "r", encoding="utf-8") as f:
+                with open(path_to_file, "r", encoding="latin-1") as f:
                     ans = f.read()
                 ans = f"<contents>\n{ans}\n</contents>"
 

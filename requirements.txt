@@ -1,6 +1,13 @@
 boto3
 gradio
 qrcode
+ffmpeg
 matplotlib
+pydot
 black
 pre-commit
+tqdm
+ipywidgets
+jupyterlab
+jupyterlab-lsp
+python-lsp-server

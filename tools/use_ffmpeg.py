@@ -41,7 +41,6 @@ This tool returns ffmpeg_stdout containing the stdout of ffmpeg and ffmpeg_stder
 
         all_args = "ffmpeg " + ffmpeg_arguments  # ffmpeg_arguments.split()
         p = subprocess.run(all_args, capture_output=True, text=True, shell=True)
-        print(all_args)
 
         final_ans = ["<ffmpeg_stdout>"]
         final_ans.append(p.stdout + p.stderr)

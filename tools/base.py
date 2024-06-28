@@ -10,32 +10,57 @@ from tools.solve_python_code import ToolSolvePythonCode
 from tools.get_webpage_contents import ToolGetUrlContent
 from tools.make_qr_code import ToolMakeQRCode
 from tools.read_local_file import ToolReadLocalFile
+from tools.write_local_file import ToolWriteLocalFile
 from tools.read_file_names_in_local_folder import ToolReadLocalFolder
 from tools.do_date_math import ToolDoDateMath
 from tools.update_user_details import ToolUpdateUserDetails
 from tools.use_ffmpeg import ToolUseFFMPEG
+from tools.plot_with_graphviz import ToolPlotWithGraphviz
 
 rng = np.random.default_rng()
 
 
 class LLMTools:
-    def __init__(self, query_llm=None):
-        """Constructor."""
-        self.query_llm = query_llm
-        self.tools = [
+    def get_all_tools(query_llm):
+        """Returns a list of all tools available"""
+        return [
             ToolDoDateMath(),
             ToolUpdateUserDetails(),
             ToolMakeCustomPlot(),
             ToolSolveSymbolic(),
             ToolSolveNumeric(),
-            ToolGetUrlContent(self.query_llm),
+            ToolGetUrlContent(query_llm),
             ToolMakeQRCode(),
             ToolReadLocalFile(),
+            ToolWriteLocalFile(),
             ToolReadLocalFolder(),
-            ToolUseFFMPEG()
-            # Being left out for now
-            # ToolSolvePythonCode(),
+            ToolUseFFMPEG(),
+            ToolSolvePythonCode(),
+            ToolPlotWithGraphviz(),
         ]
+
+    def __init__(self, query_llm=None, desired_tools=None):
+        """Constructor."""
+        self.query_llm = query_llm
+        if desired_tools is None:
+            self.tools = [
+                ToolDoDateMath(),
+                ToolUpdateUserDetails(),
+                ToolMakeCustomPlot(),
+                ToolSolveSymbolic(),
+                ToolSolveNumeric(),
+                ToolGetUrlContent(self.query_llm),
+                ToolMakeQRCode(),
+                ToolReadLocalFile(),
+                ToolWriteLocalFile(),
+                ToolReadLocalFolder(),
+                ToolUseFFMPEG(),
+                ToolPlotWithGraphviz(),
+                # Being left out for now
+                # ToolSolvePythonCode(),
+            ]
+        else:
+            self.tools = desired_tools
 
         self.tool_mapping = dict(zip([x.name for x in self.tools], self.tools))
         self.call_return_string = """

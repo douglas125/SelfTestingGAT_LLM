@@ -70,7 +70,7 @@ class LLMInterface:
         self.log = []
 
         # handle native tool use
-        if self.rpg.use_native_tools:
+        if self.rpg is not None and self.rpg.use_native_tools:
             self.native_tools = [x.tool_description for x in self.lt.tools]
             self.tool_invoker_fn = self.lt.invoke_tool
             self.extra_stop_sequences = []
@@ -149,6 +149,7 @@ class LLMInterface:
             image_string = base64.b64encode(buff.getvalue()).decode("utf-8")
 
         t0 = time.time()
+
         cur_log = {"Function calls": []}
 
         if len(ui_history) > 0:
@@ -174,10 +175,14 @@ class LLMInterface:
             else "",
             extra_stop_sequences=self.extra_stop_sequences,
             tools=self.native_tools,
-            tool_invoker_fn=self.lt.invoke_tool,
+            tool_invoker_fn=self.lt.invoke_tool if self.lt is not None else None,
         )
-        with open("ui_debug_prompt.txt", "w") as f:
-            f.write(str(self.llm.last_prompt))
+
+        try:
+            with open("ui_debug_prompt.txt", "w", encoding="utf-8") as f:
+                f.write(str(self.llm.last_prompt))
+        except:
+            pass
 
         for x in ans2:
             # pass
@@ -249,7 +254,7 @@ class LLMInterface:
             tool_results.append("\n")
             for x in self.llm.tool_use_added_msgs:
                 history_to_append.append(x)
-                # enable file display
+                # enable media display in the Gradio UI
                 if x["role"] == "user":
                     cur_tool_result = x["content"][0]["content"]
                     tool_results.append(
