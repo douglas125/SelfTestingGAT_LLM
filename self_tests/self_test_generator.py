@@ -169,11 +169,6 @@ The questions should be as different as possible from each other. Never generate
 
             return json.dumps(test_cases)
 
-    def _extract_answer(self, x):
-        """Extracts the final answer from chatwithfunctioncaller method"""
-        ans = x[3][-1][1].split("<answer><b>")[-1].split("</answer></b>")[0]
-        return ans.replace("\\", "\\\\\\\\")  # adjust backslash
-
 
 if __name__ == "__main__":
     # configure tests

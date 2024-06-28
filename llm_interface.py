@@ -177,8 +177,12 @@ class LLMInterface:
             tools=self.native_tools,
             tool_invoker_fn=self.lt.invoke_tool if self.lt is not None else None,
         )
-        with open("ui_debug_prompt.txt", "w") as f:
-            f.write(str(self.llm.last_prompt))
+
+        try:
+            with open("ui_debug_prompt.txt", "w", encoding="utf-8") as f:
+                f.write(str(self.llm.last_prompt))
+        except:
+            pass
 
         for x in ans2:
             # pass

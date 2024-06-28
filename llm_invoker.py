@@ -71,6 +71,7 @@ class LLM_Bedrock:
         extra_stop_sequences=[],
         tools=None,
         tool_invoker_fn=None,
+        max_retries=1,
     ):
         """Calls the LLM in streaming mode
         Arguments:
@@ -88,7 +89,10 @@ class LLM_Bedrock:
         self.last_prompt = str(prompt) + postpend
         if tools is None:
             return self.invoke_streaming(
-                prompt, postpend=postpend, extra_stop_sequences=extra_stop_sequences
+                prompt,
+                postpend=postpend,
+                extra_stop_sequences=extra_stop_sequences,
+                max_retries=max_retries,
             )
         else:
             return self.invoke_streaming(
@@ -97,6 +101,7 @@ class LLM_Bedrock:
                 extra_stop_sequences=extra_stop_sequences,
                 tools=tools,
                 tool_invoker_fn=tool_invoker_fn,
+                max_retries=max_retries,
             )
 
     def _prepare_call_list_from_history(

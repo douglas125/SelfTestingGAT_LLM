@@ -51,3 +51,8 @@ class SelfTestBase:
             system_prompt=system_prompt, llm=self.llm, llm_tools=lt, rpg=rpg
         )
         return li
+
+    def _extract_answer(self, x):
+        """Extracts the final answer from chatwithfunctioncaller method"""
+        ans = x[3][-1][1].split("<answer><b>")[-1].split("</answer></b>")[0]
+        return ans.replace("\\", "\\\\\\\\")  # adjust backslash
