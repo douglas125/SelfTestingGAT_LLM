@@ -11,3 +11,5 @@ ipywidgets
 jupyterlab
 jupyterlab-lsp
 python-lsp-server
+openai
+anthropic

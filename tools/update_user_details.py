@@ -8,17 +8,15 @@ class ToolUpdateUserDetails:
 
         self.tool_description = {
             "name": self.name,
-            "description": """Reads or writes relevant information about the user being assisted. Always retrieve relevant information about the user before answering questions. Always READ before you WRITE. Before saving new data, show all the changes (before/after) to the user and ask for confirmation. Never save or replace information without first confirming with the user that the changes are correct. Use [] instead of <> when creating groups.
+            "description": """Reads or writes relevant information about the user being assisted. Always READ before you WRITE. Before saving new data, show all the changes (before/after) to the user and ask for confirmation. Never save or replace information without first confirming with the user that the changes are correct. Use [] instead of <> when creating groups.
 
-This tool should be used to save and retrieve relevant information that may be needed to provide a better experience to the user.
-Always retrieve the existing information first so you don't forget to save important existing data. When saving, make sure to include all information still relevant, as shown below in  <user_details_example></user_details_example>:
+Always retrieve the existing information first so you don't forget to save important existing data. When saving, make sure to include all information still relevant, as shown below in  <user_example></user_example>:
 
-<user_details_example>
+<user_example>
 If the current user information is:
 
 [user_info]
 [name]Julian[/name]
-[birth]1983-10-10[/birth]
 [friends]Karlo, Joseph, Milly[/friends]
 [/user_info]
 
@@ -26,12 +24,11 @@ And the user says: Joseph is not my friend. After confirmation, the user informa
 
 [user_info]
 [name]Julian[/name]
-[birth]1983-10-10[/birth]
 [friends]Karlo, Milly[/friends]
 [/user_info]
 
-This means that all previous relevant information has to be sent in the contents, since the new relevant information fully replaces the old one.
-</user_details_example>""",
+All previous relevant information has to be sent in the contents.
+</user_example>""",
             "input_schema": {
                 "type": "object",
                 "properties": {
