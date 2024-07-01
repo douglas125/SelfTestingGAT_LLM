@@ -169,12 +169,12 @@ class LLM_GPT_OpenAI(LLM_Service):
         self.config = {
             # "messages": prompt,
             # "system": sysprompt,
-            "max_tokens": 3500,
+            "max_tokens": 1000,
             "temperature": 0.5,  # 0.5 is default,
             "stream": True,
             # "top_k": 250,
             # "top_p": 1,
-            "stop": [],  # the regular is already implemented
+            "stop": None,  # the regular is already implemented
             "model": self.model_id,
         }
         # requests and answer word count
@@ -211,7 +211,9 @@ class LLM_GPT_OpenAI(LLM_Service):
                     "content": [
                         {
                             "type": "image_url",
-                            "image_url": b64image,
+                            "image_url": {
+                                "url": f"data:image/jpeg;base64,{b64image}",
+                            },
                         },
                         {"type": "text", "text": msg},
                     ],
@@ -255,7 +257,10 @@ class LLM_GPT_OpenAI(LLM_Service):
         # start time
         t0 = time.time()
         body = self.config.copy()
-        body["stop"] = body["stop"] + extra_stop_sequences
+        if len(extra_stop_sequences) > 0:
+            body["stop"] = extra_stop_sequences
+        else:
+            body.pop("stop", None)
         body["messages"] = prompt
 
         if tools is None:
@@ -280,95 +285,91 @@ class LLM_GPT_OpenAI(LLM_Service):
 
         cur_fail_sleep = 60
         for k in range(max_retries):
-            # try:
-            self.debug_body = body
-            llm_body_changed = True
-            while llm_body_changed:
-                llm_body_changed = False
-                response = self.openai_client.chat.completions.create(**body)
-                word_count = len(re.findall(r"\w+", str(body["messages"])))
-                print(f"Invoking {self.llm_description}. Word count: {word_count}")
+            try:
+                self.debug_body = body
+                llm_body_changed = True
+                while llm_body_changed:
+                    llm_body_changed = False
+                    print(body["messages"])
+                    response = self.openai_client.chat.completions.create(**body)
+                    word_count = len(re.findall(r"\w+", str(body["messages"])))
+                    print(f"Invoking {self.llm_description}. Word count: {word_count}")
 
-                # stream responses
-                partial_ans = self._response_gen(response, postpend)
-                x = ""
-                for x in partial_ans:
-                    yield x
-                cur_ans = x
+                    # stream responses
+                    partial_ans = self._response_gen(response, postpend)
+                    x = ""
+                    for x in partial_ans:
+                        yield x
+                    cur_ans = x
 
-                if self.cur_tool_spec is not None:
-                    # tool use has been required. Let's do it
-                    # TODO: update upstream to reflect the inclusion of a response
-                    # TODO: probably rework gradio UI to re-instantiate things every chat, or keep an instance per chat ID
-                    tool_ans = tool_invoker_fn(
-                        self.cur_tool_spec["tool_name"],
-                        return_results_only=True,
-                        **self.cur_tool_spec["input"],
-                    )
+                    if self.cur_tool_spec is not None:
+                        # tool use has been required. Let's do it
+                        # TODO: update upstream to reflect the inclusion of a response
+                        # TODO: probably rework gradio UI to re-instantiate things every chat, or keep an instance per chat ID
+                        tool_ans = tool_invoker_fn(
+                            self.cur_tool_spec["tool_name"],
+                            return_results_only=True,
+                            **self.cur_tool_spec["input"],
+                        )
 
-                    # append assistant responses
-                    assistant_msg = {
-                        "role": "assistant",
-                        "content": [
-                            {
-                                "type": "text",
-                                "text": cur_ans,
-                            },
-                        ],
-                        "tool_calls": [
-                            {
-                                "id": self.cur_tool_spec["id"],
-                                "type": "function",
-                                "function": {
-                                    "name": self.cur_tool_spec["tool_name"],
-                                    "arguments": json.dumps(
-                                        self.cur_tool_spec["input"]
-                                    ),
+                        # append assistant responses
+                        assistant_msg = {
+                            "role": "assistant",
+                            "content": [
+                                {
+                                    "type": "text",
+                                    "text": cur_ans,
                                 },
-                            }
-                        ],
-                    }
+                            ],
+                            "tool_calls": [
+                                {
+                                    "id": self.cur_tool_spec["id"],
+                                    "type": "function",
+                                    "function": {
+                                        "name": self.cur_tool_spec["tool_name"],
+                                        "arguments": json.dumps(
+                                            self.cur_tool_spec["input"]
+                                        ),
+                                    },
+                                }
+                            ],
+                        }
 
-                    next_user_msg = {
-                        "role": "tool",
-                        "content": tool_ans,
-                        "tool_call_id": self.cur_tool_spec["id"],
-                    }
-                    body["messages"].append(assistant_msg)
-                    body["messages"].append(next_user_msg)
+                        next_user_msg = {
+                            "role": "tool",
+                            "content": tool_ans,
+                            "tool_call_id": self.cur_tool_spec["id"],
+                        }
+                        body["messages"].append(assistant_msg)
+                        body["messages"].append(next_user_msg)
 
-                    # keep a log of messages that had to be appended due to tool use
-                    self.tool_use_added_msgs.append(assistant_msg)
-                    self.tool_use_added_msgs.append(next_user_msg)
-                    llm_body_changed = True
+                        # keep a log of messages that had to be appended due to tool use
+                        self.tool_use_added_msgs.append(assistant_msg)
+                        self.tool_use_added_msgs.append(next_user_msg)
+                        llm_body_changed = True
 
-                # TODO: Include proper token count and pricing
-                ans_word_count = len(
-                    re.findall(r"\w+", postpend + cur_ans + str(self.stop_reason))
+                    # TODO: Include proper token count and pricing
+                    ans_word_count = len(
+                        re.findall(r"\w+", postpend + cur_ans + str(self.stop_reason))
+                    )
+                    self.word_counts.append(
+                        {
+                            "request_word_count": word_count,
+                            "answer_word_count": ans_word_count,
+                            "price_estimate": 0.001
+                            * (0.003 * word_count + 0.015 * ans_word_count),
+                            "exec_time_in_s": time.time() - t0,
+                        }
+                    )
+                return
+            except Exception as e:
+                print(
+                    f'Error {str(e)}. Prompt length: {len(str(body["messages"]))}\n\nRetrying {k}...'
                 )
-                self.word_counts.append(
-                    {
-                        "request_word_count": word_count,
-                        "answer_word_count": ans_word_count,
-                        "price_estimate": 0.001
-                        * (0.003 * word_count + 0.015 * ans_word_count),
-                        "exec_time_in_s": time.time() - t0,
-                    }
-                )
-            return
-        # except Exception as e:
-        #     print(
-        #         f'Error {str(e)}. Prompt length: {len(str(body["messages"]))}\n\nRetrying {k}...'
-        #     )
-        #     time.sleep(int(cur_fail_sleep))
-        #     cur_fail_sleep *= 1.2
+                time.sleep(int(cur_fail_sleep))
+                cur_fail_sleep *= 1.2
 
         raise
-        # return response
-
-        # except ClientError:
-        #    logger.error("Couldn't invoke Claude")
-        #    raise
 
     def _response_gen(self, response_body, postpend=""):
         cur_ans = ""
@@ -399,7 +400,15 @@ class LLM_GPT_OpenAI(LLM_Service):
                 yield postpend + cur_ans + stop_txt
                 break
         if cur_tool_spec is not None:
-            cur_tool_spec["input"] = json.loads(cur_tool_spec["arguments"])
+            cur_tool_spec["arguments"] = cur_tool_spec["arguments"].split("{")[1:]
+            cur_tool_spec["arguments"] = "{" + "{".join(cur_tool_spec["arguments"])
+
+            # print(f'*{cur_tool_spec["arguments"]}*')
+            cur_tool_spec["input"] = (
+                cur_tool_spec["arguments"]
+                if isinstance(cur_tool_spec["arguments"], dict)
+                else json.loads(cur_tool_spec["arguments"])
+            )
             cur_tool_spec["tool_name"] = cur_tool_spec["function"].name
             cur_tool_spec.pop("index", None)
             cur_tool_spec.pop("type", None)
@@ -500,89 +509,84 @@ class LLM_Claude3_Anthropic(LLM_Service):
 
         cur_fail_sleep = 60
         for k in range(max_retries):
-            # try:
-            self.debug_body = body
-            llm_body_changed = True
-            while llm_body_changed:
-                llm_body_changed = False
-                response = self.anthropic_client.messages.create(**body)
-                word_count = len(re.findall(r"\w+", str(body["messages"])))
-                print(f"Invoking {self.llm_description}. Word count: {word_count}")
+            try:
+                self.debug_body = body
+                llm_body_changed = True
+                while llm_body_changed:
+                    llm_body_changed = False
+                    response = self.anthropic_client.messages.create(**body)
+                    word_count = len(re.findall(r"\w+", str(body["messages"])))
+                    print(f"Invoking {self.llm_description}. Word count: {word_count}")
 
-                # stream responses
-                partial_ans = self._response_gen(response, postpend)
-                x = ""
-                for x in partial_ans:
-                    yield x
-                cur_ans = x
+                    # stream responses
+                    partial_ans = self._response_gen(response, postpend)
+                    x = ""
+                    for x in partial_ans:
+                        yield x
+                    cur_ans = x
 
-                if self.cur_tool_spec is not None:
-                    # tool use has been required. Let's do it
-                    # TODO: update upstream to reflect the inclusion of a response
-                    # TODO: probably rework gradio UI to re-instantiate things every chat, or keep an instance per chat ID
-                    tool_ans = tool_invoker_fn(
-                        self.cur_tool_spec["name"],
-                        return_results_only=True,
-                        **self.cur_tool_spec["input"],
+                    if self.cur_tool_spec is not None:
+                        # tool use has been required. Let's do it
+                        # TODO: update upstream to reflect the inclusion of a response
+                        # TODO: probably rework gradio UI to re-instantiate things every chat, or keep an instance per chat ID
+                        tool_ans = tool_invoker_fn(
+                            self.cur_tool_spec["name"],
+                            return_results_only=True,
+                            **self.cur_tool_spec["input"],
+                        )
+
+                        # append assistant responses
+                        assistant_msg = {
+                            "role": "assistant",
+                            "content": [
+                                {
+                                    "type": "text",
+                                    "text": cur_ans,
+                                },
+                                self.cur_tool_spec,
+                            ],
+                        }
+
+                        next_user_msg = {
+                            "role": "user",
+                            "content": [
+                                {
+                                    "type": "tool_result",
+                                    "tool_use_id": self.cur_tool_spec["id"],
+                                    "content": tool_ans,
+                                }
+                            ],
+                        }
+                        body["messages"].append(assistant_msg)
+                        body["messages"].append(next_user_msg)
+
+                        # keep a log of messages that had to be appended due to tool use
+                        self.tool_use_added_msgs.append(assistant_msg)
+                        self.tool_use_added_msgs.append(next_user_msg)
+                        llm_body_changed = True
+
+                    # TODO: Include proper token count and pricing
+                    ans_word_count = len(
+                        re.findall(r"\w+", postpend + cur_ans + str(self.stop_reason))
                     )
-
-                    # append assistant responses
-                    assistant_msg = {
-                        "role": "assistant",
-                        "content": [
-                            {
-                                "type": "text",
-                                "text": cur_ans,
-                            },
-                            self.cur_tool_spec,
-                        ],
-                    }
-
-                    next_user_msg = {
-                        "role": "user",
-                        "content": [
-                            {
-                                "type": "tool_result",
-                                "tool_use_id": self.cur_tool_spec["id"],
-                                "content": tool_ans,
-                            }
-                        ],
-                    }
-                    body["messages"].append(assistant_msg)
-                    body["messages"].append(next_user_msg)
-
-                    # keep a log of messages that had to be appended due to tool use
-                    self.tool_use_added_msgs.append(assistant_msg)
-                    self.tool_use_added_msgs.append(next_user_msg)
-                    llm_body_changed = True
-
-                # TODO: Include proper token count and pricing
-                ans_word_count = len(
-                    re.findall(r"\w+", postpend + cur_ans + str(self.stop_reason))
+                    self.word_counts.append(
+                        {
+                            "request_word_count": word_count,
+                            "answer_word_count": ans_word_count,
+                            "price_estimate": 0.001
+                            * (0.003 * word_count + 0.015 * ans_word_count),
+                            "exec_time_in_s": time.time() - t0,
+                        }
+                    )
+                return
+            except Exception as e:
+                print(
+                    f'Error {str(e)}. Prompt length: {len(str(body["messages"]))}\n\nRetrying {k}...'
                 )
-                self.word_counts.append(
-                    {
-                        "request_word_count": word_count,
-                        "answer_word_count": ans_word_count,
-                        "price_estimate": 0.001
-                        * (0.003 * word_count + 0.015 * ans_word_count),
-                        "exec_time_in_s": time.time() - t0,
-                    }
-                )
-            return
-        # except Exception as e:
-        #     print(
-        #         f'Error {str(e)}. Prompt length: {len(str(body["messages"]))}\n\nRetrying {k}...'
-        #     )
-        #     time.sleep(int(cur_fail_sleep))
-        #     cur_fail_sleep *= 1.2
+                time.sleep(int(cur_fail_sleep))
+                cur_fail_sleep *= 1.2
 
         raise
-        # return response
-
-        # except ClientError:
-        #    logger.error("Couldn't invoke Claude")
-        #    raise
 
     def _response_gen(self, response_body, postpend=""):
         cur_ans = ""
