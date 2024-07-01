@@ -254,9 +254,15 @@ class LLMInterface:
             tool_results.append("\n")
             for x in self.llm.tool_use_added_msgs:
                 history_to_append.append(x)
-                # enable media display in the Gradio UI
+                # enable media display in the Gradio UI - anthropic
                 if x["role"] == "user":
                     cur_tool_result = x["content"][0]["content"]
+                    tool_results.append(
+                        cur_tool_result if "<path_to_" in cur_tool_result else ""
+                    )
+                # enable media display in the Gradio UI - openai
+                if x["role"] == "tool":
+                    cur_tool_result = x["content"]
                     tool_results.append(
                         cur_tool_result if "<path_to_" in cur_tool_result else ""
                     )
