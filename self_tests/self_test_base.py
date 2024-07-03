@@ -27,7 +27,7 @@ class SelfTestBase:
             service_name="bedrock-runtime", config=self.config
         )
         self.ref_llm = ref_llm
-        self.llm = inv.LLM_Service.get_llm(self.bedrock_client, ref_llm)
+        self.llm = inv.LLM_Provider.get_llm(self.bedrock_client, ref_llm)
         self.use_native_LLM_tools = use_native_LLM_tools
 
     def get_llm_interface(self, tool_subset):
