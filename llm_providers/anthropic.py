@@ -21,7 +21,7 @@ class LLM_Claude3_Anthropic(LLM_Service):
         self.config = {
             # "messages": prompt,
             # "system": sysprompt,
-            "max_tokens": 3500,
+            "max_tokens": 4000,
             "temperature": 0.5,  # 0.5 is default,
             "stream": True,
             # "top_k": 250,
