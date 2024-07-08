@@ -13,10 +13,15 @@ class LLM_Claude3_Anthropic(LLM_Service):
             bedrock_client - Instance of boto3.client(service_name='bedrock-runtime')
                 to use when making calls to bedrock models
         """
+        self.anthropic_client = anthropic.Anthropic()
         if model_size == "Sonnet 3.5 Anthropic":
             self.model_id = "claude-3-5-sonnet-20240620"
-            self.anthropic_client = anthropic.Anthropic()
             self.llm_description = "Anthropic Claude 3.5 Sonnet (Medium-size LLM) - directly from Anthropic"
+        elif model_size == "Opus 3 Anthropic":
+            self.model_id = "claude-3-opus-20240229"
+            self.llm_description = (
+                "Anthropic Claude 3 Opus (Large-size LLM) - directly from Anthropic"
+            )
 
         self.config = {
             # "messages": prompt,

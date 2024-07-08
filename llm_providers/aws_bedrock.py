@@ -15,17 +15,24 @@ class LLM_Claude3_Bedrock(LLM_Service):
         """
         if model_size == "Opus":
             self.model_id = "anthropic.claude-3-opus-20240229-v1:0"
-            self.llm_description = "Anthropic Claude 3.0 Opus (Large LLM)"
+            self.llm_description = (
+                "Anthropic Claude 3.0 Opus from AWS Bedrock (Large LLM)"
+            )
         elif model_size == "Sonnet":
             self.model_id = "anthropic.claude-3-sonnet-20240229-v1:0"
-            self.llm_description = "Anthropic Claude 3.0 Sonnet (Medium-size LLM)"
+            self.llm_description = (
+                "Anthropic Claude 3.0 Sonnet from AWS Bedrock (Medium-size LLM)"
+            )
         elif model_size == "Sonnet 3.5":
             self.model_id = "anthropic.claude-3-5-sonnet-20240620-v1:0"
-            self.llm_description = "Anthropic Claude 3.5 Sonnet (Medium-size LLM)"
-            assert False, "Model still not available"
+            self.llm_description = (
+                "Anthropic Claude 3.5 Sonnet from AWS Bedrock (Medium-size LLM)"
+            )
         elif model_size == "Haiku":
             self.model_id = "anthropic.claude-3-haiku-20240307-v1:0"
-            self.llm_description = "Anthropic Claude 3.0 Haiku (Small-size LLM)"
+            self.llm_description = (
+                "Anthropic Claude 3.0 Haiku from AWS Bedrock (Small-size LLM)"
+            )
 
         self.bedrock_client = bedrock_client
         self.config = {

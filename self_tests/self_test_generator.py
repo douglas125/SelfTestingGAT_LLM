@@ -185,7 +185,7 @@ if __name__ == "__main__":
     # configure tests
     n_test_cases = 2
     llms_to_test = [
-        "Claude 3 Haiku",
+        "Claude 3 Haiku - Bedrock",
         "GPT 3.5 - OpenAI",
         "Claude 3.5 Sonnet - Anthropic",
         "GPT 4o - OpenAI",
