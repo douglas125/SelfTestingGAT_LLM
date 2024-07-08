@@ -266,10 +266,11 @@ class LLMInterface:
                     tool_results.append(
                         cur_tool_result if "<path_to_" in cur_tool_result else ""
                     )
-            tool_results = "\n".join(tool_results)
             history_to_append.append({"role": "assistant", "content": cur_answer})
         else:
             history_to_append.append([msg, cur_answer])
+
+        tool_results = "\n".join(tool_results)
         self.history_log[chat_id] = history + history_to_append
 
         final_response_ui = self._format_msg(cur_answer + tool_results, msg, ui_history)

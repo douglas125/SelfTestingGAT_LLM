@@ -3,6 +3,7 @@
 # outdated
 from llm_providers.aws_bedrock import LLM_Llama13b
 from llm_providers.aws_bedrock import LLM_Llama70b
+from llm_providers.aws_bedrock import LLM_Llama3
 from llm_providers.aws_bedrock import LLM_Claude2_1_Bedrock
 from llm_providers.aws_bedrock import LLM_Mixtral8x7b_Bedrock
 from llm_providers.aws_bedrock import LLM_Claude_Instant_1_2_Bedrock
@@ -11,6 +12,7 @@ from llm_providers.aws_bedrock import LLM_Claude_Instant_1_2_Bedrock
 from llm_providers.openai import LLM_GPT_OpenAI
 from llm_providers.anthropic import LLM_Claude3_Anthropic
 from llm_providers.aws_bedrock import LLM_Claude3_Bedrock
+from llm_providers.aws_bedrock_cohere import LLM_Command_Cohere
 
 
 class LLM_Provider:
@@ -23,11 +25,16 @@ class LLM_Provider:
         "Claude 3 Sonnet - Bedrock",
         "Claude 3.5 Sonnet - Bedrock",
         "Claude 3 Opus - Bedrock",
+        "Command R - Bedrock",
+        "Command RPlus - Bedrock",
+        "Mistral Mixtral 8x7B",
+        # Legacy
         "Claude 2.1",
         "Claude Instant 1.2",
         "Llama2 13b",
         "Llama2 70b",
-        "Mistral Mixtral 8x7B",
+        "Llama3 8b instruct",
+        "Llama3 70b instruct",
     ]
 
     def get_llm(bedrock_client, llm):
@@ -48,6 +55,16 @@ class LLM_Provider:
             return LLM_Llama13b(bedrock_client)
         elif llm == "Llama2 70b":
             return LLM_Llama70b(bedrock_client)
+        elif llm == "Llama3 8b instruct":
+            return LLM_Llama3(bedrock_client, model="Llama3 8B Instruct - Bedrock")
+        elif llm == "Llama3 70b instruct":
+            return LLM_Llama3(bedrock_client, model="Llama3 70B Instruct - Bedrock")
+        elif llm == "Command R - Bedrock":
+            return LLM_Command_Cohere(bedrock_client, model_size="Command R Cohere 1")
+        elif llm == "Command RPlus - Bedrock":
+            return LLM_Command_Cohere(
+                bedrock_client, model_size="Command RPlus Cohere 1"
+            )
         elif llm == "Mistral Mixtral 8x7B":
             return LLM_Mixtral8x7b_Bedrock(bedrock_client)
         elif llm == "Claude 3 Opus - Bedrock":

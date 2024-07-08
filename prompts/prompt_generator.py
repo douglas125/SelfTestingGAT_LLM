@@ -41,4 +41,4 @@ class RAGPromptGenerator:
 
         self.prompt = self.prompt.replace("{{DATE}}", date_str)
 
-        self.post_anti_hallucination = "<scratchpad> I can only use functions that have been explicitly provided. I must follow the <tool_guidelines></tool_guidelines>. I may need the following tools:"
+        self.post_anti_hallucination = "<scratchpad> I can only use functions that have been explicitly provided. I must follow the <tool_guidelines></tool_guidelines>. I need the following tools:"
