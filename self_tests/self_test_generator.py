@@ -51,8 +51,10 @@ class SelfTestGenerator(SelfTestBase):
         if tool_strategy == "use_all":
             q = """Analyze carefully your tools.
 For each tool, generate a set of NTESTCASES questions that can be answered using exactly that tool and no other.
-The total number of questions to be generated is NTESTCASES * (number of tools), which means NTESTCASES per tool.
+The number of questions to be generated in this phase is NTESTCASES * (number of tools), which means NTESTCASES per tool.
+
 Then, generate a set of NTESTCASES questions that can be answered using exactly two tools and no other.
+The number of additional questions to be generated in this phase is NTESTCASES * (number of tools) * (number of tools - 1) / 2, which means NTESTCASES per pair of tools.
 
 Give a list of the tool names in the order they should be used. The questions should be as different as possible from each other.
 """.replace(
@@ -64,7 +66,8 @@ Give a list of the tool names in the order they should be used. The questions sh
             ans_gen = li.chat_with_function_caller(q, image=None, ui_history=[])
             for x in ans_gen:
                 pass
-            test_cases = json.loads(self._extract_answer(x))
+            use_all_ans = self._extract_answer(x)
+            test_cases = json.loads(use_all_ans)
             return json.dumps(test_cases)
         elif tool_strategy == "only_selected":
             test_cases = []
@@ -85,6 +88,8 @@ Generate a set of NTESTCASES questions that can be answered using exactly the to
                 try:
                     cur_case = self._extract_answer(x)
                     cur_case = json.loads(cur_case)
+                    for t in cur_case:
+                        t["expected_tool_to_gen_test"] = cur_tool.name
                     test_cases += cur_case
                 except Exception as ex:
                     print(x, str(ex))
@@ -109,6 +114,8 @@ The questions should be as different as possible from each other. Never generate
                     try:
                         cur_case = self._extract_answer(x)
                         cur_case = json.loads(cur_case)
+                        for t in cur_case:
+                            t["expected_tool_to_gen_test"] = f"{t1.name},{t2.name}"
                         test_cases += cur_case
                     except Exception as ex:
                         print(x, str(ex))
@@ -136,6 +143,8 @@ The questions should be as different as possible from each other.
                 try:
                     cur_case = self._extract_answer(x)
                     cur_case = json.loads(cur_case)
+                    for t in cur_case:
+                        t["expected_tool_to_gen_test"] = cur_tool.name
                     test_cases += cur_case
                 except Exception as ex:
                     print(x, str(ex))
@@ -163,6 +172,8 @@ The questions should be as different as possible from each other. Never generate
                     try:
                         cur_case = self._extract_answer(x)
                         cur_case = json.loads(cur_case)
+                        for t in cur_case:
+                            t["expected_tool_to_gen_test"] = f"{t1.name},{t2.name}"
                         test_cases += cur_case
                     except Exception as ex:
                         print(x, str(ex))
@@ -174,8 +185,10 @@ if __name__ == "__main__":
     # configure tests
     n_test_cases = 2
     llms_to_test = [
-        "Claude 3 Haiku",
+        "Claude 3 Haiku - Bedrock",
+        "GPT 3.5 - OpenAI",
         "Claude 3.5 Sonnet - Anthropic",
+        "GPT 4o - OpenAI",
     ]  # , "Claude 3 Sonnet"]
     tool_strategies = ["use_all", "only_selected", "selected_with_dummies"]
     for cur_llm_name in llms_to_test:

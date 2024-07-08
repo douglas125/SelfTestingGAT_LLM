@@ -70,8 +70,8 @@ if __name__ == "__main__":
     # configure tests
     n_test_cases = 2
     llms_to_test = [
-        {"model": "Claude 3 Haiku", "native_tools": True},
-        # {"model": "Claude 3 Haiku", "native_tools": False},
+        {"model": "Claude 3 Haiku - Bedrock", "native_tools": True},
+        # {"model": "Claude 3 Haiku - Bedrock", "native_tools": False},
         # {"model": "Claude 3.5 Sonnet - Anthropic", "native_tools": True},
     ]
     test_files = [

@@ -18,9 +18,11 @@ class LLM_Provider:
         "GPT 4o - OpenAI",
         "GPT 3.5 - OpenAI",
         "Claude 3.5 Sonnet - Anthropic",
-        "Claude 3 Haiku",
-        "Claude 3 Sonnet",
-        "Claude 3 Opus",
+        "Claude 3 Opus - Anthropic",
+        "Claude 3 Haiku - Bedrock",
+        "Claude 3 Sonnet - Bedrock",
+        "Claude 3.5 Sonnet - Bedrock",
+        "Claude 3 Opus - Bedrock",
         "Claude 2.1",
         "Claude Instant 1.2",
         "Llama2 13b",
@@ -48,16 +50,18 @@ class LLM_Provider:
             return LLM_Llama70b(bedrock_client)
         elif llm == "Mistral Mixtral 8x7B":
             return LLM_Mixtral8x7b_Bedrock(bedrock_client)
-        elif llm == "Claude 3 Opus":
+        elif llm == "Claude 3 Opus - Bedrock":
             return LLM_Claude3_Bedrock(bedrock_client, model_size="Opus")
-        elif llm == "Claude 3 Sonnet":
+        elif llm == "Claude 3 Sonnet - Bedrock":
             return LLM_Claude3_Bedrock(bedrock_client, model_size="Sonnet")
-        elif llm == "Claude 3 Haiku":
+        elif llm == "Claude 3 Haiku - Bedrock":
             return LLM_Claude3_Bedrock(bedrock_client, model_size="Haiku")
-        elif llm == "Claude 3.5 Sonnet":
+        elif llm == "Claude 3.5 Sonnet - Bedrock":
             return LLM_Claude3_Bedrock(bedrock_client, model_size="Sonnet 3.5")
         elif llm == "Claude 3.5 Sonnet - Anthropic":
             return LLM_Claude3_Anthropic(model_size="Sonnet 3.5 Anthropic")
+        elif llm == "Claude 3 Opus - Anthropic":
+            return LLM_Claude3_Anthropic(model_size="Opus 3 Anthropic")
         elif llm == "GPT 3.5 - OpenAI":
             return LLM_GPT_OpenAI(model_size="GPT3_5 OpenAI")
         elif llm == "GPT 4o - OpenAI":

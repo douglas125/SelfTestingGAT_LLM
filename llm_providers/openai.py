@@ -28,7 +28,7 @@ class LLM_GPT_OpenAI(LLM_Service):
         self.config = {
             # "messages": prompt,
             # "system": sysprompt,
-            "max_tokens": 1000,
+            "max_tokens": 4000,
             "temperature": 0.5,  # 0.5 is default,
             "stream": True,
             # "top_k": 250,
@@ -149,7 +149,6 @@ class LLM_GPT_OpenAI(LLM_Service):
                 llm_body_changed = True
                 while llm_body_changed:
                     llm_body_changed = False
-                    print(body["messages"])
                     response = self.openai_client.chat.completions.create(**body)
                     word_count = len(re.findall(r"\w+", str(body["messages"])))
                     print(f"Invoking {self.llm_description}. Word count: {word_count}")
