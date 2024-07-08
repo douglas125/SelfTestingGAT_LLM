@@ -1,4 +1,5 @@
 import re
+import copy
 import json
 import time
 
@@ -31,6 +32,7 @@ class LLM_Command_Cohere(LLM_Service):
             # "system": sysprompt,
             "max_tokens": 3900,
             "temperature": 0.5,  # 0.5 is default,
+            "force_single_step": False,
             # "top_k": 250,
             # "top_p": 1,
             "stop_sequences": [],  # the regular is already implemented
@@ -90,6 +92,7 @@ class LLM_Command_Cohere(LLM_Service):
         """
         # Messages that had to be added because of function use
         self.tool_use_added_msgs = []
+        self.tool_results = []
 
         # try:
         # The different model providers have individual request and response formats.
@@ -114,8 +117,35 @@ class LLM_Command_Cohere(LLM_Service):
         # if tools is not None:
         #     body["messages"].append({"role": "assistant", "content": postpend})
         if tools is not None:
-            body["tools"] = tools
             assert postpend == "", "When using tools, postpend is not supported"
+            assert (
+                tool_invoker_fn is not None
+            ), "When using tools, a tool invoker must be provided"
+
+            adj_tools = []
+            for x in tools:
+                cur_desc = x.copy()
+                required_params = cur_desc["input_schema"].copy().pop("required")
+                cur_desc["parameter_definitions"] = copy.deepcopy(
+                    cur_desc["input_schema"]["properties"]
+                )
+                cur_desc.pop("input_schema", None)
+                # adjust parameter types
+                lookup_param_type = {
+                    "string": "str",
+                    "integer": "int",
+                    "boolean": "bool",
+                }
+                for k in cur_desc["parameter_definitions"]:
+                    cur_desc["parameter_definitions"][k]["type"] = lookup_param_type[
+                        cur_desc["parameter_definitions"][k]["type"]
+                    ]
+                # adjust required parameters
+                for p in required_params:
+                    cur_desc["parameter_definitions"][p]["required"] = True
+                adj_tools.append(cur_desc)
+            body["tools"] = adj_tools
+            # assert postpend == "", "When using tools, postpend is not supported"
             assert (
                 tool_invoker_fn is not None
             ), "When using tools, a tool invoker must be provided"
@@ -147,9 +177,29 @@ class LLM_Command_Cohere(LLM_Service):
                     # TODO: update upstream to reflect the inclusion of a response
                     # TODO: probably rework gradio UI to re-instantiate things every chat, or keep an instance per chat ID
                     tool_ans = tool_invoker_fn(
-                        self.cur_tool_spec["name"],
+                        self.cur_tool_spec["tool_name"],
                         return_results_only=True,
                         **self.cur_tool_spec["input"],
+                    )
+                    """
+                        "tool_name": func_call_spec["name"],
+                        "input": func_call_spec["parameters"],
+                        "generation_id": func_call_spec["generation_id"],
+                    """
+
+                    print(self.cur_tool_spec)
+                    last_call = {
+                        "name": self.cur_tool_spec["tool_name"],
+                        "parameters": self.cur_tool_spec["input"],
+                        # "generation_id": self.cur_tool_spec["generation_id"],
+                    }
+                    self.tool_results.append(
+                        {
+                            "call": last_call,
+                            "outputs": [
+                                {self.cur_tool_spec["tool_name"] + "_output": tool_ans}
+                            ],
+                        }
                     )
 
                     # append assistant responses
@@ -169,13 +219,16 @@ class LLM_Command_Cohere(LLM_Service):
                         "content": [
                             {
                                 "type": "tool_result",
-                                "tool_use_id": self.cur_tool_spec["id"],
+                                # "generation_id": self.cur_tool_spec["generation_id"],
                                 "content": tool_ans,
                             }
                         ],
                     }
-                    body["chat_history"].append(assistant_msg)
-                    body["chat_history"].append(next_user_msg)
+                    # body["chat_history"].append(assistant_msg)
+                    # body["chat_history"].append(next_user_msg)
+                    body["tool_results"] = self.tool_results
+                    body["chat_history"] = self.cur_tool_spec["chat_history"]
+                    body["message"] = ""
 
                     # keep a log of messages that had to be appended due to tool use
                     self.tool_use_added_msgs.append(assistant_msg)
@@ -212,25 +265,29 @@ class LLM_Command_Cohere(LLM_Service):
             out_dict = json.loads(x["chunk"]["bytes"])
             txt = ""
             if "event_type" in out_dict.keys():
-                if out_dict["event_type"] == "text-generation":
-                    txt = out_dict["text"]
-                elif out_dict["event_type"] == "tool_use":
-                    cur_tool_spec = out_dict["content_block"].copy()
-                    cur_tool_spec["input"] = ""
+                # if out_dict["event_type"] == "text-generation":
+                #     txt = out_dict["text"]
+                if (
+                    out_dict["event_type"] == "tool-calls-generation"
+                    and out_dict.get("out_dict", False)
+                    and len(out_dict["tool_calls"]) > 0
+                ):
+                    func_call_spec = out_dict["tool_calls"][0]
+                    cur_tool_spec = {
+                        "tool_name": func_call_spec["name"],
+                        "input": func_call_spec["parameters"],
+                    }
+                txt = out_dict.get("text", "")
 
             if txt != "":
                 cur_ans += txt
                 yield postpend + cur_ans
-            stop_reason = (
-                out_dict["delta"].get("stop_reason", None)
-                if "delta" in out_dict.keys()
-                else None
-            )
-            if stop_reason is not None and stop_reason == "stop_sequence":
-                stop_txt = out_dict["delta"]["stop_sequence"]
-                yield postpend + cur_ans + stop_txt
-                break
-        if cur_tool_spec is not None:
-            cur_tool_spec["input"] = json.loads(cur_tool_spec["input"])
+            stop_reason = out_dict["event_type"] if out_dict["is_finished"] else None
+            if out_dict["is_finished"] and cur_tool_spec is not None:
+                cur_tool_spec["generation_id"] = out_dict["response"]["generation_id"]
+                cur_tool_spec["chat_history"] = out_dict["response"]["chat_history"]
+
+        yield postpend + cur_ans
+        # TODO: Make tool call work
         self.cur_tool_spec = cur_tool_spec
         self.stop_reason = stop_reason

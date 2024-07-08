@@ -38,10 +38,10 @@ Raises ValueError: if one of the parameters is invalid.""",
                     "delta_type": {
                         "type": "string",
                         "enum": ["day", "week", "month", "year"],
-                        "description": "Type of interval to sum or subtract from base_date. Possible values are listed in enum",
+                        "description": "Type of interval to sum or subtract from base_date. Possible values are listed in the string enum: ['day', 'week', 'month', 'year']",
                     },
                 },
-                "required": ["base_date", "delta"],
+                "required": ["base_date", "deltas", "delta_type"],
             },
         }
 
