@@ -5,13 +5,13 @@ from llm_providers.aws_bedrock import LLM_Llama13b
 from llm_providers.aws_bedrock import LLM_Llama70b
 from llm_providers.aws_bedrock import LLM_Llama3
 from llm_providers.aws_bedrock import LLM_Claude2_1_Bedrock
-from llm_providers.aws_bedrock import LLM_Mixtral8x7b_Bedrock
 from llm_providers.aws_bedrock import LLM_Claude_Instant_1_2_Bedrock
 
 # current
 from llm_providers.openai import LLM_GPT_OpenAI
 from llm_providers.anthropic import LLM_Claude3_Anthropic
 from llm_providers.aws_bedrock import LLM_Claude3_Bedrock
+from llm_providers.aws_bedrock import LLM_Mistral_Bedrock
 from llm_providers.aws_bedrock_cohere import LLM_Command_Cohere
 
 
@@ -28,6 +28,7 @@ class LLM_Provider:
         "Command R - Bedrock",
         "Command RPlus - Bedrock",
         "Mistral Mixtral 8x7B",
+        "Mistral Large v1",
         # Legacy
         "Claude 2.1",
         "Claude Instant 1.2",
@@ -66,7 +67,9 @@ class LLM_Provider:
                 bedrock_client, model_size="Command RPlus Cohere 1"
             )
         elif llm == "Mistral Mixtral 8x7B":
-            return LLM_Mixtral8x7b_Bedrock(bedrock_client)
+            return LLM_Mistral_Bedrock(bedrock_client, model_size="Mixtral 8x7B v0:1")
+        elif llm == "Mistral Large v1":
+            return LLM_Mistral_Bedrock(bedrock_client, model_size="Mistral Large v1")
         elif llm == "Claude 3 Opus - Bedrock":
             return LLM_Claude3_Bedrock(bedrock_client, model_size="Opus")
         elif llm == "Claude 3 Sonnet - Bedrock":

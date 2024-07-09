@@ -21,11 +21,15 @@ class LLM_Command_Cohere(LLM_Service):
             self.llm_description = (
                 "Cohere Command R 1.0 (Medium-size LLM) - from Bedrock"
             )
+            self.price_per_M_input_tokens = 0.5
+            self.price_per_M_output_tokens = 1.5
         elif model_size == "Command RPlus Cohere 1":
             self.model_id = "cohere.command-r-plus-v1:0"
             self.llm_description = (
                 "Cohere Command R+ 1.0 (Large-size LLM) - from Bedrock"
             )
+            self.price_per_M_input_tokens = 3
+            self.price_per_M_output_tokens = 15
 
         self.config = {
             # "messages": prompt,
