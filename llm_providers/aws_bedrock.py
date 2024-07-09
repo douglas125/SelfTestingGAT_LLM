@@ -758,6 +758,143 @@ class LLM_Llama70b(LLM_Service):
         #    raise
 
 
+class LLM_Llama3(LLM_Service):
+    def __init__(self, bedrock_client, model):
+        """Constructor
+        Arguments:
+            bedrock_client - Instance of boto3.client(service_name='bedrock-runtime')
+                to use when making calls to bedrock models
+        """
+
+        self.bedrock_client = bedrock_client
+        if model == "Llama3 8B Instruct - Bedrock":
+            self.model_id = "meta.llama3-8b-instruct-v1:0"
+            self.llm_description = "Llama3 8B Instruct LLM from Bedrock"
+        elif model == "Llama3 70B Instruct - Bedrock":
+            self.model_id = "meta.llama3-70b-instruct-v1:0"
+            self.llm_description = "Llama3 70B Instruct LLM from Bedrock"
+
+        self.config = {
+            "max_gen_len": 1024,
+            "top_p": 0.9,
+            "temperature": 0.6,
+        }
+
+        # requests and answer word count
+        self.word_counts = []
+
+    def _prepare_prompt_from_list(self, messages):
+        """Receives a list of dictionaries containing keys
+        'role' and 'content' and produces the relevant formatting for the LLM
+        """
+        """Format messages for Llama-3 chat models.
+
+        The model only supports 'system', 'user' and 'assistant' roles, starting with 'system', then 'user' and
+        alternating (u/a/u/a/u...). The last message must be from 'user'.
+        """
+        prompt = ["<|begin_of_text|>"]
+        assert messages[-1]["role"] == "user", "Last message has to be from user"
+
+        for msg in messages:
+            prompt.extend(
+                [
+                    "<|start_header_id|>",
+                    msg["role"].strip(),
+                    "<|end_header_id|>",
+                    msg["content"].strip(),
+                    "<|eot_id|>",
+                ]
+            )
+
+        prompt.append("<|start_header_id|>assistant<|end_header_id|>")
+        return "".join(prompt)
+
+    def invoke_streaming(
+        self,
+        prompt,
+        postpend="",
+        extra_stop_sequences=[],
+        max_retries=25,
+        tools=None,
+        tool_invoker_fn=None,
+    ):
+        """
+        Invokes the Llama3 large-language model to run an inference
+        using the input provided in the request body.
+
+        :param prompt: The prompt to be answered
+        :param postpend: Extra text to append, to `put words in the mouth` of the LLM
+        :return: Inference response from the model.
+        """
+        assert (
+            tools is None and tool_invoker_fn is None
+        ), "Native function calling not supported for Llama3"
+
+        # try:
+        # The different model providers have individual request and response formats.
+        # For the format, ranges, and default values for Meta Llama 2 Chat, refer to:
+        # https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-meta.html
+
+        # start time
+        t0 = time.time()
+        body = self.config.copy()
+        # body['stop_sequences'] = body['stop_sequences'] + extra_stop_sequences
+        body["prompt"] = prompt + postpend
+
+        cur_fail_sleep = 1
+        for k in range(max_retries):
+            # try:
+            response = self.bedrock_client.invoke_model_with_response_stream(
+                modelId=self.model_id, body=json.dumps(body)
+            )
+            word_count = len(re.findall(r"\w+", body["prompt"]))
+            print(f"Invoking {self.llm_description}. Word count: {word_count}")
+
+            cur_ans = ""
+            for x in response["body"]:
+                partial = json.loads(x["chunk"]["bytes"])["generation"]
+                cur_ans += partial
+
+                # we have to manually check for stopword generation
+                extra_stop_break = False
+                for x in extra_stop_sequences:
+                    cur_split = cur_ans.split(x)
+                    if len(cur_split) > 1:
+                        cur_ans = cur_split[0] + x
+                        extra_stop_break = True
+                        break
+
+                yield postpend + cur_ans
+
+                if extra_stop_break:
+                    break
+                # stop_reason = json.loads(x['chunk']['bytes'])['stop_reason']
+
+            ans_word_count = len(re.findall(r"\w+", postpend + cur_ans))
+            self.word_counts.append(
+                {
+                    "request_word_count": word_count,
+                    "answer_word_count": ans_word_count,
+                    "price_estimate": 0.001
+                    * (0.00195 * word_count + 0.00256 * ans_word_count),
+                    "exec_time_in_s": time.time() - t0,
+                }
+            )
+
+            return
+        # except Exception as e:
+        #    print(f'Error {str(e)}. Prompt length: {len(body["prompt"])}\n\nRetrying {k}...')
+        #    time.sleep(int(cur_fail_sleep))
+        #    cur_fail_sleep *= 1.2
+
+        raise
+        # return response
+
+        # except ClientError:
+        #    logger.error("Couldn't invoke Claude")
+        #    raise
+
+
 def format_messages_for_claude(messages: List[Dict[str, str]]) -> List[str]:
     """Format messages for Claude 2.1 chat models."""
     prompt: List[str] = []
