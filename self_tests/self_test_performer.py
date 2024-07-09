@@ -72,18 +72,23 @@ if __name__ == "__main__":
     llms_to_test = [
         {"model": "Claude 3 Haiku - Bedrock", "native_tools": True},
         # {"model": "Claude 3 Haiku - Bedrock", "native_tools": False},
-        # {"model": "Claude 3.5 Sonnet - Anthropic", "native_tools": True},
+        {"model": "Llama3 70b instruct", "native_tools": False},
+        # {"model": "Llama3 8b instruct", "native_tools": False},
+        {"model": "Claude 3.5 Sonnet - Anthropic", "native_tools": True},
+        # {"model": "Claude 3.5 Sonnet - Anthropic", "native_tools": False},
+        {"model": "GPT 3.5 - OpenAI", "native_tools": True},
+        # {"model": "GPT 3.5 - OpenAI", "native_tools": False},
+        # {"model": "GPT 4o - OpenAI", "native_tools": True},
+        # {"model": "GPT 4o - OpenAI", "native_tools": False},
     ]
     test_files = [
-        os.path.join(
-            "self_tests", "use_all_test_cases_Claude 3.5 Sonnet - Anthropic.json"
-        ),
         os.path.join(
             "self_tests",
             "selected_with_dummies_test_cases_Claude 3.5 Sonnet - Anthropic.json",
         ),
         os.path.join(
-            "self_tests", "only_selected_test_cases_Claude 3.5 Sonnet - Anthropic.json"
+            "self_tests",
+            "selected_with_dummies_test_cases_GPT 4o - OpenAI.json",
         ),
     ]
     for llm_spec in llms_to_test:

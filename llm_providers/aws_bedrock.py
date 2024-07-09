@@ -246,8 +246,8 @@ class LLM_Mixtral8x7b_Bedrock(LLM_Service):
         self.llm_description = "Mistral Mixtral 8x7B LLM"
         self.config = {
             # "prompt": prompt,
-            "max_tokens": 1000,
-            "temperature": 0.3,  # 0.5 is default,
+            "max_tokens": 2000,
+            "temperature": 0.5,  # 0.5 is default,
             "top_k": 50,
             "top_p": 0.9,
         }
