@@ -1,1 +1,2136 @@
-[{"question": "If today is July 4, 2024, what date will it be 100 days from now?", "appropriate_tools": ["do_date_math"], "expected_tool_to_gen_test": "do_date_math"}, {"question": "What was the date exactly 3 months ago from today (July 4, 2024)?", "appropriate_tools": ["do_date_math"], "expected_tool_to_gen_test": "do_date_math"}, {"question": "What are my current interests saved in my user profile?", "appropriate_tools": ["read_write_user_details"], "expected_tool_to_gen_test": "read_write_user_details"}, {"question": "Can you update my list of favorite books in my user profile? I want to add 'To Kill a Mockingbird' and remove 'The Great Gatsby'.", "appropriate_tools": ["read_write_user_details"], "expected_tool_to_gen_test": "read_write_user_details"}, {"question": "Create a scatter plot showing the relationship between the height and weight of 20 randomly generated individuals.", "appropriate_tools": ["make_custom_plot"], "expected_tool_to_gen_test": "make_custom_plot"}, {"question": "Generate a bar chart displaying the average monthly rainfall in New York City for the past year.", "appropriate_tools": ["make_custom_plot"], "expected_tool_to_gen_test": "make_custom_plot"}, {"question": "Solve the system of equations: 2x + 3y = 12 and 4x - y = 5. What are the values of x and y?", "appropriate_tools": ["solve_symbolic"], "expected_tool_to_gen_test": "solve_symbolic"}, {"question": "Find the limit of (x^2 - 1) / (x - 1) as x approaches 1. What is the result?", "appropriate_tools": ["solve_symbolic"], "expected_tool_to_gen_test": "solve_symbolic"}, {"question": "What is the result of multiplying the square root of 169 by the cube root of 27?", "appropriate_tools": ["solve_numeric"], "expected_tool_to_gen_test": "solve_numeric"}, {"question": "If you invest $10,000 at an annual interest rate of 5% compounded monthly for 3 years, how much money will you have at the end?", "appropriate_tools": ["solve_numeric"], "expected_tool_to_gen_test": "solve_numeric"}, {"question": "What are the current top headlines on the BBC News website?", "appropriate_tools": ["get_url_content"], "expected_tool_to_gen_test": "get_url_content"}, {"question": "What is the current price of Bitcoin according to CoinMarketCap?", "appropriate_tools": ["get_url_content"], "expected_tool_to_gen_test": "get_url_content"}, {"question": "Can you create a QR code for my website 'www.myawesomesite.com' with high error correction?", "appropriate_tools": ["make_qr_code"], "expected_tool_to_gen_test": "make_qr_code"}, {"question": "I need a small QR code for my business card that contains my contact information 'John Doe, johndoe@email.com, 555-123-4567'. Can you generate one?", "appropriate_tools": ["make_qr_code"], "expected_tool_to_gen_test": "make_qr_code"}, {"question": "What is the content of the file 'important_notes.txt' located in my Documents folder?", "appropriate_tools": ["read_local_files"], "expected_tool_to_gen_test": "read_local_files"}, {"question": "Can you compare the Python code in 'script1.py' and 'script2.py' in my Projects folder and tell me the differences?", "appropriate_tools": ["read_local_files"], "expected_tool_to_gen_test": "read_local_files"}, {"question": "Can you create a new text file named 'todo.txt' in my Documents folder and write my shopping list: milk, eggs, bread, and apples?", "appropriate_tools": ["write_local_files"], "expected_tool_to_gen_test": "write_local_files"}, {"question": "I need to save a Python script that prints 'Hello, World!' to a file called 'hello.py' in my current directory. Can you help me with that?", "appropriate_tools": ["write_local_files"], "expected_tool_to_gen_test": "write_local_files"}, {"question": "How many files are in the 'Documents' folder on my computer?", "appropriate_tools": ["read_file_names_in_local_folder"], "expected_tool_to_gen_test": "read_file_names_in_local_folder"}, {"question": "List all the PDF files in my 'Downloads' directory.", "appropriate_tools": ["read_file_names_in_local_folder"], "expected_tool_to_gen_test": "read_file_names_in_local_folder"}, {"question": "Can you extract a 30-second clip from the video file 'input.mp4', starting at the 2-minute mark, and save it as 'output.mp4'?", "appropriate_tools": ["use_ffmpeg"], "expected_tool_to_gen_test": "use_ffmpeg"}, {"question": "How can I remove the audio track from the video file 'movie.mp4' and save the result as 'silent_movie.mp4'?", "appropriate_tools": ["use_ffmpeg"], "expected_tool_to_gen_test": "use_ffmpeg"}, {"question": "Given the list of numbers [5, 2, 8, 1, 9, 3, 7, 4, 6], what is the sum of the three largest numbers?", "appropriate_tools": ["solve_with_python"], "expected_tool_to_gen_test": "solve_with_python"}, {"question": "How many unique characters are there in the string 'supercalifragilisticexpialidocious'?", "appropriate_tools": ["solve_with_python"], "expected_tool_to_gen_test": "solve_with_python"}, {"question": "Can you create a visual representation of a simple family tree with three generations, showing grandparents, parents, and children?", "appropriate_tools": ["plot_with_graphviz"], "expected_tool_to_gen_test": "plot_with_graphviz"}, {"question": "I need to visualize a basic network topology with 5 nodes representing different servers connected to each other. Can you generate a graph showing this setup?", "appropriate_tools": ["plot_with_graphviz"], "expected_tool_to_gen_test": "plot_with_graphviz"}, {"question": "My birthday is on 2025-03-15. How many weeks are there between my birthday and the birthdays of my friends stored in my user details?", "appropriate_tools": ["do_date_math", "read_write_user_details"], "expected_tool_to_gen_test": "do_date_math,read_write_user_details"}, {"question": "I want to plan a reunion with my friends. Can you tell me how many days are left until the first day of next month, and then update my user details with the names of friends I should invite?", "appropriate_tools": ["do_date_math", "read_write_user_details"], "expected_tool_to_gen_test": "do_date_math,read_write_user_details"}, {"question": "Calculate the dates for the next 12 Fridays starting from today, and create a bar plot showing the number of Fridays in each month.", "appropriate_tools": ["do_date_math", "make_custom_plot"], "expected_tool_to_gen_test": "do_date_math,make_custom_plot"}, {"question": "Determine the dates of the last day of each month for the next 6 months, starting from today. Then, create a line plot showing the number of days in each of these months.", "appropriate_tools": ["do_date_math", "make_custom_plot"], "expected_tool_to_gen_test": "do_date_math,make_custom_plot"}, {"question": "If today is July 4, 2024, on what date will the 100th day of a 365-day exponential growth experiment end, and what will be the final population if it starts with 1000 organisms and doubles every 10 days?", "appropriate_tools": ["do_date_math", "solve_symbolic"], "expected_tool_to_gen_test": "do_date_math,solve_symbolic"}, {"question": "A company's workforce is growing linearly. If they started with 500 employees on January 1, 2024, and expect to have 800 employees on December 31, 2024, on what date will they reach 650 employees, and what will be their total number of employees 5 years from today?", "appropriate_tools": ["do_date_math", "solve_symbolic"], "expected_tool_to_gen_test": "do_date_math,solve_symbolic"}, {"question": "If today is July 4, 2024, what will be the date 87 days from now, and how many weeks is that?", "appropriate_tools": ["do_date_math", "solve_numeric"], "expected_tool_to_gen_test": "do_date_math,solve_numeric"}, {"question": "A savings account earns 3% interest compounded annually. If you deposit $1000 today (July 4, 2024), how much will you have in 5 years, and on what exact date?", "appropriate_tools": ["do_date_math", "solve_numeric"], "expected_tool_to_gen_test": "do_date_math,solve_numeric"}, {"question": "What day of the week will it be 3 weeks from now, and what are the top headlines on CNN's website on that date?", "appropriate_tools": ["do_date_math", "get_url_content"], "expected_tool_to_gen_test": "do_date_math,get_url_content"}, {"question": "What was the weather like in New York City 2 months ago, and what major events are scheduled for the same day next year?", "appropriate_tools": ["do_date_math", "get_url_content"], "expected_tool_to_gen_test": "do_date_math,get_url_content"}, {"question": "Can you create a QR code that contains the date exactly 3 months from today?", "appropriate_tools": ["do_date_math", "make_qr_code"], "expected_tool_to_gen_test": "do_date_math,make_qr_code"}, {"question": "I need a QR code for an event invitation. The event is scheduled for 6 weeks from now. Please generate a QR code with the future date as its content.", "appropriate_tools": ["do_date_math", "make_qr_code"], "expected_tool_to_gen_test": "do_date_math,make_qr_code"}, {"question": "What will be the date 30 days from now, and can you list the contents of the file 'upcoming_events.txt' to see if there are any events scheduled for that day?", "appropriate_tools": ["do_date_math", "read_local_files"], "expected_tool_to_gen_test": "do_date_math,read_local_files"}, {"question": "In the file 'important_dates.txt', there's a date listed for a future meeting. Can you read that date and tell me what day of the week it will fall on?", "appropriate_tools": ["read_local_files", "do_date_math"], "expected_tool_to_gen_test": "do_date_math,read_local_files"}, {"question": "What will be the date 30 days from now, and can you save this information in a file named 'future_date.txt'?", "appropriate_tools": ["do_date_math", "write_local_files"], "expected_tool_to_gen_test": "do_date_math,write_local_files"}, {"question": "Calculate the dates for the next 5 Mondays and write them to a file called 'upcoming_mondays.txt'.", "appropriate_tools": ["do_date_math", "write_local_files"], "expected_tool_to_gen_test": "do_date_math,write_local_files"}, {"question": "If I have a project deadline 30 days from today, what date will it be, and how many Python files are in my 'project' folder?", "appropriate_tools": ["do_date_math", "read_file_names_in_local_folder"], "expected_tool_to_gen_test": "do_date_math,read_file_names_in_local_folder"}, {"question": "What day of the week will it be 2 weeks ago from today, and can you list all the text files in my 'documents' directory?", "appropriate_tools": ["do_date_math", "read_file_names_in_local_folder"], "expected_tool_to_gen_test": "do_date_math,read_file_names_in_local_folder"}, {"question": "If I have a video recorded on January 1, 2024, and I want to extract a 30-second clip starting from the 2-minute mark, what will be the date exactly 100 days after the recording date?", "appropriate_tools": ["do_date_math", "use_ffmpeg"], "expected_tool_to_gen_test": "do_date_math,use_ffmpeg"}, {"question": "I have a time-lapse video of a flower blooming, recorded over 7 days. If I want to speed up the video by a factor of 2 and add a text overlay showing the date for each day of the recording (starting from today), what ffmpeg command should I use and what would be the final date shown in the video?", "appropriate_tools": ["do_date_math", "use_ffmpeg"], "expected_tool_to_gen_test": "do_date_math,use_ffmpeg"}, {"question": "If today is July 4, 2024, what day of the week will it be 100 days from now, and how many vowels are in that day's name?", "appropriate_tools": ["do_date_math", "solve_with_python"], "expected_tool_to_gen_test": "do_date_math,solve_with_python"}, {"question": "Calculate the sum of the numbers from 1 to 50, and then determine what date it will be that many days from today (July 4, 2024).", "appropriate_tools": ["solve_with_python", "do_date_math"], "expected_tool_to_gen_test": "do_date_math,solve_with_python"}, {"question": "Create a timeline visualization of important events in a project, starting from today and including milestones at 30 days, 60 days, and 90 days from now. Show the dates for each milestone in the graph.", "appropriate_tools": ["do_date_math", "plot_with_graphviz"], "expected_tool_to_gen_test": "do_date_math,plot_with_graphviz"}, {"question": "Generate a family tree graph for a hypothetical family, including birthdates for each member. Calculate and display the age of each person as of next year in the graph.", "appropriate_tools": ["do_date_math", "plot_with_graphviz"], "expected_tool_to_gen_test": "do_date_math,plot_with_graphviz"}, {"question": "Can you update my favorite movies list and then create a bar plot showing the number of movies I like for each genre?", "appropriate_tools": ["read_write_user_details", "make_custom_plot"], "expected_tool_to_gen_test": "read_write_user_details,make_custom_plot"}, {"question": "I'd like to add a new hobby to my profile and then see a pie chart of how I spend my time across all my hobbies. Can you help with that?", "appropriate_tools": ["read_write_user_details", "make_custom_plot"], "expected_tool_to_gen_test": "read_write_user_details,make_custom_plot"}, {"question": "What is my favorite number, and can you solve the equation x^2 + 3x - my_favorite_number = 0 for x?", "appropriate_tools": ["read_write_user_details", "solve_symbolic"], "expected_tool_to_gen_test": "read_write_user_details,solve_symbolic"}, {"question": "If my age is stored in my user details, can you find the value of x that satisfies the equation: x^3 - 2x^2 + x - my_age = 0?", "appropriate_tools": ["read_write_user_details", "solve_symbolic"], "expected_tool_to_gen_test": "read_write_user_details,solve_symbolic"}, {"question": "What is the average age of my friends? Also, add a new friend named Alice who is 28 years old.", "appropriate_tools": ["read_write_user_details", "solve_numeric"], "expected_tool_to_gen_test": "read_write_user_details,solve_numeric"}, {"question": "Calculate the total amount I've spent on my hobbies this year, and update my list of interests to include 'budgeting'.", "appropriate_tools": ["read_write_user_details", "solve_numeric"], "expected_tool_to_gen_test": "read_write_user_details,solve_numeric"}, {"question": "What is the current weather in my favorite city, and can you update my user profile with this information?", "appropriate_tools": ["read_write_user_details", "get_url_content"], "expected_tool_to_gen_test": "read_write_user_details,get_url_content"}, {"question": "Can you find the latest news about my favorite sports team and add it to my user interests?", "appropriate_tools": ["read_write_user_details", "get_url_content"], "expected_tool_to_gen_test": "read_write_user_details,get_url_content"}, {"question": "Can you update my contact information with my new email address and then create a QR code containing all my updated contact details?", "appropriate_tools": ["read_write_user_details", "make_qr_code"], "expected_tool_to_gen_test": "read_write_user_details,make_qr_code"}, {"question": "I'd like to add my favorite restaurant to my user preferences and then generate a QR code with the restaurant's name and address. Can you help me with that?", "appropriate_tools": ["read_write_user_details", "make_qr_code"], "expected_tool_to_gen_test": "read_write_user_details,make_qr_code"}, {"question": "Can you update my list of favorite books based on the contents of my 'books.txt' file and then show me my updated user profile?", "appropriate_tools": ["read_local_files", "read_write_user_details"], "expected_tool_to_gen_test": "read_write_user_details,read_local_files"}, {"question": "Please read my 'personal_info.txt' file and update my user profile with any new information. Then, show me my complete updated profile.", "appropriate_tools": ["read_local_files", "read_write_user_details"], "expected_tool_to_gen_test": "read_write_user_details,read_local_files"}, {"question": "Update my list of favorite books in my user profile and save it to a text file named 'my_favorite_books.txt' in the 'Documents' folder.", "appropriate_tools": ["read_write_user_details", "write_local_files"], "expected_tool_to_gen_test": "read_write_user_details,write_local_files"}, {"question": "Add a new hobby to my user profile and create a file called 'hobbies_log.txt' in my 'Personal' folder with today's date and the updated list of hobbies.", "appropriate_tools": ["read_write_user_details", "write_local_files"], "expected_tool_to_gen_test": "read_write_user_details,write_local_files"}, {"question": "What files are in my 'Documents' folder, and can you update my user profile to include my favorite document from that folder?", "appropriate_tools": ["read_file_names_in_local_folder", "read_write_user_details"], "expected_tool_to_gen_test": "read_write_user_details,read_file_names_in_local_folder"}, {"question": "List the contents of my 'Projects' folder and update my user interests based on the types of files you find there.", "appropriate_tools": ["read_file_names_in_local_folder", "read_write_user_details"], "expected_tool_to_gen_test": "read_write_user_details,read_file_names_in_local_folder"}, {"question": "Can you update my favorite movie in my user profile and then create a 30-second trailer from the first 2 minutes of the movie file I have?", "appropriate_tools": ["read_write_user_details", "use_ffmpeg"], "expected_tool_to_gen_test": "read_write_user_details,use_ffmpeg"}, {"question": "What's my current list of favorite actors in my user profile? Also, can you extract a 1-minute clip from each of their movies I have stored in my 'C:\\\\Movies' folder?", "appropriate_tools": ["read_write_user_details", "use_ffmpeg"], "expected_tool_to_gen_test": "read_write_user_details,use_ffmpeg"}, {"question": "What is the average age of my friends? Also, add a new friend named Alice who is 28 years old.", "appropriate_tools": ["read_write_user_details", "solve_with_python"], "expected_tool_to_gen_test": "read_write_user_details,solve_with_python"}, {"question": "Sort my list of favorite books alphabetically and then add 'The Great Gatsby' to the list. What's the new sorted list?", "appropriate_tools": ["read_write_user_details", "solve_with_python"], "expected_tool_to_gen_test": "read_write_user_details,solve_with_python"}, {"question": "Can you create a family tree visualization based on my stored family information and then add my newly married cousin to it?", "appropriate_tools": ["read_write_user_details", "plot_with_graphviz"], "expected_tool_to_gen_test": "read_write_user_details,plot_with_graphviz"}, {"question": "Based on my saved friend list, can you generate a social network graph showing connections between my friends, and then update it by removing a friend who moved away?", "appropriate_tools": ["read_write_user_details", "plot_with_graphviz"], "expected_tool_to_gen_test": "read_write_user_details,plot_with_graphviz"}, {"question": "Solve the equation x^3 - 6x^2 + 11x - 6 = 0 and plot the function y = x^3 - 6x^2 + 11x - 6 to visualize its roots.", "appropriate_tools": ["solve_symbolic", "make_custom_plot"], "expected_tool_to_gen_test": "make_custom_plot,solve_symbolic"}, {"question": "Find the intersection points of the curves y = sin(x) and y = cos(x) in the interval [0, 2\u03c0], and create a plot showing both curves with the intersection points highlighted.", "appropriate_tools": ["solve_symbolic", "make_custom_plot"], "expected_tool_to_gen_test": "make_custom_plot,solve_symbolic"}, {"question": "Calculate the average daily temperature for the past week and create a line plot showing the temperature trend. The temperatures (in Celsius) for the last 7 days were: 22, 24, 23, 25, 21, 20, 23.", "appropriate_tools": ["solve_numeric", "make_custom_plot"], "expected_tool_to_gen_test": "make_custom_plot,solve_numeric"}, {"question": "A car accelerates from 0 to 100 km/h in 8 seconds. Calculate its average acceleration in m/s^2 and create a velocity vs. time graph for this scenario.", "appropriate_tools": ["solve_numeric", "make_custom_plot"], "expected_tool_to_gen_test": "make_custom_plot,solve_numeric"}, {"question": "Create a bar plot showing the top 5 countries by population according to the latest data from worldometers.info, and include the population figures in millions.", "appropriate_tools": ["get_url_content", "make_custom_plot"], "expected_tool_to_gen_test": "make_custom_plot,get_url_content"}, {"question": "Generate a line graph displaying the Bitcoin price trend over the last 30 days, using data from coingecko.com, and highlight the highest and lowest points.", "appropriate_tools": ["get_url_content", "make_custom_plot"], "expected_tool_to_gen_test": "make_custom_plot,get_url_content"}, {"question": "Create a scatter plot of the points (1,2), (3,4), (5,6), and (7,8), then generate a QR code containing the URL where the plot image is hosted.", "appropriate_tools": ["make_custom_plot", "make_qr_code"], "expected_tool_to_gen_test": "make_custom_plot,make_qr_code"}, {"question": "Generate a bar chart showing the sales data for the last 4 quarters (Q1: 100, Q2: 150, Q3: 120, Q4: 180), and create a QR code that, when scanned, displays the text description of the chart data.", "appropriate_tools": ["make_custom_plot", "make_qr_code"], "expected_tool_to_gen_test": "make_custom_plot,make_qr_code"}, {"question": "Read the data from the file 'sales_data.txt' and create a line plot showing the monthly sales trend for the past year.", "appropriate_tools": ["read_local_files", "make_custom_plot"], "expected_tool_to_gen_test": "make_custom_plot,read_local_files"}, {"question": "Analyze the temperature readings stored in 'temperature_logs.txt' and generate a histogram plot to visualize the distribution of temperatures.", "appropriate_tools": ["read_local_files", "make_custom_plot"], "expected_tool_to_gen_test": "make_custom_plot,read_local_files"}, {"question": "Generate a plot of a sine wave over two periods, save it as an image, and then write the plot's data points to a CSV file named 'sine_wave_data.csv'.", "appropriate_tools": ["make_custom_plot", "write_local_files"], "expected_tool_to_gen_test": "make_custom_plot,write_local_files"}, {"question": "Create a bar chart showing the population of the top 5 most populous cities in a country, save it as an image, and then write the city names and their populations to a text file named 'city_populations.txt'.", "appropriate_tools": ["make_custom_plot", "write_local_files"], "expected_tool_to_gen_test": "make_custom_plot,write_local_files"}, {"question": "Can you create a bar plot showing the distribution of file types in the 'documents' folder and visualize it?", "appropriate_tools": ["read_file_names_in_local_folder", "make_custom_plot"], "expected_tool_to_gen_test": "make_custom_plot,read_file_names_in_local_folder"}, {"question": "Please generate a pie chart representing the proportion of image files (jpg, png, gif) versus document files (pdf, doc, txt) in my 'project_files' directory.", "appropriate_tools": ["read_file_names_in_local_folder", "make_custom_plot"], "expected_tool_to_gen_test": "make_custom_plot,read_file_names_in_local_folder"}, {"question": "Create a bar plot showing the duration of each video in the folder C:\\\\\\\\Videos, then speed up all videos by 1.5x and save them with '_fast' appended to their filenames.", "appropriate_tools": ["make_custom_plot", "use_ffmpeg"], "expected_tool_to_gen_test": "make_custom_plot,use_ffmpeg"}, {"question": "Extract the first 10 seconds of each video in C:\\\\\\\\Videos, then create a line graph showing the average brightness of each extracted clip over time.", "appropriate_tools": ["make_custom_plot", "use_ffmpeg"], "expected_tool_to_gen_test": "make_custom_plot,use_ffmpeg"}, {"question": "Generate a bar plot of the top 5 most frequent words in the following text: 'The quick brown fox jumps over the lazy dog. The dog barks, but the fox is too quick. The brown fox is clever, while the lazy dog sleeps.'", "appropriate_tools": ["solve_with_python", "make_custom_plot"], "expected_tool_to_gen_test": "make_custom_plot,solve_with_python"}, {"question": "Calculate the Fibonacci sequence up to the 20th term and create a line plot showing the growth of the sequence.", "appropriate_tools": ["solve_with_python", "make_custom_plot"], "expected_tool_to_gen_test": "make_custom_plot,solve_with_python"}, {"question": "Create a visualization comparing the monthly sales data for the past year as a line plot, and then represent the sales team hierarchy as a tree graph.", "appropriate_tools": ["make_custom_plot", "plot_with_graphviz"], "expected_tool_to_gen_test": "make_custom_plot,plot_with_graphviz"}, {"question": "Generate a scatter plot showing the correlation between employee productivity and years of experience, and then create a network graph illustrating the collaboration patterns among different departments.", "appropriate_tools": ["make_custom_plot", "plot_with_graphviz"], "expected_tool_to_gen_test": "make_custom_plot,plot_with_graphviz"}, {"question": "Solve the equation x^2 - 5x + 6 = 0 symbolically, then calculate the sum of the squares of the roots.", "appropriate_tools": ["solve_symbolic", "solve_numeric"], "expected_tool_to_gen_test": "solve_symbolic,solve_numeric"}, {"question": "Find the derivative of f(x) = 3x^4 - 2x^2 + 5x - 1 with respect to x, then evaluate the result at x = 2.", "appropriate_tools": ["solve_symbolic", "solve_numeric"], "expected_tool_to_gen_test": "solve_symbolic,solve_numeric"}, {"question": "What is the current price of gold per ounce, and how many ounces of gold could I buy with $10,000 if I had to pay a 5% transaction fee?", "appropriate_tools": ["get_url_content", "solve_symbolic"], "expected_tool_to_gen_test": "solve_symbolic,get_url_content"}, {"question": "Find the roots of the equation x^3 - 6x^2 + 11x - 6 = 0, and then calculate how many times the number of roots appears in the first paragraph of the Wikipedia page for 'Cubic function'.", "appropriate_tools": ["solve_symbolic", "get_url_content"], "expected_tool_to_gen_test": "solve_symbolic,get_url_content"}, {"question": "Solve the equation x^2 + 5x + 6 = 0 and create a QR code containing the solutions.", "appropriate_tools": ["solve_symbolic", "make_qr_code"], "expected_tool_to_gen_test": "solve_symbolic,make_qr_code"}, {"question": "Find the derivative of f(x) = 3x^4 - 2x^2 + 7x - 1 and generate a QR code that encodes the resulting expression.", "appropriate_tools": ["solve_symbolic", "make_qr_code"], "expected_tool_to_gen_test": "solve_symbolic,make_qr_code"}, {"question": "Solve the system of equations stored in the file 'equations.txt' and simplify the result.", "appropriate_tools": ["read_local_files", "solve_symbolic"], "expected_tool_to_gen_test": "solve_symbolic,read_local_files"}, {"question": "Read the mathematical expression from the file 'expression.txt' and find its derivative with respect to x.", "appropriate_tools": ["read_local_files", "solve_symbolic"], "expected_tool_to_gen_test": "solve_symbolic,read_local_files"}, {"question": "Solve the equation x^2 + 5x + 6 = 0 symbolically and save the solution in a file named 'equation_solution.txt' in the current directory.", "appropriate_tools": ["solve_symbolic", "write_local_files"], "expected_tool_to_gen_test": "solve_symbolic,write_local_files"}, {"question": "Find the symbolic expression for the derivative of f(x) = 3x^4 - 2x^3 + 5x - 1 with respect to x, and write the result to a file called 'derivative_result.txt' in the Documents folder.", "appropriate_tools": ["solve_symbolic", "write_local_files"], "expected_tool_to_gen_test": "solve_symbolic,write_local_files"}, {"question": "Solve the equation x^2 + 3x - 4 = 0 and save the solution in a new file named 'equation_solution.txt' in the 'math_results' folder. Then, list all the files in the 'math_results' folder.", "appropriate_tools": ["solve_symbolic", "read_file_names_in_local_folder"], "expected_tool_to_gen_test": "solve_symbolic,read_file_names_in_local_folder"}, {"question": "Find the derivative of f(x) = 2x^3 - 5x^2 + 3x - 1 and create a file with the result in the 'calculus' folder. After that, provide a list of all files in the 'calculus' folder, including the newly created one.", "appropriate_tools": ["solve_symbolic", "read_file_names_in_local_folder"], "expected_tool_to_gen_test": "solve_symbolic,read_file_names_in_local_folder"}, {"question": "Solve the equation x^2 + 3x - 4 = 0 symbolically, then create a 10-second video visualization of the parabola y = x^2 + 3x - 4 using ffmpeg, highlighting the roots found.", "appropriate_tools": ["solve_symbolic", "use_ffmpeg"], "expected_tool_to_gen_test": "solve_symbolic,use_ffmpeg"}, {"question": "Find the symbolic solution for the system of equations: 2x + y = 5 and x - y = 1. Then, create a 15-second video that transitions between two images: one showing the equations, and another showing the solution point on a coordinate plane. Use ffmpeg for the video creation.", "appropriate_tools": ["solve_symbolic", "use_ffmpeg"], "expected_tool_to_gen_test": "solve_symbolic,use_ffmpeg"}, {"question": "Solve the equation x^2 + 5x + 6 = 0 symbolically, then create a list of the first 10 multiples of the larger root (rounded to 2 decimal places).", "appropriate_tools": ["solve_symbolic", "solve_with_python"], "expected_tool_to_gen_test": "solve_symbolic,solve_with_python"}, {"question": "Find the derivative of f(x) = 3x^4 - 2x^3 + 5x - 1 symbolically, then evaluate it at x = 2, 3, 4, and 5. Sort the results in descending order.", "appropriate_tools": ["solve_symbolic", "solve_with_python"], "expected_tool_to_gen_test": "solve_symbolic,solve_with_python"}, {"question": "Solve the equation x^3 - 6x^2 + 11x - 6 = 0 and visualize its roots on a number line graph.", "appropriate_tools": ["solve_symbolic", "plot_with_graphviz"], "expected_tool_to_gen_test": "solve_symbolic,plot_with_graphviz"}, {"question": "Find the eigenvalues and eigenvectors of the matrix [[3, 1], [1, 3]], and create a graph showing the transformation of the unit vectors using these eigenvectors.", "appropriate_tools": ["solve_symbolic", "plot_with_graphviz"], "expected_tool_to_gen_test": "solve_symbolic,plot_with_graphviz"}, {"question": "What is the current price of Bitcoin in USD, and how much would 2.5 bitcoins be worth?", "appropriate_tools": ["get_url_content", "solve_numeric"], "expected_tool_to_gen_test": "solve_numeric,get_url_content"}, {"question": "What is the current population of New York City, and what percentage is it of the total US population?", "appropriate_tools": ["get_url_content", "solve_numeric"], "expected_tool_to_gen_test": "solve_numeric,get_url_content"}, {"question": "Calculate the area of a circle with radius 7.5 units, then create a QR code containing the result rounded to two decimal places.", "appropriate_tools": ["solve_numeric", "make_qr_code"], "expected_tool_to_gen_test": "solve_numeric,make_qr_code"}, {"question": "Compute the sum of the first 100 prime numbers, then generate a QR code with the text 'The sum is: [result]' where [result] is the calculated sum.", "appropriate_tools": ["solve_numeric", "make_qr_code"], "expected_tool_to_gen_test": "solve_numeric,make_qr_code"}, {"question": "Calculate the average of all numbers in the file 'data.txt' and multiply the result by pi.", "appropriate_tools": ["read_local_files", "solve_numeric"], "expected_tool_to_gen_test": "solve_numeric,read_local_files"}, {"question": "Read the contents of 'equations.txt', which contains a list of mathematical expressions. Evaluate each expression and return the sum of all results.", "appropriate_tools": ["read_local_files", "solve_numeric"], "expected_tool_to_gen_test": "solve_numeric,read_local_files"}, {"question": "Calculate the sum of the squares of the first 100 positive integers and save the result in a file named 'sum_of_squares.txt' in the 'C:\\\\\\\\Math_Results' folder.", "appropriate_tools": ["solve_numeric", "write_local_files"], "expected_tool_to_gen_test": "solve_numeric,write_local_files"}, {"question": "Compute the product of all prime numbers less than 50, then write this result along with its natural logarithm to a file called 'prime_product_log.txt' in the user's home directory.", "appropriate_tools": ["solve_numeric", "write_local_files"], "expected_tool_to_gen_test": "solve_numeric,write_local_files"}, {"question": "How many text files (.txt) are in the folder C:\\\\\\\\Documents, and what is the square root of that number rounded to two decimal places?", "appropriate_tools": ["read_file_names_in_local_folder", "solve_numeric"], "expected_tool_to_gen_test": "solve_numeric,read_file_names_in_local_folder"}, {"question": "In the folder D:\\\\\\\\Projects, calculate the product of the number of Python files (.py) and the cube of the number of Markdown files (.md).", "appropriate_tools": ["read_file_names_in_local_folder", "solve_numeric"], "expected_tool_to_gen_test": "solve_numeric,read_file_names_in_local_folder"}, {"question": "Calculate the average frame rate of a 5-minute video file named 'input.mp4', and then create a new video that's 1.5 times faster. What's the new duration of the accelerated video?", "appropriate_tools": ["use_ffmpeg", "solve_numeric"], "expected_tool_to_gen_test": "solve_numeric,use_ffmpeg"}, {"question": "Extract a 30-second clip from the middle of a 2-hour long video file 'movie.mp4'. Then, calculate how many individual frames are in this extracted clip if the video has a frame rate of 24 fps.", "appropriate_tools": ["use_ffmpeg", "solve_numeric"], "expected_tool_to_gen_test": "solve_numeric,use_ffmpeg"}, {"question": "Calculate the sum of the squares of the first 100 positive integers, then find the square root of the result. Round the final answer to 2 decimal places.", "appropriate_tools": ["solve_with_python", "solve_numeric"], "expected_tool_to_gen_test": "solve_numeric,solve_with_python"}, {"question": "Generate a list of the first 20 Fibonacci numbers. Then, calculate the average (mean) of these numbers and express it in scientific notation with 3 significant figures.", "appropriate_tools": ["solve_with_python", "solve_numeric"], "expected_tool_to_gen_test": "solve_numeric,solve_with_python"}, {"question": "Calculate the values of y = x^2 - 4x + 4 for x ranging from -2 to 6 with a step of 0.5. Then, create a graph visualization showing these points connected by edges, where each node is labeled with its (x, y) coordinates.", "appropriate_tools": ["solve_numeric", "plot_with_graphviz"], "expected_tool_to_gen_test": "solve_numeric,plot_with_graphviz"}, {"question": "Generate a sequence of 10 Fibonacci numbers starting from 1. Then, create a directed graph where each node represents a Fibonacci number, and an edge connects each number to the next one in the sequence. Label each node with its Fibonacci number and its index in the sequence.", "appropriate_tools": ["solve_numeric", "plot_with_graphviz"], "expected_tool_to_gen_test": "solve_numeric,plot_with_graphviz"}, {"question": "Can you create a QR code for the current Bitcoin price in USD, retrieved from a cryptocurrency tracking website?", "appropriate_tools": ["get_url_content", "make_qr_code"], "expected_tool_to_gen_test": "get_url_content,make_qr_code"}, {"question": "Please generate a QR code containing the first paragraph of today's top news story from a major news website.", "appropriate_tools": ["get_url_content", "make_qr_code"], "expected_tool_to_gen_test": "get_url_content,make_qr_code"}, {"question": "Compare the current weather in New York City (from a weather website) with the historical weather data stored in the local file 'nyc_weather_history.txt'. Are today's temperatures unusual compared to the historical data?", "appropriate_tools": ["get_url_content", "read_local_files"], "expected_tool_to_gen_test": "get_url_content,read_local_files"}, {"question": "Retrieve the latest exchange rates for USD to EUR from a financial website and update the local file 'exchange_rates.txt' with the new information. Then, read the updated file to confirm the changes.", "appropriate_tools": ["get_url_content", "read_local_files"], "expected_tool_to_gen_test": "get_url_content,read_local_files"}, {"question": "Retrieve the current top 5 headlines from CNN's website and save them to a local file named 'cnn_headlines.txt'.", "appropriate_tools": ["get_url_content", "write_local_files"], "expected_tool_to_gen_test": "get_url_content,write_local_files"}, {"question": "Fetch the latest COVID-19 statistics for the United States from a reliable health website and store the information in a file called 'us_covid_stats.txt' on my desktop.", "appropriate_tools": ["get_url_content", "write_local_files"], "expected_tool_to_gen_test": "get_url_content,write_local_files"}, {"question": "Compare the number of files in the local folder 'C:\\\\\\\\Documents' with the number of links on the homepage of www.example.com. Which is greater?", "appropriate_tools": ["get_url_content", "read_file_names_in_local_folder"], "expected_tool_to_gen_test": "get_url_content,read_file_names_in_local_folder"}, {"question": "List all the PDF files in the local folder 'D:\\\\\\\\Reports' and check if any of their names match the titles of the latest news articles on www.technews.com.", "appropriate_tools": ["get_url_content", "read_file_names_in_local_folder"], "expected_tool_to_gen_test": "get_url_content,read_file_names_in_local_folder"}, {"question": "Download the latest movie trailer from the official website of Marvel Studios and create a 30-second highlight reel from it.", "appropriate_tools": ["get_url_content", "use_ffmpeg"], "expected_tool_to_gen_test": "get_url_content,use_ffmpeg"}, {"question": "Find the current top song on Billboard's Hot 100 chart, then extract its audio from a YouTube music video and slow it down by 25%.", "appropriate_tools": ["get_url_content", "use_ffmpeg"], "expected_tool_to_gen_test": "get_url_content,use_ffmpeg"}, {"question": "What is the most common word (excluding common stop words) on the homepage of Wikipedia, and how many times does it appear?", "appropriate_tools": ["get_url_content", "solve_with_python"], "expected_tool_to_gen_test": "get_url_content,solve_with_python"}, {"question": "Retrieve the current temperature in Celsius for New York City from a weather website, and convert it to Fahrenheit. Round the result to the nearest whole number.", "appropriate_tools": ["get_url_content", "solve_with_python"], "expected_tool_to_gen_test": "get_url_content,solve_with_python"}, {"question": "Create a graph visualization of the organizational structure of Apple Inc. based on the information from their official website.", "appropriate_tools": ["get_url_content", "plot_with_graphviz"], "expected_tool_to_gen_test": "get_url_content,plot_with_graphviz"}, {"question": "Generate a graph showing the top 5 most linked websites from the homepage of Wikipedia, with the thickness of edges representing the number of links to each site.", "appropriate_tools": ["get_url_content", "plot_with_graphviz"], "expected_tool_to_gen_test": "get_url_content,plot_with_graphviz"}, {"question": "Create a QR code containing the contents of the file 'important_info.txt' located in the 'documents' folder.", "appropriate_tools": ["read_local_files", "make_qr_code"], "expected_tool_to_gen_test": "make_qr_code,read_local_files"}, {"question": "Generate a QR code that links to a webpage containing the combined contents of all .txt files in the 'project_notes' directory.", "appropriate_tools": ["read_local_files", "make_qr_code"], "expected_tool_to_gen_test": "make_qr_code,read_local_files"}, {"question": "Generate a QR code for the text 'Welcome to our website!' and save it as a text file containing its ASCII representation in 'C:\\\\\\\\QR_Codes\\\\\\\\website_qr.txt'.", "appropriate_tools": ["make_qr_code", "write_local_files"], "expected_tool_to_gen_test": "make_qr_code,write_local_files"}, {"question": "Create a QR code for the URL 'https://example.com/contact', then write a Python script that generates this QR code and save it as 'C:\\\\\\\\Scripts\\\\\\\\qr_generator.py'.", "appropriate_tools": ["make_qr_code", "write_local_files"], "expected_tool_to_gen_test": "make_qr_code,write_local_files"}, {"question": "Create a QR code containing a list of all Python files in the 'scripts' folder.", "appropriate_tools": ["read_file_names_in_local_folder", "make_qr_code"], "expected_tool_to_gen_test": "make_qr_code,read_file_names_in_local_folder"}, {"question": "Generate a QR code that links to a webpage listing the names of all image files in the 'photos' directory.", "appropriate_tools": ["read_file_names_in_local_folder", "make_qr_code"], "expected_tool_to_gen_test": "make_qr_code,read_file_names_in_local_folder"}, {"question": "Create a QR code for my website 'www.example.com' and embed it as a watermark in the bottom right corner of my promotional video 'promo.mp4'.", "appropriate_tools": ["make_qr_code", "use_ffmpeg"], "expected_tool_to_gen_test": "make_qr_code,use_ffmpeg"}, {"question": "Generate a QR code for my event details 'Annual Tech Conference, July 15-17, 2024' and add it as an overlay to the first 5 seconds of my event teaser video 'teaser.mp4'.", "appropriate_tools": ["make_qr_code", "use_ffmpeg"], "expected_tool_to_gen_test": "make_qr_code,use_ffmpeg"}, {"question": "Create a QR code containing the first 50 prime numbers. What is the size of the generated QR code image in pixels?", "appropriate_tools": ["solve_with_python", "make_qr_code"], "expected_tool_to_gen_test": "make_qr_code,solve_with_python"}, {"question": "Generate a QR code for a randomly generated strong password of 16 characters (including uppercase, lowercase, numbers, and special characters). What is the error correction level used in the QR code?", "appropriate_tools": ["solve_with_python", "make_qr_code"], "expected_tool_to_gen_test": "make_qr_code,solve_with_python"}, {"question": "Create a QR code for the URL 'https://example.com' and then generate a graph visualization showing the structure of the website with the homepage as the root node and its main sections as child nodes. How do the two visual representations compare in terms of information density?", "appropriate_tools": ["make_qr_code", "plot_with_graphviz"], "expected_tool_to_gen_test": "make_qr_code,plot_with_graphviz"}, {"question": "Generate a QR code for a simple family tree (e.g., 'John and Mary are parents of Tom and Sarah'). Then, create a graph visualization of the same family tree. Which representation is easier to understand at a glance, and why?", "appropriate_tools": ["make_qr_code", "plot_with_graphviz"], "expected_tool_to_gen_test": "make_qr_code,plot_with_graphviz"}, {"question": "Read the contents of the file 'input.txt', reverse each line, and save the result in a new file called 'output.txt'.", "appropriate_tools": ["read_local_files", "write_local_files"], "expected_tool_to_gen_test": "read_local_files,write_local_files"}, {"question": "Combine the contents of 'file1.txt' and 'file2.txt' into a single file called 'combined.txt', with the contents of 'file1.txt' appearing first.", "appropriate_tools": ["read_local_files", "write_local_files"], "expected_tool_to_gen_test": "read_local_files,write_local_files"}, {"question": "How many Python files are in the 'src' folder, and what is the total number of lines of code in all of these Python files combined?", "appropriate_tools": ["read_file_names_in_local_folder", "read_local_files"], "expected_tool_to_gen_test": "read_local_files,read_file_names_in_local_folder"}, {"question": "In the 'documents' folder, find all text files containing the word 'important' and list their names along with the number of occurrences of the word in each file.", "appropriate_tools": ["read_file_names_in_local_folder", "read_local_files"], "expected_tool_to_gen_test": "read_local_files,read_file_names_in_local_folder"}, {"question": "Read the contents of the file 'video_instructions.txt' in the 'C:\\\\Projects' folder and apply the ffmpeg command specified in it to the video 'input.mp4' in the same folder.", "appropriate_tools": ["read_local_files", "use_ffmpeg"], "expected_tool_to_gen_test": "read_local_files,use_ffmpeg"}, {"question": "Extract the first 30 seconds from all .mp4 files listed in 'video_list.txt' located in 'D:\\\\VideoProject'. Save the extracted clips in a new folder 'D:\\\\VideoProject\\\\Clips'.", "appropriate_tools": ["read_local_files", "use_ffmpeg"], "expected_tool_to_gen_test": "read_local_files,use_ffmpeg"}, {"question": "Read the contents of the file 'data.txt' and count how many times each word appears, then sort the results alphabetically by word.", "appropriate_tools": ["read_local_files", "solve_with_python"], "expected_tool_to_gen_test": "read_local_files,solve_with_python"}, {"question": "Read the numbers from the file 'numbers.txt' (one number per line), calculate the median of these numbers, and then determine how many numbers are above the median.", "appropriate_tools": ["read_local_files", "solve_with_python"], "expected_tool_to_gen_test": "read_local_files,solve_with_python"}, {"question": "Read the contents of the file 'employee_hierarchy.txt' and create a graph visualization of the company's organizational structure.", "appropriate_tools": ["read_local_files", "plot_with_graphviz"], "expected_tool_to_gen_test": "read_local_files,plot_with_graphviz"}, {"question": "Analyze the 'network_connections.txt' file and generate a graph showing the relationships between different network nodes.", "appropriate_tools": ["read_local_files", "plot_with_graphviz"], "expected_tool_to_gen_test": "read_local_files,plot_with_graphviz"}, {"question": "Create a new text file named 'task_list.txt' in the 'Documents' folder with a list of tasks, then show me all the file names in that folder.", "appropriate_tools": ["write_local_files", "read_file_names_in_local_folder"], "expected_tool_to_gen_test": "write_local_files,read_file_names_in_local_folder"}, {"question": "Write a Python script file named 'hello_world.py' in the 'Scripts' directory that prints 'Hello, World!', then list all the Python files in that directory.", "appropriate_tools": ["write_local_files", "read_file_names_in_local_folder"], "expected_tool_to_gen_test": "write_local_files,read_file_names_in_local_folder"}, {"question": "Create a text file with a list of video editing instructions, then use that file to trim the first 10 seconds from video.mp4 and save the result as trimmed_video.mp4.", "appropriate_tools": ["write_local_files", "use_ffmpeg"], "expected_tool_to_gen_test": "write_local_files,use_ffmpeg"}, {"question": "Write a script file containing ffmpeg commands to convert video.mp4 to a GIF, then execute that script to create output.gif with a frame rate of 10 fps.", "appropriate_tools": ["write_local_files", "use_ffmpeg"], "expected_tool_to_gen_test": "write_local_files,use_ffmpeg"}, {"question": "Create a text file named 'fibonacci.txt' containing the first 20 Fibonacci numbers, then read the file and calculate the sum of all even Fibonacci numbers in it.", "appropriate_tools": ["write_local_files", "solve_with_python"], "expected_tool_to_gen_test": "write_local_files,solve_with_python"}, {"question": "Generate a text file named 'random_words.txt' with 100 random English words, then read the file and create a new file 'sorted_words.txt' with the words sorted alphabetically and in reverse order.", "appropriate_tools": ["write_local_files", "solve_with_python"], "expected_tool_to_gen_test": "write_local_files,solve_with_python"}, {"question": "Create a simple family tree for the Simpsons family (Homer, Marge, Bart, Lisa, and Maggie) and save it as both a graph image and a text file describing the relationships.", "appropriate_tools": ["write_local_files", "plot_with_graphviz"], "expected_tool_to_gen_test": "write_local_files,plot_with_graphviz"}, {"question": "Generate a flowchart of a basic pizza ordering process (e.g., select size, choose toppings, add to cart, checkout) and save it as an image. Also, create a text file with a step-by-step description of the process.", "appropriate_tools": ["write_local_files", "plot_with_graphviz"], "expected_tool_to_gen_test": "write_local_files,plot_with_graphviz"}, {"question": "Extract the first 10 seconds from all MP4 videos in the folder C:\\\\\\\\MyVideos and save them as new files with '_short' appended to their names. How many videos were processed?", "appropriate_tools": ["read_file_names_in_local_folder", "use_ffmpeg"], "expected_tool_to_gen_test": "read_file_names_in_local_folder,use_ffmpeg"}, {"question": "In the folder D:\\\\\\\\Lectures, convert all MOV files to MP4 format, reducing their resolution to 720p. What is the total duration of all processed videos?", "appropriate_tools": ["read_file_names_in_local_folder", "use_ffmpeg"], "expected_tool_to_gen_test": "read_file_names_in_local_folder,use_ffmpeg"}, {"question": "In the folder 'C:\\\\\\\\Documents\\\\\\\\Reports', what is the average length of all filenames (including extension) that start with the word 'Annual'?", "appropriate_tools": ["read_file_names_in_local_folder", "solve_with_python"], "expected_tool_to_gen_test": "read_file_names_in_local_folder,solve_with_python"}, {"question": "How many files in the directory '/home/user/projects' have names that are palindromes (read the same forwards and backwards, ignoring file extensions)?", "appropriate_tools": ["read_file_names_in_local_folder", "solve_with_python"], "expected_tool_to_gen_test": "read_file_names_in_local_folder,solve_with_python"}, {"question": "Create a graph visualization of the file structure in the 'C:\\\\\\\\Projects' folder, showing files as nodes and subfolders as parent nodes.", "appropriate_tools": ["read_file_names_in_local_folder", "plot_with_graphviz"], "expected_tool_to_gen_test": "read_file_names_in_local_folder,plot_with_graphviz"}, {"question": "Generate a dependency graph of Python files in the 'D:\\\\\\\\src' folder, where each .py file is a node and edges represent import statements between files.", "appropriate_tools": ["read_file_names_in_local_folder", "plot_with_graphviz"], "expected_tool_to_gen_test": "read_file_names_in_local_folder,plot_with_graphviz"}, {"question": "Extract the first 10 seconds of all MP4 videos in the folder C:\\\\\\\\Videos, then create a Python list of the new video filenames sorted alphabetically.", "appropriate_tools": ["use_ffmpeg", "solve_with_python"], "expected_tool_to_gen_test": "use_ffmpeg,solve_with_python"}, {"question": "For each video in the C:\\\\\\\\Movies directory, calculate its duration using ffmpeg, then use Python to find the average duration and the title of the longest video.", "appropriate_tools": ["use_ffmpeg", "solve_with_python"], "expected_tool_to_gen_test": "use_ffmpeg,solve_with_python"}, {"question": "Create a visualization of the scene transitions in a movie by extracting frame information using ffmpeg and then plotting the scene changes as a graph. Use the movie file 'movie.mp4' for this analysis.", "appropriate_tools": ["use_ffmpeg", "plot_with_graphviz"], "expected_tool_to_gen_test": "use_ffmpeg,plot_with_graphviz"}, {"question": "Generate a graph showing the relationship between video compression settings and file size. Use ffmpeg to compress a sample video 'input.mp4' with different bitrates, then create a graph visualization of the results.", "appropriate_tools": ["use_ffmpeg", "plot_with_graphviz"], "expected_tool_to_gen_test": "use_ffmpeg,plot_with_graphviz"}, {"question": "Generate a list of the first 20 Fibonacci numbers, then create a directed graph visualization showing the relationship between each number and its two predecessors.", "appropriate_tools": ["solve_with_python", "plot_with_graphviz"], "expected_tool_to_gen_test": "solve_with_python,plot_with_graphviz"}, {"question": "Create a dictionary of the first 10 prime numbers as keys, with their factors as values. Then, generate a graph visualization where each prime number is a node, and edges connect to its factors.", "appropriate_tools": ["solve_with_python", "plot_with_graphviz"], "expected_tool_to_gen_test": "solve_with_python,plot_with_graphviz"}]
+[
+	{
+		"question": "If today is July 4, 2024, what date will it be 100 days from now?",
+		"appropriate_tools": [
+			"do_date_math"
+		],
+		"human_verified_tools": [
+			"do_date_math"
+		],
+		"expected_tool_to_gen_test": "do_date_math"
+	},
+	{
+		"question": "What was the date exactly 3 months ago from today (July 4, 2024)?",
+		"appropriate_tools": [
+			"do_date_math"
+		],
+		"human_verified_tools": [
+			"do_date_math"
+		],
+		"expected_tool_to_gen_test": "do_date_math"
+	},
+	{
+		"question": "What are my current interests saved in my user profile?",
+		"appropriate_tools": [
+			"read_write_user_details"
+		],
+		"human_verified_tools": [
+			"read_write_user_details"
+		],
+		"expected_tool_to_gen_test": "read_write_user_details"
+	},
+	{
+		"question": "Can you update my list of favorite books in my user profile? I want to add 'To Kill a Mockingbird' and remove 'The Great Gatsby'.",
+		"appropriate_tools": [
+			"read_write_user_details"
+		],
+		"human_verified_tools": [
+			"read_write_user_details"
+		],
+		"expected_tool_to_gen_test": "read_write_user_details"
+	},
+	{
+		"question": "Create a scatter plot showing the relationship between the height and weight of 20 randomly generated individuals.",
+		"appropriate_tools": [
+			"make_custom_plot"
+		],
+		"human_verified_tools": [
+			"make_custom_plot"
+		],
+		"expected_tool_to_gen_test": "make_custom_plot"
+	},
+	{
+		"question": "Generate a bar chart displaying the average monthly rainfall in New York City for the past year.",
+		"appropriate_tools": [
+			"make_custom_plot"
+		],
+		"human_verified_tools": [
+			"make_custom_plot"
+		],
+		"expected_tool_to_gen_test": "make_custom_plot"
+	},
+	{
+		"question": "Solve the system of equations: 2x + 3y = 12 and 4x - y = 5. What are the values of x and y?",
+		"appropriate_tools": [
+			"solve_symbolic"
+		],
+		"human_verified_tools": [
+			"solve_symbolic"
+		],
+		"expected_tool_to_gen_test": "solve_symbolic"
+	},
+	{
+		"question": "Find the limit of (x^2 - 1) / (x - 1) as x approaches 1. What is the result?",
+		"appropriate_tools": [
+			"solve_symbolic"
+		],
+		"human_verified_tools": [
+			"solve_symbolic"
+		],
+		"expected_tool_to_gen_test": "solve_symbolic"
+	},
+	{
+		"question": "What is the result of multiplying the square root of 169 by the cube root of 27?",
+		"appropriate_tools": [
+			"solve_numeric"
+		],
+		"human_verified_tools": [
+			"solve_numeric"
+		],
+		"expected_tool_to_gen_test": "solve_numeric"
+	},
+	{
+		"question": "If you invest $10,000 at an annual interest rate of 5% compounded monthly for 3 years, how much money will you have at the end?",
+		"appropriate_tools": [
+			"solve_numeric"
+		],
+		"human_verified_tools": [
+			"solve_numeric"
+		],
+		"expected_tool_to_gen_test": "solve_numeric"
+	},
+	{
+		"question": "What are the current top headlines on the BBC News website?",
+		"appropriate_tools": [
+			"get_url_content"
+		],
+		"human_verified_tools": [
+			"get_url_content"
+		],
+		"expected_tool_to_gen_test": "get_url_content"
+	},
+	{
+		"question": "What is the current price of Bitcoin according to CoinMarketCap?",
+		"appropriate_tools": [
+			"get_url_content"
+		],
+		"human_verified_tools": [
+			"get_url_content"
+		],
+		"expected_tool_to_gen_test": "get_url_content"
+	},
+	{
+		"question": "Can you create a QR code for my website 'www.myawesomesite.com' with high error correction?",
+		"appropriate_tools": [
+			"make_qr_code"
+		],
+		"human_verified_tools": [
+			"make_qr_code"
+		],
+		"expected_tool_to_gen_test": "make_qr_code"
+	},
+	{
+		"question": "I need a small QR code for my business card that contains my contact information 'John Doe, johndoe@email.com, 555-123-4567'. Can you generate one?",
+		"appropriate_tools": [
+			"make_qr_code"
+		],
+		"human_verified_tools": [
+			"make_qr_code"
+		],
+		"expected_tool_to_gen_test": "make_qr_code"
+	},
+	{
+		"question": "What is the content of the file 'important_notes.txt' located in my Documents folder?",
+		"appropriate_tools": [
+			"read_local_files"
+		],
+		"human_verified_tools": [
+			"read_local_files"
+		],
+		"expected_tool_to_gen_test": "read_local_files"
+	},
+	{
+		"question": "Can you compare the Python code in 'script1.py' and 'script2.py' in my Projects folder and tell me the differences?",
+		"appropriate_tools": [
+			"read_local_files"
+		],
+		"human_verified_tools": [
+			"read_local_files"
+		],
+		"expected_tool_to_gen_test": "read_local_files"
+	},
+	{
+		"question": "Can you create a new text file named 'todo.txt' in my Documents folder and write my shopping list: milk, eggs, bread, and apples?",
+		"appropriate_tools": [
+			"write_local_files"
+		],
+		"human_verified_tools": [
+			"write_local_files"
+		],
+		"expected_tool_to_gen_test": "write_local_files"
+	},
+	{
+		"question": "I need to save a Python script that prints 'Hello, World!' to a file called 'hello.py' in my current directory. Can you help me with that?",
+		"appropriate_tools": [
+			"write_local_files"
+		],
+		"human_verified_tools": [
+			"write_local_files"
+		],
+		"expected_tool_to_gen_test": "write_local_files"
+	},
+	{
+		"question": "How many files are in the 'Documents' folder on my computer?",
+		"appropriate_tools": [
+			"read_file_names_in_local_folder"
+		],
+		"human_verified_tools": [
+			"read_file_names_in_local_folder"
+		],
+		"expected_tool_to_gen_test": "read_file_names_in_local_folder"
+	},
+	{
+		"question": "List all the PDF files in my 'Downloads' directory.",
+		"appropriate_tools": [
+			"read_file_names_in_local_folder"
+		],
+		"human_verified_tools": [
+			"read_file_names_in_local_folder"
+		],
+		"expected_tool_to_gen_test": "read_file_names_in_local_folder"
+	},
+	{
+		"question": "Can you extract a 30-second clip from the video file 'input.mp4', starting at the 2-minute mark, and save it as 'output.mp4'?",
+		"appropriate_tools": [
+			"use_ffmpeg"
+		],
+		"human_verified_tools": [
+			"use_ffmpeg"
+		],
+		"expected_tool_to_gen_test": "use_ffmpeg"
+	},
+	{
+		"question": "How can I remove the audio track from the video file 'movie.mp4' and save the result as 'silent_movie.mp4'?",
+		"appropriate_tools": [
+			"use_ffmpeg"
+		],
+		"human_verified_tools": [
+			"use_ffmpeg"
+		],
+		"expected_tool_to_gen_test": "use_ffmpeg"
+	},
+	{
+		"question": "Given the list of numbers [5, 2, 8, 1, 9, 3, 7, 4, 6], what is the sum of the three largest numbers?",
+		"appropriate_tools": [
+			"solve_with_python"
+		],
+		"human_verified_tools": [
+			"solve_with_python"
+		],
+		"expected_tool_to_gen_test": "solve_with_python"
+	},
+	{
+		"question": "How many unique characters are there in the string 'supercalifragilisticexpialidocious'?",
+		"appropriate_tools": [
+			"solve_with_python"
+		],
+		"human_verified_tools": [
+			"solve_with_python"
+		],
+		"expected_tool_to_gen_test": "solve_with_python"
+	},
+	{
+		"question": "Can you create a visual representation of a simple family tree with three generations, showing grandparents, parents, and children?",
+		"appropriate_tools": [
+			"plot_with_graphviz"
+		],
+		"human_verified_tools": [
+			"plot_with_graphviz"
+		],
+		"expected_tool_to_gen_test": "plot_with_graphviz"
+	},
+	{
+		"question": "I need to visualize a basic network topology with 5 nodes representing different servers connected to each other. Can you generate a graph showing this setup?",
+		"appropriate_tools": [
+			"plot_with_graphviz"
+		],
+		"human_verified_tools": [
+			"plot_with_graphviz"
+		],
+		"expected_tool_to_gen_test": "plot_with_graphviz"
+	},
+	{
+		"question": "My birthday is on 2025-03-15. How many weeks are there between my birthday and the birthdays of my friends stored in my user details?",
+		"appropriate_tools": [
+			"do_date_math",
+			"read_write_user_details"
+		],
+		"human_verified_tools": [
+			"do_date_math",
+			"read_write_user_details"
+		],
+		"expected_tool_to_gen_test": "do_date_math,read_write_user_details"
+	},
+	{
+		"question": "I want to plan a reunion with my friends. Can you tell me how many days are left until the first day of next month, and then update my user details with the names of friends I should invite?",
+		"appropriate_tools": [
+			"do_date_math",
+			"read_write_user_details"
+		],
+		"human_verified_tools": [
+			"do_date_math",
+			"read_write_user_details"
+		],
+		"expected_tool_to_gen_test": "do_date_math,read_write_user_details"
+	},
+	{
+		"question": "Calculate the dates for the next 12 Fridays starting from today, and create a bar plot showing the number of Fridays in each month.",
+		"appropriate_tools": [
+			"do_date_math",
+			"make_custom_plot"
+		],
+		"human_verified_tools": [
+			"do_date_math",
+			"make_custom_plot"
+		],
+		"expected_tool_to_gen_test": "do_date_math,make_custom_plot"
+	},
+	{
+		"question": "Determine the dates of the last day of each month for the next 6 months, starting from today. Then, create a line plot showing the number of days in each of these months.",
+		"appropriate_tools": [
+			"do_date_math",
+			"make_custom_plot"
+		],
+		"human_verified_tools": [
+			"do_date_math",
+			"make_custom_plot"
+		],
+		"expected_tool_to_gen_test": "do_date_math,make_custom_plot"
+	},
+	{
+		"question": "If today is July 4, 2024, on what date will the 100th day of a 365-day exponential growth experiment end, and what will be the final population if it starts with 1000 organisms and doubles every 10 days?",
+		"appropriate_tools": [
+			"do_date_math",
+			"solve_symbolic"
+		],
+		"human_verified_tools": [
+			"do_date_math",
+			"solve_symbolic"
+		],
+		"expected_tool_to_gen_test": "do_date_math,solve_symbolic"
+	},
+	{
+		"question": "A company's workforce is growing linearly. If they started with 500 employees on January 1, 2024, and expect to have 800 employees on December 31, 2024, on what date will they reach 650 employees, and what will be their total number of employees 5 years from today?",
+		"appropriate_tools": [
+			"do_date_math",
+			"solve_symbolic"
+		],
+		"human_verified_tools": [
+			"do_date_math",
+			"solve_symbolic"
+		],
+		"expected_tool_to_gen_test": "do_date_math,solve_symbolic"
+	},
+	{
+		"question": "If today is July 4, 2024, what will be the date 87 days from now, and how many weeks is that?",
+		"appropriate_tools": [
+			"do_date_math",
+			"solve_numeric"
+		],
+		"human_verified_tools": [
+			"do_date_math",
+			"solve_numeric"
+		],
+		"expected_tool_to_gen_test": "do_date_math,solve_numeric"
+	},
+	{
+		"question": "A savings account earns 3% interest compounded annually. If you deposit $1000 today (July 4, 2024), how much will you have in 5 years, and on what exact date?",
+		"appropriate_tools": [
+			"do_date_math",
+			"solve_numeric"
+		],
+		"human_verified_tools": [
+			"do_date_math",
+			"solve_numeric"
+		],
+		"expected_tool_to_gen_test": "do_date_math,solve_numeric"
+	},
+	{
+		"question": "What day of the week will it be 3 weeks from now, and what are the top headlines on CNN's website on that date?",
+		"appropriate_tools": [
+			"do_date_math",
+			"get_url_content"
+		],
+		"human_verified_tools": [
+			"do_date_math",
+			"get_url_content"
+		],
+		"expected_tool_to_gen_test": "do_date_math,get_url_content"
+	},
+	{
+		"question": "What was the weather like in New York City 2 months ago, and what major events are scheduled for the same day next year?",
+		"appropriate_tools": [
+			"do_date_math",
+			"get_url_content"
+		],
+		"human_verified_tools": [
+			"do_date_math",
+			"get_url_content"
+		],
+		"expected_tool_to_gen_test": "do_date_math,get_url_content"
+	},
+	{
+		"question": "Can you create a QR code that contains the date exactly 3 months from today?",
+		"appropriate_tools": [
+			"do_date_math",
+			"make_qr_code"
+		],
+		"human_verified_tools": [
+			"do_date_math",
+			"make_qr_code"
+		],
+		"expected_tool_to_gen_test": "do_date_math,make_qr_code"
+	},
+	{
+		"question": "I need a QR code for an event invitation. The event is scheduled for 6 weeks from now. Please generate a QR code with the future date as its content.",
+		"appropriate_tools": [
+			"do_date_math",
+			"make_qr_code"
+		],
+		"human_verified_tools": [
+			"do_date_math",
+			"make_qr_code"
+		],
+		"expected_tool_to_gen_test": "do_date_math,make_qr_code"
+	},
+	{
+		"question": "What will be the date 30 days from now, and can you list the contents of the file 'upcoming_events.txt' to see if there are any events scheduled for that day?",
+		"appropriate_tools": [
+			"do_date_math",
+			"read_local_files"
+		],
+		"human_verified_tools": [
+			"do_date_math",
+			"read_local_files"
+		],
+		"expected_tool_to_gen_test": "do_date_math,read_local_files"
+	},
+	{
+		"question": "In the file 'important_dates.txt', there's a date listed for a future meeting. Can you read that date and tell me what day of the week it will fall on?",
+		"appropriate_tools": [
+			"read_local_files",
+			"do_date_math"
+		],
+		"human_verified_tools": [
+			"read_local_files",
+			"do_date_math"
+		],
+		"expected_tool_to_gen_test": "do_date_math,read_local_files"
+	},
+	{
+		"question": "What will be the date 30 days from now, and can you save this information in a file named 'future_date.txt'?",
+		"appropriate_tools": [
+			"do_date_math",
+			"write_local_files"
+		],
+		"human_verified_tools": [
+			"do_date_math",
+			"write_local_files"
+		],
+		"expected_tool_to_gen_test": "do_date_math,write_local_files"
+	},
+	{
+		"question": "Calculate the dates for the next 5 Mondays and write them to a file called 'upcoming_mondays.txt'.",
+		"appropriate_tools": [
+			"do_date_math",
+			"write_local_files"
+		],
+		"human_verified_tools": [
+			"do_date_math",
+			"write_local_files"
+		],
+		"expected_tool_to_gen_test": "do_date_math,write_local_files"
+	},
+	{
+		"question": "If I have a project deadline 30 days from today, what date will it be, and how many Python files are in my 'project' folder?",
+		"appropriate_tools": [
+			"do_date_math",
+			"read_file_names_in_local_folder"
+		],
+		"human_verified_tools": [
+			"do_date_math",
+			"read_file_names_in_local_folder"
+		],
+		"expected_tool_to_gen_test": "do_date_math,read_file_names_in_local_folder"
+	},
+	{
+		"question": "What day of the week will it be 2 weeks ago from today, and can you list all the text files in my 'documents' directory?",
+		"appropriate_tools": [
+			"do_date_math",
+			"read_file_names_in_local_folder"
+		],
+		"human_verified_tools": [
+			"do_date_math",
+			"read_file_names_in_local_folder"
+		],
+		"expected_tool_to_gen_test": "do_date_math,read_file_names_in_local_folder"
+	},
+	{
+		"question": "If I have a video recorded on January 1, 2024, and I want to extract a 30-second clip starting from the 2-minute mark, what will be the date exactly 100 days after the recording date?",
+		"appropriate_tools": [
+			"do_date_math",
+			"use_ffmpeg"
+		],
+		"human_verified_tools": [
+			"do_date_math",
+			"use_ffmpeg"
+		],
+		"expected_tool_to_gen_test": "do_date_math,use_ffmpeg"
+	},
+	{
+		"question": "I have a time-lapse video of a flower blooming, recorded over 7 days. If I want to speed up the video by a factor of 2 and add a text overlay showing the date for each day of the recording (starting from today), what ffmpeg command should I use and what would be the final date shown in the video?",
+		"appropriate_tools": [
+			"do_date_math",
+			"use_ffmpeg"
+		],
+		"human_verified_tools": [
+			"do_date_math",
+			"use_ffmpeg"
+		],
+		"expected_tool_to_gen_test": "do_date_math,use_ffmpeg"
+	},
+	{
+		"question": "If today is July 4, 2024, what day of the week will it be 100 days from now, and how many vowels are in that day's name?",
+		"appropriate_tools": [
+			"do_date_math",
+			"solve_with_python"
+		],
+		"human_verified_tools": [
+			"do_date_math",
+			"solve_with_python"
+		],
+		"expected_tool_to_gen_test": "do_date_math,solve_with_python"
+	},
+	{
+		"question": "Calculate the sum of the numbers from 1 to 50, and then determine what date it will be that many days from today (July 4, 2024).",
+		"appropriate_tools": [
+			"solve_with_python",
+			"do_date_math"
+		],
+		"human_verified_tools": [
+			"solve_with_python",
+			"do_date_math"
+		],
+		"expected_tool_to_gen_test": "do_date_math,solve_with_python"
+	},
+	{
+		"question": "Create a timeline visualization of important events in a project, starting from today and including milestones at 30 days, 60 days, and 90 days from now. Show the dates for each milestone in the graph.",
+		"appropriate_tools": [
+			"do_date_math",
+			"plot_with_graphviz"
+		],
+		"human_verified_tools": [
+			"do_date_math",
+			"plot_with_graphviz"
+		],
+		"expected_tool_to_gen_test": "do_date_math,plot_with_graphviz"
+	},
+	{
+		"question": "Generate a family tree graph for a hypothetical family, including birthdates for each member. Calculate and display the age of each person as of next year in the graph.",
+		"appropriate_tools": [
+			"do_date_math",
+			"plot_with_graphviz"
+		],
+		"human_verified_tools": [
+			"do_date_math",
+			"plot_with_graphviz"
+		],
+		"expected_tool_to_gen_test": "do_date_math,plot_with_graphviz"
+	},
+	{
+		"question": "Can you update my favorite movies list and then create a bar plot showing the number of movies I like for each genre?",
+		"appropriate_tools": [
+			"read_write_user_details",
+			"make_custom_plot"
+		],
+		"human_verified_tools": [
+			"read_write_user_details",
+			"make_custom_plot"
+		],
+		"expected_tool_to_gen_test": "read_write_user_details,make_custom_plot"
+	},
+	{
+		"question": "I'd like to add a new hobby to my profile and then see a pie chart of how I spend my time across all my hobbies. Can you help with that?",
+		"appropriate_tools": [
+			"read_write_user_details",
+			"make_custom_plot"
+		],
+		"human_verified_tools": [
+			"read_write_user_details",
+			"make_custom_plot"
+		],
+		"expected_tool_to_gen_test": "read_write_user_details,make_custom_plot"
+	},
+	{
+		"question": "What is my favorite number, and can you solve the equation x^2 + 3x - my_favorite_number = 0 for x?",
+		"appropriate_tools": [
+			"read_write_user_details",
+			"solve_symbolic"
+		],
+		"human_verified_tools": [
+			"read_write_user_details",
+			"solve_symbolic"
+		],
+		"expected_tool_to_gen_test": "read_write_user_details,solve_symbolic"
+	},
+	{
+		"question": "If my age is stored in my user details, can you find the value of x that satisfies the equation: x^3 - 2x^2 + x - my_age = 0?",
+		"appropriate_tools": [
+			"read_write_user_details",
+			"solve_symbolic"
+		],
+		"human_verified_tools": [
+			"read_write_user_details",
+			"solve_symbolic"
+		],
+		"expected_tool_to_gen_test": "read_write_user_details,solve_symbolic"
+	},
+	{
+		"question": "What is the average age of my friends? Also, add a new friend named Alice who is 28 years old.",
+		"appropriate_tools": [
+			"read_write_user_details",
+			"solve_numeric"
+		],
+		"human_verified_tools": [
+			"read_write_user_details",
+			"solve_numeric"
+		],
+		"expected_tool_to_gen_test": "read_write_user_details,solve_numeric"
+	},
+	{
+		"question": "Calculate the total amount I've spent on my hobbies this year, and update my list of interests to include 'budgeting'.",
+		"appropriate_tools": [
+			"read_write_user_details",
+			"solve_numeric"
+		],
+		"human_verified_tools": [
+			"read_write_user_details",
+			"solve_numeric"
+		],
+		"expected_tool_to_gen_test": "read_write_user_details,solve_numeric"
+	},
+	{
+		"question": "What is the current weather in my favorite city, and can you update my user profile with this information?",
+		"appropriate_tools": [
+			"read_write_user_details",
+			"get_url_content"
+		],
+		"human_verified_tools": [
+			"read_write_user_details",
+			"get_url_content"
+		],
+		"expected_tool_to_gen_test": "read_write_user_details,get_url_content"
+	},
+	{
+		"question": "Can you find the latest news about my favorite sports team and add it to my user interests?",
+		"appropriate_tools": [
+			"read_write_user_details",
+			"get_url_content"
+		],
+		"human_verified_tools": [
+			"read_write_user_details",
+			"get_url_content"
+		],
+		"expected_tool_to_gen_test": "read_write_user_details,get_url_content"
+	},
+	{
+		"question": "Can you update my contact information with my new email address and then create a QR code containing all my updated contact details?",
+		"appropriate_tools": [
+			"read_write_user_details",
+			"make_qr_code"
+		],
+		"human_verified_tools": [
+			"read_write_user_details",
+			"make_qr_code"
+		],
+		"expected_tool_to_gen_test": "read_write_user_details,make_qr_code"
+	},
+	{
+		"question": "I'd like to add my favorite restaurant to my user preferences and then generate a QR code with the restaurant's name and address. Can you help me with that?",
+		"appropriate_tools": [
+			"read_write_user_details",
+			"make_qr_code"
+		],
+		"human_verified_tools": [
+			"read_write_user_details",
+			"make_qr_code"
+		],
+		"expected_tool_to_gen_test": "read_write_user_details,make_qr_code"
+	},
+	{
+		"question": "Can you update my list of favorite books based on the contents of my 'books.txt' file and then show me my updated user profile?",
+		"appropriate_tools": [
+			"read_local_files",
+			"read_write_user_details"
+		],
+		"human_verified_tools": [
+			"read_local_files",
+			"read_write_user_details"
+		],
+		"expected_tool_to_gen_test": "read_write_user_details,read_local_files"
+	},
+	{
+		"question": "Please read my 'personal_info.txt' file and update my user profile with any new information. Then, show me my complete updated profile.",
+		"appropriate_tools": [
+			"read_local_files",
+			"read_write_user_details"
+		],
+		"human_verified_tools": [
+			"read_local_files",
+			"read_write_user_details"
+		],
+		"expected_tool_to_gen_test": "read_write_user_details,read_local_files"
+	},
+	{
+		"question": "Update my list of favorite books in my user profile and save it to a text file named 'my_favorite_books.txt' in the 'Documents' folder.",
+		"appropriate_tools": [
+			"read_write_user_details",
+			"write_local_files"
+		],
+		"human_verified_tools": [
+			"read_write_user_details",
+			"write_local_files"
+		],
+		"expected_tool_to_gen_test": "read_write_user_details,write_local_files"
+	},
+	{
+		"question": "Add a new hobby to my user profile and create a file called 'hobbies_log.txt' in my 'Personal' folder with today's date and the updated list of hobbies.",
+		"appropriate_tools": [
+			"read_write_user_details",
+			"write_local_files"
+		],
+		"human_verified_tools": [
+			"read_write_user_details",
+			"write_local_files"
+		],
+		"expected_tool_to_gen_test": "read_write_user_details,write_local_files"
+	},
+	{
+		"question": "What files are in my 'Documents' folder, and can you update my user profile to include my favorite document from that folder?",
+		"appropriate_tools": [
+			"read_file_names_in_local_folder",
+			"read_write_user_details"
+		],
+		"human_verified_tools": [
+			"read_file_names_in_local_folder",
+			"read_write_user_details"
+		],
+		"expected_tool_to_gen_test": "read_write_user_details,read_file_names_in_local_folder"
+	},
+	{
+		"question": "List the contents of my 'Projects' folder and update my user interests based on the types of files you find there.",
+		"appropriate_tools": [
+			"read_file_names_in_local_folder",
+			"read_write_user_details"
+		],
+		"human_verified_tools": [
+			"read_file_names_in_local_folder",
+			"read_write_user_details"
+		],
+		"expected_tool_to_gen_test": "read_write_user_details,read_file_names_in_local_folder"
+	},
+	{
+		"question": "Can you update my favorite movie in my user profile and then create a 30-second trailer from the first 2 minutes of the movie file I have?",
+		"appropriate_tools": [
+			"read_write_user_details",
+			"use_ffmpeg"
+		],
+		"human_verified_tools": [
+			"read_write_user_details",
+			"use_ffmpeg"
+		],
+		"expected_tool_to_gen_test": "read_write_user_details,use_ffmpeg"
+	},
+	{
+		"question": "What's my current list of favorite actors in my user profile? Also, can you extract a 1-minute clip from each of their movies I have stored in my 'C:\\\\Movies' folder?",
+		"appropriate_tools": [
+			"read_write_user_details",
+			"use_ffmpeg"
+		],
+		"human_verified_tools": [
+			"read_write_user_details",
+			"use_ffmpeg"
+		],
+		"expected_tool_to_gen_test": "read_write_user_details,use_ffmpeg"
+	},
+	{
+		"question": "What is the average age of my friends? Also, add a new friend named Alice who is 28 years old.",
+		"appropriate_tools": [
+			"read_write_user_details",
+			"solve_with_python"
+		],
+		"human_verified_tools": [
+			"read_write_user_details",
+			"solve_with_python"
+		],
+		"expected_tool_to_gen_test": "read_write_user_details,solve_with_python"
+	},
+	{
+		"question": "Sort my list of favorite books alphabetically and then add 'The Great Gatsby' to the list. What's the new sorted list?",
+		"appropriate_tools": [
+			"read_write_user_details",
+			"solve_with_python"
+		],
+		"human_verified_tools": [
+			"read_write_user_details",
+			"solve_with_python"
+		],
+		"expected_tool_to_gen_test": "read_write_user_details,solve_with_python"
+	},
+	{
+		"question": "Can you create a family tree visualization based on my stored family information and then add my newly married cousin to it?",
+		"appropriate_tools": [
+			"read_write_user_details",
+			"plot_with_graphviz"
+		],
+		"human_verified_tools": [
+			"read_write_user_details",
+			"plot_with_graphviz"
+		],
+		"expected_tool_to_gen_test": "read_write_user_details,plot_with_graphviz"
+	},
+	{
+		"question": "Based on my saved friend list, can you generate a social network graph showing connections between my friends, and then update it by removing a friend who moved away?",
+		"appropriate_tools": [
+			"read_write_user_details",
+			"plot_with_graphviz"
+		],
+		"human_verified_tools": [
+			"read_write_user_details",
+			"plot_with_graphviz"
+		],
+		"expected_tool_to_gen_test": "read_write_user_details,plot_with_graphviz"
+	},
+	{
+		"question": "Solve the equation x^3 - 6x^2 + 11x - 6 = 0 and plot the function y = x^3 - 6x^2 + 11x - 6 to visualize its roots.",
+		"appropriate_tools": [
+			"solve_symbolic",
+			"make_custom_plot"
+		],
+		"human_verified_tools": [
+			"solve_symbolic",
+			"make_custom_plot"
+		],
+		"expected_tool_to_gen_test": "make_custom_plot,solve_symbolic"
+	},
+	{
+		"question": "Find the intersection points of the curves y = sin(x) and y = cos(x) in the interval [0, 2π], and create a plot showing both curves with the intersection points highlighted.",
+		"appropriate_tools": [
+			"solve_symbolic",
+			"make_custom_plot"
+		],
+		"human_verified_tools": [
+			"solve_symbolic",
+			"make_custom_plot"
+		],
+		"expected_tool_to_gen_test": "make_custom_plot,solve_symbolic"
+	},
+	{
+		"question": "Calculate the average daily temperature for the past week and create a line plot showing the temperature trend. The temperatures (in Celsius) for the last 7 days were: 22, 24, 23, 25, 21, 20, 23.",
+		"appropriate_tools": [
+			"solve_numeric",
+			"make_custom_plot"
+		],
+		"human_verified_tools": [
+			"solve_numeric",
+			"make_custom_plot"
+		],
+		"expected_tool_to_gen_test": "make_custom_plot,solve_numeric"
+	},
+	{
+		"question": "A car accelerates from 0 to 100 km/h in 8 seconds. Calculate its average acceleration in m/s^2 and create a velocity vs. time graph for this scenario.",
+		"appropriate_tools": [
+			"solve_numeric",
+			"make_custom_plot"
+		],
+		"human_verified_tools": [
+			"solve_numeric",
+			"make_custom_plot"
+		],
+		"expected_tool_to_gen_test": "make_custom_plot,solve_numeric"
+	},
+	{
+		"question": "Create a bar plot showing the top 5 countries by population according to the latest data from worldometers.info, and include the population figures in millions.",
+		"appropriate_tools": [
+			"get_url_content",
+			"make_custom_plot"
+		],
+		"human_verified_tools": [
+			"get_url_content",
+			"make_custom_plot"
+		],
+		"expected_tool_to_gen_test": "make_custom_plot,get_url_content"
+	},
+	{
+		"question": "Generate a line graph displaying the Bitcoin price trend over the last 30 days, using data from coingecko.com, and highlight the highest and lowest points.",
+		"appropriate_tools": [
+			"get_url_content",
+			"make_custom_plot"
+		],
+		"human_verified_tools": [
+			"get_url_content",
+			"make_custom_plot"
+		],
+		"expected_tool_to_gen_test": "make_custom_plot,get_url_content"
+	},
+	{
+		"question": "Create a scatter plot of the points (1,2), (3,4), (5,6), and (7,8), then generate a QR code containing the URL where the plot image is hosted.",
+		"appropriate_tools": [
+			"make_custom_plot",
+			"make_qr_code"
+		],
+		"human_verified_tools": [
+			"make_custom_plot",
+			"make_qr_code"
+		],
+		"expected_tool_to_gen_test": "make_custom_plot,make_qr_code"
+	},
+	{
+		"question": "Generate a bar chart showing the sales data for the last 4 quarters (Q1: 100, Q2: 150, Q3: 120, Q4: 180), and create a QR code that, when scanned, displays the text description of the chart data.",
+		"appropriate_tools": [
+			"make_custom_plot",
+			"make_qr_code"
+		],
+		"human_verified_tools": [
+			"make_custom_plot",
+			"make_qr_code"
+		],
+		"expected_tool_to_gen_test": "make_custom_plot,make_qr_code"
+	},
+	{
+		"question": "Read the data from the file 'sales_data.txt' and create a line plot showing the monthly sales trend for the past year.",
+		"appropriate_tools": [
+			"read_local_files",
+			"make_custom_plot"
+		],
+		"human_verified_tools": [
+			"read_local_files",
+			"make_custom_plot"
+		],
+		"expected_tool_to_gen_test": "make_custom_plot,read_local_files"
+	},
+	{
+		"question": "Analyze the temperature readings stored in 'temperature_logs.txt' and generate a histogram plot to visualize the distribution of temperatures.",
+		"appropriate_tools": [
+			"read_local_files",
+			"make_custom_plot"
+		],
+		"human_verified_tools": [
+			"read_local_files",
+			"make_custom_plot"
+		],
+		"expected_tool_to_gen_test": "make_custom_plot,read_local_files"
+	},
+	{
+		"question": "Generate a plot of a sine wave over two periods, save it as an image, and then write the plot's data points to a CSV file named 'sine_wave_data.csv'.",
+		"appropriate_tools": [
+			"make_custom_plot",
+			"write_local_files"
+		],
+		"human_verified_tools": [
+			"make_custom_plot",
+			"write_local_files"
+		],
+		"expected_tool_to_gen_test": "make_custom_plot,write_local_files"
+	},
+	{
+		"question": "Create a bar chart showing the population of the top 5 most populous cities in a country, save it as an image, and then write the city names and their populations to a text file named 'city_populations.txt'.",
+		"appropriate_tools": [
+			"make_custom_plot",
+			"write_local_files"
+		],
+		"human_verified_tools": [
+			"make_custom_plot",
+			"write_local_files"
+		],
+		"expected_tool_to_gen_test": "make_custom_plot,write_local_files"
+	},
+	{
+		"question": "Can you create a bar plot showing the distribution of file types in the 'documents' folder and visualize it?",
+		"appropriate_tools": [
+			"read_file_names_in_local_folder",
+			"make_custom_plot"
+		],
+		"human_verified_tools": [
+			"read_file_names_in_local_folder",
+			"make_custom_plot"
+		],
+		"expected_tool_to_gen_test": "make_custom_plot,read_file_names_in_local_folder"
+	},
+	{
+		"question": "Please generate a pie chart representing the proportion of image files (jpg, png, gif) versus document files (pdf, doc, txt) in my 'project_files' directory.",
+		"appropriate_tools": [
+			"read_file_names_in_local_folder",
+			"make_custom_plot"
+		],
+		"human_verified_tools": [
+			"read_file_names_in_local_folder",
+			"make_custom_plot"
+		],
+		"expected_tool_to_gen_test": "make_custom_plot,read_file_names_in_local_folder"
+	},
+	{
+		"question": "Create a bar plot showing the duration of each video in the folder C:\\\\\\\\Videos, then speed up all videos by 1.5x and save them with '_fast' appended to their filenames.",
+		"appropriate_tools": [
+			"make_custom_plot",
+			"use_ffmpeg"
+		],
+		"human_verified_tools": [
+			"make_custom_plot",
+			"use_ffmpeg"
+		],
+		"expected_tool_to_gen_test": "make_custom_plot,use_ffmpeg"
+	},
+	{
+		"question": "Extract the first 10 seconds of each video in C:\\\\\\\\Videos, then create a line graph showing the average brightness of each extracted clip over time.",
+		"appropriate_tools": [
+			"make_custom_plot",
+			"use_ffmpeg"
+		],
+		"human_verified_tools": [
+			"make_custom_plot",
+			"use_ffmpeg"
+		],
+		"expected_tool_to_gen_test": "make_custom_plot,use_ffmpeg"
+	},
+	{
+		"question": "Generate a bar plot of the top 5 most frequent words in the following text: 'The quick brown fox jumps over the lazy dog. The dog barks, but the fox is too quick. The brown fox is clever, while the lazy dog sleeps.'",
+		"appropriate_tools": [
+			"solve_with_python",
+			"make_custom_plot"
+		],
+		"human_verified_tools": [
+			"solve_with_python",
+			"make_custom_plot"
+		],
+		"expected_tool_to_gen_test": "make_custom_plot,solve_with_python"
+	},
+	{
+		"question": "Calculate the Fibonacci sequence up to the 20th term and create a line plot showing the growth of the sequence.",
+		"appropriate_tools": [
+			"solve_with_python",
+			"make_custom_plot"
+		],
+		"human_verified_tools": [
+			"solve_with_python",
+			"make_custom_plot"
+		],
+		"expected_tool_to_gen_test": "make_custom_plot,solve_with_python"
+	},
+	{
+		"question": "Create a visualization comparing the monthly sales data for the past year as a line plot, and then represent the sales team hierarchy as a tree graph.",
+		"appropriate_tools": [
+			"make_custom_plot",
+			"plot_with_graphviz"
+		],
+		"human_verified_tools": [
+			"make_custom_plot",
+			"plot_with_graphviz"
+		],
+		"expected_tool_to_gen_test": "make_custom_plot,plot_with_graphviz"
+	},
+	{
+		"question": "Generate a scatter plot showing the correlation between employee productivity and years of experience, and then create a network graph illustrating the collaboration patterns among different departments.",
+		"appropriate_tools": [
+			"make_custom_plot",
+			"plot_with_graphviz"
+		],
+		"human_verified_tools": [
+			"make_custom_plot",
+			"plot_with_graphviz"
+		],
+		"expected_tool_to_gen_test": "make_custom_plot,plot_with_graphviz"
+	},
+	{
+		"question": "Solve the equation x^2 - 5x + 6 = 0 symbolically, then calculate the sum of the squares of the roots.",
+		"appropriate_tools": [
+			"solve_symbolic",
+			"solve_numeric"
+		],
+		"human_verified_tools": [
+			"solve_symbolic",
+			"solve_numeric"
+		],
+		"expected_tool_to_gen_test": "solve_symbolic,solve_numeric"
+	},
+	{
+		"question": "Find the derivative of f(x) = 3x^4 - 2x^2 + 5x - 1 with respect to x, then evaluate the result at x = 2.",
+		"appropriate_tools": [
+			"solve_symbolic",
+			"solve_numeric"
+		],
+		"human_verified_tools": [
+			"solve_symbolic",
+			"solve_numeric"
+		],
+		"expected_tool_to_gen_test": "solve_symbolic,solve_numeric"
+	},
+	{
+		"question": "What is the current price of gold per ounce, and how many ounces of gold could I buy with $10,000 if I had to pay a 5% transaction fee?",
+		"appropriate_tools": [
+			"get_url_content",
+			"solve_symbolic"
+		],
+		"human_verified_tools": [
+			"get_url_content",
+			"solve_symbolic"
+		],
+		"expected_tool_to_gen_test": "solve_symbolic,get_url_content"
+	},
+	{
+		"question": "Find the roots of the equation x^3 - 6x^2 + 11x - 6 = 0, and then calculate how many times the number of roots appears in the first paragraph of the Wikipedia page for 'Cubic function'.",
+		"appropriate_tools": [
+			"solve_symbolic",
+			"get_url_content"
+		],
+		"human_verified_tools": [
+			"get_url_content",
+			"solve_symbolic"
+		],
+		"expected_tool_to_gen_test": "solve_symbolic,get_url_content"
+	},
+	{
+		"question": "Solve the equation x^2 + 5x + 6 = 0 and create a QR code containing the solutions.",
+		"appropriate_tools": [
+			"solve_symbolic",
+			"make_qr_code"
+		],
+		"human_verified_tools": [
+			"solve_symbolic",
+			"make_qr_code"
+		],
+		"expected_tool_to_gen_test": "solve_symbolic,make_qr_code"
+	},
+	{
+		"question": "Find the derivative of f(x) = 3x^4 - 2x^2 + 7x - 1 and generate a QR code that encodes the resulting expression.",
+		"appropriate_tools": [
+			"solve_symbolic",
+			"make_qr_code"
+		],
+		"human_verified_tools": [
+			"solve_symbolic",
+			"make_qr_code"
+		],
+		"expected_tool_to_gen_test": "solve_symbolic,make_qr_code"
+	},
+	{
+		"question": "Solve the system of equations stored in the file 'equations.txt' and simplify the result.",
+		"appropriate_tools": [
+			"read_local_files",
+			"solve_symbolic"
+		],
+		"human_verified_tools": [
+			"read_local_files",
+			"solve_symbolic"
+		],
+		"expected_tool_to_gen_test": "solve_symbolic,read_local_files"
+	},
+	{
+		"question": "Read the mathematical expression from the file 'expression.txt' and find its derivative with respect to x.",
+		"appropriate_tools": [
+			"read_local_files",
+			"solve_symbolic"
+		],
+		"human_verified_tools": [
+			"read_local_files",
+			"solve_symbolic"
+		],
+		"expected_tool_to_gen_test": "solve_symbolic,read_local_files"
+	},
+	{
+		"question": "Solve the equation x^2 + 5x + 6 = 0 symbolically and save the solution in a file named 'equation_solution.txt' in the current directory.",
+		"appropriate_tools": [
+			"solve_symbolic",
+			"write_local_files"
+		],
+		"human_verified_tools": [
+			"solve_symbolic",
+			"write_local_files"
+		],
+		"expected_tool_to_gen_test": "solve_symbolic,write_local_files"
+	},
+	{
+		"question": "Find the symbolic expression for the derivative of f(x) = 3x^4 - 2x^3 + 5x - 1 with respect to x, and write the result to a file called 'derivative_result.txt' in the Documents folder.",
+		"appropriate_tools": [
+			"solve_symbolic",
+			"write_local_files"
+		],
+		"human_verified_tools": [
+			"solve_symbolic",
+			"write_local_files"
+		],
+		"expected_tool_to_gen_test": "solve_symbolic,write_local_files"
+	},
+	{
+		"question": "Solve the equation x^2 + 3x - 4 = 0 and save the solution in a new file named 'equation_solution.txt' in the 'math_results' folder. Then, list all the files in the 'math_results' folder.",
+		"appropriate_tools": [
+			"solve_symbolic",
+			"read_file_names_in_local_folder"
+		],
+		"human_verified_tools": [
+			"solve_symbolic",
+			"write_local_files",
+			"read_file_names_in_local_folder"
+		],
+		"expected_tool_to_gen_test": "solve_symbolic,read_file_names_in_local_folder"
+	},
+	{
+		"question": "Find the derivative of f(x) = 2x^3 - 5x^2 + 3x - 1 and create a file with the result in the 'calculus' folder. After that, provide a list of all files in the 'calculus' folder, including the newly created one.",
+		"appropriate_tools": [
+			"solve_symbolic",
+			"read_file_names_in_local_folder"
+		],
+		"human_verified_tools": [
+			"solve_symbolic",
+			"write_local_files",
+			"read_file_names_in_local_folder"
+		],
+		"expected_tool_to_gen_test": "solve_symbolic,read_file_names_in_local_folder"
+	},
+	{
+		"question": "Solve the equation x^2 + 3x - 4 = 0 symbolically, then create a 10-second video visualization of the parabola y = x^2 + 3x - 4 using ffmpeg, highlighting the roots found.",
+		"appropriate_tools": [
+			"solve_symbolic",
+			"use_ffmpeg"
+		],
+		"human_verified_tools": [
+			"solve_symbolic",
+			"use_ffmpeg"
+		],
+		"expected_tool_to_gen_test": "solve_symbolic,use_ffmpeg"
+	},
+	{
+		"question": "Find the symbolic solution for the system of equations: 2x + y = 5 and x - y = 1. Then, create a 15-second video that transitions between two images: one showing the equations, and another showing the solution point on a coordinate plane. Use ffmpeg for the video creation.",
+		"appropriate_tools": [
+			"solve_symbolic",
+			"use_ffmpeg"
+		],
+		"human_verified_tools": [
+			"solve_symbolic",
+			"use_ffmpeg"
+		],
+		"expected_tool_to_gen_test": "solve_symbolic,use_ffmpeg"
+	},
+	{
+		"question": "Solve the equation x^2 + 5x + 6 = 0 symbolically, then create a list of the first 10 multiples of the larger root (rounded to 2 decimal places).",
+		"appropriate_tools": [
+			"solve_symbolic",
+			"solve_with_python"
+		],
+		"human_verified_tools": [
+			"solve_symbolic",
+			"solve_with_python"
+		],
+		"expected_tool_to_gen_test": "solve_symbolic,solve_with_python"
+	},
+	{
+		"question": "Find the derivative of f(x) = 3x^4 - 2x^3 + 5x - 1 symbolically, then evaluate it at x = 2, 3, 4, and 5. Sort the results in descending order.",
+		"appropriate_tools": [
+			"solve_symbolic",
+			"solve_with_python"
+		],
+		"human_verified_tools": [
+			"solve_symbolic",
+			"solve_with_python"
+		],
+		"expected_tool_to_gen_test": "solve_symbolic,solve_with_python"
+	},
+	{
+		"question": "Solve the equation x^3 - 6x^2 + 11x - 6 = 0 and visualize its roots on a number line graph.",
+		"appropriate_tools": [
+			"solve_symbolic",
+			"plot_with_graphviz"
+		],
+		"human_verified_tools": [
+			"solve_symbolic",
+			"plot_with_graphviz"
+		],
+		"expected_tool_to_gen_test": "solve_symbolic,plot_with_graphviz"
+	},
+	{
+		"question": "Find the eigenvalues and eigenvectors of the matrix [[3, 1], [1, 3]], and create a graph showing the transformation of the unit vectors using these eigenvectors.",
+		"appropriate_tools": [
+			"solve_symbolic",
+			"plot_with_graphviz"
+		],
+		"human_verified_tools": [
+			"solve_symbolic",
+			"plot_with_graphviz"
+		],
+		"expected_tool_to_gen_test": "solve_symbolic,plot_with_graphviz"
+	},
+	{
+		"question": "What is the current price of Bitcoin in USD, and how much would 2.5 bitcoins be worth?",
+		"appropriate_tools": [
+			"get_url_content",
+			"solve_numeric"
+		],
+		"human_verified_tools": [
+			"get_url_content",
+			"solve_numeric"
+		],
+		"expected_tool_to_gen_test": "solve_numeric,get_url_content"
+	},
+	{
+		"question": "What is the current population of New York City, and what percentage is it of the total US population?",
+		"appropriate_tools": [
+			"get_url_content",
+			"solve_numeric"
+		],
+		"human_verified_tools": [
+			"get_url_content",
+			"solve_numeric"
+		],
+		"expected_tool_to_gen_test": "solve_numeric,get_url_content"
+	},
+	{
+		"question": "Calculate the area of a circle with radius 7.5 units, then create a QR code containing the result rounded to two decimal places.",
+		"appropriate_tools": [
+			"solve_numeric",
+			"make_qr_code"
+		],
+		"human_verified_tools": [
+			"solve_numeric",
+			"make_qr_code"
+		],
+		"expected_tool_to_gen_test": "solve_numeric,make_qr_code"
+	},
+	{
+		"question": "Compute the sum of the first 100 prime numbers, then generate a QR code with the text 'The sum is: [result]' where [result] is the calculated sum.",
+		"appropriate_tools": [
+			"solve_numeric",
+			"make_qr_code"
+		],
+		"human_verified_tools": [
+			"solve_numeric",
+			"make_qr_code"
+		],
+		"expected_tool_to_gen_test": "solve_numeric,make_qr_code"
+	},
+	{
+		"question": "Calculate the average of all numbers in the file 'data.txt' and multiply the result by pi.",
+		"appropriate_tools": [
+			"read_local_files",
+			"solve_numeric"
+		],
+		"human_verified_tools": [
+			"read_local_files",
+			"solve_numeric"
+		],
+		"expected_tool_to_gen_test": "solve_numeric,read_local_files"
+	},
+	{
+		"question": "Read the contents of 'equations.txt', which contains a list of mathematical expressions. Evaluate each expression and return the sum of all results.",
+		"appropriate_tools": [
+			"read_local_files",
+			"solve_numeric"
+		],
+		"human_verified_tools": [
+			"read_local_files",
+			"solve_numeric"
+		],
+		"expected_tool_to_gen_test": "solve_numeric,read_local_files"
+	},
+	{
+		"question": "Calculate the sum of the squares of the first 100 positive integers and save the result in a file named 'sum_of_squares.txt' in the 'C:\\\\\\\\Math_Results' folder.",
+		"appropriate_tools": [
+			"solve_numeric",
+			"write_local_files"
+		],
+		"human_verified_tools": [
+			"solve_numeric",
+			"write_local_files"
+		],
+		"expected_tool_to_gen_test": "solve_numeric,write_local_files"
+	},
+	{
+		"question": "Compute the product of all prime numbers less than 50, then write this result along with its natural logarithm to a file called 'prime_product_log.txt' in the user's home directory.",
+		"appropriate_tools": [
+			"solve_numeric",
+			"write_local_files"
+		],
+		"human_verified_tools": [
+			"solve_numeric",
+			"write_local_files"
+		],
+		"expected_tool_to_gen_test": "solve_numeric,write_local_files"
+	},
+	{
+		"question": "How many text files (.txt) are in the folder C:\\\\\\\\Documents, and what is the square root of that number rounded to two decimal places?",
+		"appropriate_tools": [
+			"read_file_names_in_local_folder",
+			"solve_numeric"
+		],
+		"human_verified_tools": [
+			"read_file_names_in_local_folder",
+			"solve_numeric"
+		],
+		"expected_tool_to_gen_test": "solve_numeric,read_file_names_in_local_folder"
+	},
+	{
+		"question": "In the folder D:\\\\\\\\Projects, calculate the product of the number of Python files (.py) and the cube of the number of Markdown files (.md).",
+		"appropriate_tools": [
+			"read_file_names_in_local_folder",
+			"solve_numeric"
+		],
+		"human_verified_tools": [
+			"read_file_names_in_local_folder",
+			"solve_numeric"
+		],
+		"expected_tool_to_gen_test": "solve_numeric,read_file_names_in_local_folder"
+	},
+	{
+		"question": "Calculate the average frame rate of a 5-minute video file named 'input.mp4', and then create a new video that's 1.5 times faster. What's the new duration of the accelerated video?",
+		"appropriate_tools": [
+			"use_ffmpeg",
+			"solve_numeric"
+		],
+		"human_verified_tools": [
+			"use_ffmpeg",
+			"solve_numeric"
+		],
+		"expected_tool_to_gen_test": "solve_numeric,use_ffmpeg"
+	},
+	{
+		"question": "Extract a 30-second clip from the middle of a 2-hour long video file 'movie.mp4'. Then, calculate how many individual frames are in this extracted clip if the video has a frame rate of 24 fps.",
+		"appropriate_tools": [
+			"use_ffmpeg",
+			"solve_numeric"
+		],
+		"human_verified_tools": [
+			"use_ffmpeg",
+			"solve_numeric"
+		],
+		"expected_tool_to_gen_test": "solve_numeric,use_ffmpeg"
+	},
+	{
+		"question": "Calculate the sum of the squares of the first 100 positive integers, then find the square root of the result. Round the final answer to 2 decimal places.",
+		"appropriate_tools": [
+			"solve_with_python",
+			"solve_numeric"
+		],
+		"human_verified_tools": [
+			"solve_numeric"
+		],
+		"expected_tool_to_gen_test": "solve_numeric,solve_with_python"
+	},
+	{
+		"question": "Generate a list of the first 20 Fibonacci numbers. Then, calculate the average (mean) of these numbers and express it in scientific notation with 3 significant figures.",
+		"appropriate_tools": [
+			"solve_with_python",
+			"solve_numeric"
+		],
+		"human_verified_tools": [
+			"solve_numeric"
+		],
+		"expected_tool_to_gen_test": "solve_numeric,solve_with_python"
+	},
+	{
+		"question": "Calculate the values of y = x^2 - 4x + 4 for x ranging from -2 to 6 with a step of 0.5. Then, create a graph visualization showing these points connected by edges, where each node is labeled with its (x, y) coordinates.",
+		"appropriate_tools": [
+			"solve_numeric",
+			"plot_with_graphviz"
+		],
+		"human_verified_tools": [
+			"solve_numeric",
+			"plot_with_graphviz"
+		],
+		"expected_tool_to_gen_test": "solve_numeric,plot_with_graphviz"
+	},
+	{
+		"question": "Generate a sequence of 10 Fibonacci numbers starting from 1. Then, create a directed graph where each node represents a Fibonacci number, and an edge connects each number to the next one in the sequence. Label each node with its Fibonacci number and its index in the sequence.",
+		"appropriate_tools": [
+			"solve_numeric",
+			"plot_with_graphviz"
+		],
+		"human_verified_tools": [
+			"solve_numeric",
+			"plot_with_graphviz"
+		],
+		"expected_tool_to_gen_test": "solve_numeric,plot_with_graphviz"
+	},
+	{
+		"question": "Can you create a QR code for the current Bitcoin price in USD, retrieved from a cryptocurrency tracking website?",
+		"appropriate_tools": [
+			"get_url_content",
+			"make_qr_code"
+		],
+		"human_verified_tools": [
+			"get_url_content",
+			"make_qr_code"
+		],
+		"expected_tool_to_gen_test": "get_url_content,make_qr_code"
+	},
+	{
+		"question": "Please generate a QR code containing the first paragraph of today's top news story from a major news website.",
+		"appropriate_tools": [
+			"get_url_content",
+			"make_qr_code"
+		],
+		"human_verified_tools": [
+			"get_url_content",
+			"make_qr_code"
+		],
+		"expected_tool_to_gen_test": "get_url_content,make_qr_code"
+	},
+	{
+		"question": "Compare the current weather in New York City (from a weather website) with the historical weather data stored in the local file 'nyc_weather_history.txt'. Are today's temperatures unusual compared to the historical data?",
+		"appropriate_tools": [
+			"get_url_content",
+			"read_local_files"
+		],
+		"human_verified_tools": [
+			"get_url_content",
+			"read_local_files"
+		],
+		"expected_tool_to_gen_test": "get_url_content,read_local_files"
+	},
+	{
+		"question": "Retrieve the latest exchange rates for USD to EUR from a financial website and update the local file 'exchange_rates.txt' with the new information. Then, read the updated file to confirm the changes.",
+		"appropriate_tools": [
+			"get_url_content",
+			"read_local_files"
+		],
+		"human_verified_tools": [
+			"get_url_content",
+			"write_local_files",
+			"read_local_files"
+		],
+		"expected_tool_to_gen_test": "get_url_content,read_local_files"
+	},
+	{
+		"question": "Retrieve the current top 5 headlines from CNN's website and save them to a local file named 'cnn_headlines.txt'.",
+		"appropriate_tools": [
+			"get_url_content",
+			"write_local_files"
+		],
+		"human_verified_tools": [
+			"get_url_content",
+			"write_local_files"
+		],
+		"expected_tool_to_gen_test": "get_url_content,write_local_files"
+	},
+	{
+		"question": "Fetch the latest COVID-19 statistics for the United States from a reliable health website and store the information in a file called 'us_covid_stats.txt' on my desktop.",
+		"appropriate_tools": [
+			"get_url_content",
+			"write_local_files"
+		],
+		"human_verified_tools": [
+			"get_url_content",
+			"write_local_files"
+		],
+		"expected_tool_to_gen_test": "get_url_content,write_local_files"
+	},
+	{
+		"question": "Compare the number of files in the local folder 'C:\\\\\\\\Documents' with the number of links on the homepage of www.example.com. Which is greater?",
+		"appropriate_tools": [
+			"get_url_content",
+			"read_file_names_in_local_folder"
+		],
+		"human_verified_tools": [
+			"get_url_content",
+			"read_file_names_in_local_folder"
+		],
+		"expected_tool_to_gen_test": "get_url_content,read_file_names_in_local_folder"
+	},
+	{
+		"question": "List all the PDF files in the local folder 'D:\\\\\\\\Reports' and check if any of their names match the titles of the latest news articles on www.technews.com.",
+		"appropriate_tools": [
+			"get_url_content",
+			"read_file_names_in_local_folder"
+		],
+		"human_verified_tools": [
+			"get_url_content",
+			"read_file_names_in_local_folder"
+		],
+		"expected_tool_to_gen_test": "get_url_content,read_file_names_in_local_folder"
+	},
+	{
+		"question": "Download the latest movie trailer from the official website of Marvel Studios and create a 30-second highlight reel from it.",
+		"appropriate_tools": [
+			"get_url_content",
+			"use_ffmpeg"
+		],
+		"human_verified_tools": [
+			"get_url_content",
+			"use_ffmpeg"
+		],
+		"expected_tool_to_gen_test": "get_url_content,use_ffmpeg"
+	},
+	{
+		"question": "Find the current top song on Billboard's Hot 100 chart, then extract its audio from a YouTube music video and slow it down by 25%.",
+		"appropriate_tools": [
+			"get_url_content",
+			"use_ffmpeg"
+		],
+		"human_verified_tools": [
+			"get_url_content",
+			"use_ffmpeg"
+		],
+		"expected_tool_to_gen_test": "get_url_content,use_ffmpeg"
+	},
+	{
+		"question": "What is the most common word (excluding common stop words) on the homepage of Wikipedia, and how many times does it appear?",
+		"appropriate_tools": [
+			"get_url_content",
+			"solve_with_python"
+		],
+		"human_verified_tools": [
+			"get_url_content",
+			"solve_with_python"
+		],
+		"expected_tool_to_gen_test": "get_url_content,solve_with_python"
+	},
+	{
+		"question": "Retrieve the current temperature in Celsius for New York City from a weather website, and convert it to Fahrenheit. Round the result to the nearest whole number.",
+		"appropriate_tools": [
+			"get_url_content",
+			"solve_with_python"
+		],
+		"human_verified_tools": [
+			"get_url_content",
+			"solve_with_python"
+		],
+		"expected_tool_to_gen_test": "get_url_content,solve_with_python"
+	},
+	{
+		"question": "Create a graph visualization of the organizational structure of Apple Inc. based on the information from their official website.",
+		"appropriate_tools": [
+			"get_url_content",
+			"plot_with_graphviz"
+		],
+		"human_verified_tools": [
+			"get_url_content",
+			"plot_with_graphviz"
+		],
+		"expected_tool_to_gen_test": "get_url_content,plot_with_graphviz"
+	},
+	{
+		"question": "Generate a graph showing the top 5 most linked websites from the homepage of Wikipedia, with the thickness of edges representing the number of links to each site.",
+		"appropriate_tools": [
+			"get_url_content",
+			"plot_with_graphviz"
+		],
+		"human_verified_tools": [
+			"get_url_content",
+			"plot_with_graphviz"
+		],
+		"expected_tool_to_gen_test": "get_url_content,plot_with_graphviz"
+	},
+	{
+		"question": "Create a QR code containing the contents of the file 'important_info.txt' located in the 'documents' folder.",
+		"appropriate_tools": [
+			"read_local_files",
+			"make_qr_code"
+		],
+		"human_verified_tools": [
+			"read_local_files",
+			"make_qr_code"
+		],
+		"expected_tool_to_gen_test": "make_qr_code,read_local_files"
+	},
+	{
+		"question": "Generate a QR code that links to a webpage containing the combined contents of all .txt files in the 'project_notes' directory.",
+		"appropriate_tools": [
+			"read_local_files",
+			"make_qr_code"
+		],
+		"human_verified_tools": [
+			"read_local_files",
+			"make_qr_code"
+		],
+		"expected_tool_to_gen_test": "make_qr_code,read_local_files"
+	},
+	{
+		"question": "Generate a QR code for the text 'Welcome to our website!' and save it as a text file containing its ASCII representation in 'C:\\\\\\\\QR_Codes\\\\\\\\website_qr.txt'.",
+		"appropriate_tools": [
+			"make_qr_code",
+			"write_local_files"
+		],
+		"human_verified_tools": [
+			"make_qr_code",
+			"write_local_files"
+		],
+		"expected_tool_to_gen_test": "make_qr_code,write_local_files"
+	},
+	{
+		"question": "Create a QR code for the URL 'https://example.com/contact', then write a Python script that generates this QR code and save it as 'C:\\\\\\\\Scripts\\\\\\\\qr_generator.py'.",
+		"appropriate_tools": [
+			"make_qr_code",
+			"write_local_files"
+		],
+		"human_verified_tools": [
+			"make_qr_code",
+			"write_local_files"
+		],
+		"expected_tool_to_gen_test": "make_qr_code,write_local_files"
+	},
+	{
+		"question": "Create a QR code containing a list of all Python files in the 'scripts' folder.",
+		"appropriate_tools": [
+			"read_file_names_in_local_folder",
+			"make_qr_code"
+		],
+		"human_verified_tools": [
+			"read_file_names_in_local_folder",
+			"make_qr_code"
+		],
+		"expected_tool_to_gen_test": "make_qr_code,read_file_names_in_local_folder"
+	},
+	{
+		"question": "Generate a QR code that links to a webpage listing the names of all image files in the 'photos' directory.",
+		"appropriate_tools": [
+			"read_file_names_in_local_folder",
+			"make_qr_code"
+		],
+		"human_verified_tools": [
+			"read_file_names_in_local_folder",
+			"make_qr_code"
+		],
+		"expected_tool_to_gen_test": "make_qr_code,read_file_names_in_local_folder"
+	},
+	{
+		"question": "Create a QR code for my website 'www.example.com' and embed it as a watermark in the bottom right corner of my promotional video 'promo.mp4'.",
+		"appropriate_tools": [
+			"make_qr_code",
+			"use_ffmpeg"
+		],
+		"human_verified_tools": [
+			"make_qr_code",
+			"use_ffmpeg"
+		],
+		"expected_tool_to_gen_test": "make_qr_code,use_ffmpeg"
+	},
+	{
+		"question": "Generate a QR code for my event details 'Annual Tech Conference, July 15-17, 2024' and add it as an overlay to the first 5 seconds of my event teaser video 'teaser.mp4'.",
+		"appropriate_tools": [
+			"make_qr_code",
+			"use_ffmpeg"
+		],
+		"human_verified_tools": [
+			"make_qr_code",
+			"use_ffmpeg"
+		],
+		"expected_tool_to_gen_test": "make_qr_code,use_ffmpeg"
+	},
+	{
+		"question": "Create a QR code containing the first 50 prime numbers. What is the size of the generated QR code image in pixels?",
+		"appropriate_tools": [
+			"solve_with_python",
+			"make_qr_code"
+		],
+		"human_verified_tools": [
+			"solve_with_python",
+			"make_qr_code"
+		],
+		"expected_tool_to_gen_test": "make_qr_code,solve_with_python"
+	},
+	{
+		"question": "Generate a QR code for a randomly generated strong password of 16 characters (including uppercase, lowercase, numbers, and special characters). What is the error correction level used in the QR code?",
+		"appropriate_tools": [
+			"solve_with_python",
+			"make_qr_code"
+		],
+		"human_verified_tools": [
+			"solve_with_python",
+			"make_qr_code"
+		],
+		"expected_tool_to_gen_test": "make_qr_code,solve_with_python"
+	},
+	{
+		"question": "Create a QR code for the URL 'https://example.com' and then generate a graph visualization showing the structure of the website with the homepage as the root node and its main sections as child nodes. How do the two visual representations compare in terms of information density?",
+		"appropriate_tools": [
+			"make_qr_code",
+			"plot_with_graphviz"
+		],
+		"human_verified_tools": [
+			"make_qr_code",
+			"plot_with_graphviz"
+		],
+		"expected_tool_to_gen_test": "make_qr_code,plot_with_graphviz"
+	},
+	{
+		"question": "Generate a QR code for a simple family tree (e.g., 'John and Mary are parents of Tom and Sarah'). Then, create a graph visualization of the same family tree. Which representation is easier to understand at a glance, and why?",
+		"appropriate_tools": [
+			"make_qr_code",
+			"plot_with_graphviz"
+		],
+		"human_verified_tools": [
+			"make_qr_code",
+			"plot_with_graphviz"
+		],
+		"expected_tool_to_gen_test": "make_qr_code,plot_with_graphviz"
+	},
+	{
+		"question": "Read the contents of the file 'input.txt', reverse each line, and save the result in a new file called 'output.txt'.",
+		"appropriate_tools": [
+			"read_local_files",
+			"write_local_files"
+		],
+		"human_verified_tools": [
+			"read_local_files",
+			"solve_with_python",
+			"write_local_files"
+		],
+		"expected_tool_to_gen_test": "read_local_files,write_local_files"
+	},
+	{
+		"question": "Combine the contents of 'file1.txt' and 'file2.txt' into a single file called 'combined.txt', with the contents of 'file1.txt' appearing first.",
+		"appropriate_tools": [
+			"read_local_files",
+			"write_local_files"
+		],
+		"human_verified_tools": [
+			"read_local_files",
+			"write_local_files"
+		],
+		"expected_tool_to_gen_test": "read_local_files,write_local_files"
+	},
+	{
+		"question": "How many Python files are in the 'src' folder, and what is the total number of lines of code in all of these Python files combined?",
+		"appropriate_tools": [
+			"read_file_names_in_local_folder",
+			"read_local_files"
+		],
+		"human_verified_tools": [
+			"read_file_names_in_local_folder",
+			"read_local_files"
+		],
+		"expected_tool_to_gen_test": "read_local_files,read_file_names_in_local_folder"
+	},
+	{
+		"question": "In the 'documents' folder, find all text files containing the word 'important' and list their names along with the number of occurrences of the word in each file.",
+		"appropriate_tools": [
+			"read_file_names_in_local_folder",
+			"read_local_files"
+		],
+		"human_verified_tools": [
+			"read_file_names_in_local_folder",
+			"read_local_files"
+		],
+		"expected_tool_to_gen_test": "read_local_files,read_file_names_in_local_folder"
+	},
+	{
+		"question": "Read the contents of the file 'video_instructions.txt' in the 'C:\\\\Projects' folder and apply the ffmpeg command specified in it to the video 'input.mp4' in the same folder.",
+		"appropriate_tools": [
+			"read_local_files",
+			"use_ffmpeg"
+		],
+		"human_verified_tools": [
+			"read_local_files",
+			"use_ffmpeg"
+		],
+		"expected_tool_to_gen_test": "read_local_files,use_ffmpeg"
+	},
+	{
+		"question": "Extract the first 30 seconds from all .mp4 files listed in 'video_list.txt' located in 'D:\\\\VideoProject'. Save the extracted clips in a new folder 'D:\\\\VideoProject\\\\Clips'.",
+		"appropriate_tools": [
+			"read_local_files",
+			"use_ffmpeg"
+		],
+		"human_verified_tools": [
+			"read_local_files",
+			"use_ffmpeg"
+		],
+		"expected_tool_to_gen_test": "read_local_files,use_ffmpeg"
+	},
+	{
+		"question": "Read the contents of the file 'data.txt' and count how many times each word appears, then sort the results alphabetically by word.",
+		"appropriate_tools": [
+			"read_local_files",
+			"solve_with_python"
+		],
+		"human_verified_tools": [
+			"read_local_files",
+			"solve_with_python"
+		],
+		"expected_tool_to_gen_test": "read_local_files,solve_with_python"
+	},
+	{
+		"question": "Read the numbers from the file 'numbers.txt' (one number per line), calculate the median of these numbers, and then determine how many numbers are above the median.",
+		"appropriate_tools": [
+			"read_local_files",
+			"solve_with_python"
+		],
+		"human_verified_tools": [
+			"read_local_files",
+			"solve_with_python"
+		],
+		"expected_tool_to_gen_test": "read_local_files,solve_with_python"
+	},
+	{
+		"question": "Read the contents of the file 'employee_hierarchy.txt' and create a graph visualization of the company's organizational structure.",
+		"appropriate_tools": [
+			"read_local_files",
+			"plot_with_graphviz"
+		],
+		"human_verified_tools": [
+			"read_local_files",
+			"plot_with_graphviz"
+		],
+		"expected_tool_to_gen_test": "read_local_files,plot_with_graphviz"
+	},
+	{
+		"question": "Analyze the 'network_connections.txt' file and generate a graph showing the relationships between different network nodes.",
+		"appropriate_tools": [
+			"read_local_files",
+			"plot_with_graphviz"
+		],
+		"human_verified_tools": [
+			"read_local_files",
+			"plot_with_graphviz"
+		],
+		"expected_tool_to_gen_test": "read_local_files,plot_with_graphviz"
+	},
+	{
+		"question": "Create a new text file named 'task_list.txt' in the 'Documents' folder with a list of tasks, then show me all the file names in that folder.",
+		"appropriate_tools": [
+			"write_local_files",
+			"read_file_names_in_local_folder"
+		],
+		"human_verified_tools": [
+			"write_local_files",
+			"read_file_names_in_local_folder"
+		],
+		"expected_tool_to_gen_test": "write_local_files,read_file_names_in_local_folder"
+	},
+	{
+		"question": "Write a Python script file named 'hello_world.py' in the 'Scripts' directory that prints 'Hello, World!', then list all the Python files in that directory.",
+		"appropriate_tools": [
+			"write_local_files",
+			"read_file_names_in_local_folder"
+		],
+		"human_verified_tools": [
+			"write_local_files",
+			"read_file_names_in_local_folder"
+		],
+		"expected_tool_to_gen_test": "write_local_files,read_file_names_in_local_folder"
+	},
+	{
+		"question": "Create a text file with a list of video editing instructions, then use that file to trim the first 10 seconds from video.mp4 and save the result as trimmed_video.mp4.",
+		"appropriate_tools": [
+			"write_local_files",
+			"use_ffmpeg"
+		],
+		"human_verified_tools": [
+			"write_local_files",
+			"use_ffmpeg"
+		],
+		"expected_tool_to_gen_test": "write_local_files,use_ffmpeg"
+	},
+	{
+		"question": "Write a script file containing ffmpeg commands to convert video.mp4 to a GIF, then execute that script to create output.gif with a frame rate of 10 fps.",
+		"appropriate_tools": [
+			"write_local_files",
+			"use_ffmpeg"
+		],
+		"human_verified_tools": [
+			"write_local_files",
+			"use_ffmpeg"
+		],
+		"expected_tool_to_gen_test": "write_local_files,use_ffmpeg"
+	},
+	{
+		"question": "Create a text file named 'fibonacci.txt' containing the first 20 Fibonacci numbers, then read the file and calculate the sum of all even Fibonacci numbers in it.",
+		"appropriate_tools": [
+			"write_local_files",
+			"solve_with_python"
+		],
+		"human_verified_tools": [
+			"write_local_files",
+			"solve_with_python"
+		],
+		"expected_tool_to_gen_test": "write_local_files,solve_with_python"
+	},
+	{
+		"question": "Generate a text file named 'random_words.txt' with 100 random English words, then read the file and create a new file 'sorted_words.txt' with the words sorted alphabetically and in reverse order.",
+		"appropriate_tools": [
+			"write_local_files",
+			"solve_with_python"
+		],
+		"human_verified_tools": [
+			"write_local_files",
+			"solve_with_python"
+		],
+		"expected_tool_to_gen_test": "write_local_files,solve_with_python"
+	},
+	{
+		"question": "Create a simple family tree for the Simpsons family (Homer, Marge, Bart, Lisa, and Maggie) and save it as both a graph image and a text file describing the relationships.",
+		"appropriate_tools": [
+			"write_local_files",
+			"plot_with_graphviz"
+		],
+		"human_verified_tools": [
+			"write_local_files",
+			"plot_with_graphviz"
+		],
+		"expected_tool_to_gen_test": "write_local_files,plot_with_graphviz"
+	},
+	{
+		"question": "Generate a flowchart of a basic pizza ordering process (e.g., select size, choose toppings, add to cart, checkout) and save it as an image. Also, create a text file with a step-by-step description of the process.",
+		"appropriate_tools": [
+			"write_local_files",
+			"plot_with_graphviz"
+		],
+		"human_verified_tools": [
+			"write_local_files",
+			"plot_with_graphviz"
+		],
+		"expected_tool_to_gen_test": "write_local_files,plot_with_graphviz"
+	},
+	{
+		"question": "Extract the first 10 seconds from all MP4 videos in the folder C:\\\\\\\\MyVideos and save them as new files with '_short' appended to their names. How many videos were processed?",
+		"appropriate_tools": [
+			"read_file_names_in_local_folder",
+			"use_ffmpeg"
+		],
+		"human_verified_tools": [
+			"read_file_names_in_local_folder",
+			"use_ffmpeg"
+		],
+		"expected_tool_to_gen_test": "read_file_names_in_local_folder,use_ffmpeg"
+	},
+	{
+		"question": "In the folder D:\\\\\\\\Lectures, convert all MOV files to MP4 format, reducing their resolution to 720p. What is the total duration of all processed videos?",
+		"appropriate_tools": [
+			"read_file_names_in_local_folder",
+			"use_ffmpeg"
+		],
+		"human_verified_tools": [
+			"read_file_names_in_local_folder",
+			"use_ffmpeg"
+		],
+		"expected_tool_to_gen_test": "read_file_names_in_local_folder,use_ffmpeg"
+	},
+	{
+		"question": "In the folder 'C:\\\\\\\\Documents\\\\\\\\Reports', what is the average length of all filenames (including extension) that start with the word 'Annual'?",
+		"appropriate_tools": [
+			"read_file_names_in_local_folder",
+			"solve_with_python"
+		],
+		"human_verified_tools": [
+			"read_file_names_in_local_folder",
+			"solve_with_python"
+		],
+		"expected_tool_to_gen_test": "read_file_names_in_local_folder,solve_with_python"
+	},
+	{
+		"question": "How many files in the directory '/home/user/projects' have names that are palindromes (read the same forwards and backwards, ignoring file extensions)?",
+		"appropriate_tools": [
+			"read_file_names_in_local_folder",
+			"solve_with_python"
+		],
+		"human_verified_tools": [
+			"read_file_names_in_local_folder",
+			"solve_with_python"
+		],
+		"expected_tool_to_gen_test": "read_file_names_in_local_folder,solve_with_python"
+	},
+	{
+		"question": "Create a graph visualization of the file structure in the 'C:\\\\\\\\Projects' folder, showing files as nodes and subfolders as parent nodes.",
+		"appropriate_tools": [
+			"read_file_names_in_local_folder",
+			"plot_with_graphviz"
+		],
+		"human_verified_tools": [
+			"read_file_names_in_local_folder",
+			"plot_with_graphviz"
+		],
+		"expected_tool_to_gen_test": "read_file_names_in_local_folder,plot_with_graphviz"
+	},
+	{
+		"question": "Generate a dependency graph of Python files in the 'D:\\\\\\\\src' folder, where each .py file is a node and edges represent import statements between files.",
+		"appropriate_tools": [
+			"read_file_names_in_local_folder",
+			"plot_with_graphviz"
+		],
+		"human_verified_tools": [
+			"read_file_names_in_local_folder",
+			"plot_with_graphviz"
+		],
+		"expected_tool_to_gen_test": "read_file_names_in_local_folder,plot_with_graphviz"
+	},
+	{
+		"question": "Extract the first 10 seconds of all MP4 videos in the folder C:\\\\\\\\Videos, then create a Python list of the new video filenames sorted alphabetically.",
+		"appropriate_tools": [
+			"use_ffmpeg",
+			"solve_with_python"
+		],
+		"human_verified_tools": [
+			"use_ffmpeg",
+			"solve_with_python"
+		],
+		"expected_tool_to_gen_test": "use_ffmpeg,solve_with_python"
+	},
+	{
+		"question": "For each video in the C:\\\\\\\\Movies directory, calculate its duration using ffmpeg, then use Python to find the average duration and the title of the longest video.",
+		"appropriate_tools": [
+			"use_ffmpeg",
+			"solve_with_python"
+		],
+		"human_verified_tools": [
+			"use_ffmpeg",
+			"solve_with_python"
+		],
+		"expected_tool_to_gen_test": "use_ffmpeg,solve_with_python"
+	},
+	{
+		"question": "Create a visualization of the scene transitions in a movie by extracting frame information using ffmpeg and then plotting the scene changes as a graph. Use the movie file 'movie.mp4' for this analysis.",
+		"appropriate_tools": [
+			"use_ffmpeg",
+			"plot_with_graphviz"
+		],
+		"human_verified_tools": [
+			"use_ffmpeg",
+			"plot_with_graphviz"
+		],
+		"expected_tool_to_gen_test": "use_ffmpeg,plot_with_graphviz"
+	},
+	{
+		"question": "Generate a graph showing the relationship between video compression settings and file size. Use ffmpeg to compress a sample video 'input.mp4' with different bitrates, then create a graph visualization of the results.",
+		"appropriate_tools": [
+			"use_ffmpeg",
+			"plot_with_graphviz"
+		],
+		"human_verified_tools": [
+			"use_ffmpeg",
+			"plot_with_graphviz"
+		],
+		"expected_tool_to_gen_test": "use_ffmpeg,plot_with_graphviz"
+	},
+	{
+		"question": "Generate a list of the first 20 Fibonacci numbers, then create a directed graph visualization showing the relationship between each number and its two predecessors.",
+		"appropriate_tools": [
+			"solve_with_python",
+			"plot_with_graphviz"
+		],
+		"human_verified_tools": [
+			"solve_with_python",
+			"plot_with_graphviz"
+		],
+		"expected_tool_to_gen_test": "solve_with_python,plot_with_graphviz"
+	},
+	{
+		"question": "Create a dictionary of the first 10 prime numbers as keys, with their factors as values. Then, generate a graph visualization where each prime number is a node, and edges connect to its factors.",
+		"appropriate_tools": [
+			"solve_with_python",
+			"plot_with_graphviz"
+		],
+		"human_verified_tools": [
+			"solve_with_python",
+			"plot_with_graphviz"
+		],
+		"expected_tool_to_gen_test": "solve_with_python,plot_with_graphviz"
+	}
+]
