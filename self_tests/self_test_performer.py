@@ -68,19 +68,19 @@ class SelfTestPerformer(SelfTestBase):
 
 if __name__ == "__main__":
     # configure tests
-    n_test_cases = 2
     llms_to_test = [
         {"model": "Claude 3 Haiku - Bedrock", "native_tools": True},
-        # {"model": "Claude 3 Haiku - Bedrock", "native_tools": False},
+        {"model": "Claude 3 Haiku - Bedrock", "native_tools": False},
         {"model": "Llama3 70b instruct", "native_tools": False},
-        # {"model": "Llama3 8b instruct", "native_tools": False},
+        {"model": "Llama3 8b instruct", "native_tools": False},
         {"model": "Claude 3.5 Sonnet - Anthropic", "native_tools": True},
-        # {"model": "Claude 3.5 Sonnet - Anthropic", "native_tools": False},
+        {"model": "Claude 3.5 Sonnet - Anthropic", "native_tools": False},
         {"model": "GPT 3.5 - OpenAI", "native_tools": True},
-        # {"model": "GPT 3.5 - OpenAI", "native_tools": False},
-        # {"model": "GPT 4o - OpenAI", "native_tools": True},
-        # {"model": "GPT 4o - OpenAI", "native_tools": False},
+        {"model": "GPT 3.5 - OpenAI", "native_tools": False},
+        {"model": "GPT 4o - OpenAI", "native_tools": True},
+        {"model": "GPT 4o - OpenAI", "native_tools": False},
         {"model": "Mistral Mixtral 8x7B", "native_tools": False},
+        {"model": "Mistral Large v1", "native_tools": False},
     ]
     test_files = [
         os.path.join(
