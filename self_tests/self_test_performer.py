@@ -81,6 +81,8 @@ if __name__ == "__main__":
         {"model": "GPT 4o - OpenAI", "native_tools": False},
         {"model": "Mistral Mixtral 8x7B", "native_tools": False},
         {"model": "Mistral Large v1", "native_tools": False},
+        {"model": "Command R - Bedrock", "native_tools": False},
+        {"model": "Command RPlus - Bedrock", "native_tools": False},
     ]
     test_files = [
         os.path.join(

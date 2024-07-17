@@ -115,7 +115,7 @@ class LLM_Command_Cohere(LLM_Service):
         body["message"] = prompt["message"]
 
         # TODO: Cohere does not support postpend. Let it use tools by itself.
-        assert postpend == "", "Model does not support postpend argument"
+        # assert postpend == "", "Model does not support postpend argument"
         postpend = ""
 
         # if tools is not None:
