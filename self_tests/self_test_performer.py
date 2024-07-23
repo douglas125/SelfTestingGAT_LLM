@@ -77,6 +77,8 @@ if __name__ == "__main__":
         {"model": "Claude 3.5 Sonnet - Anthropic", "native_tools": False},
         {"model": "GPT 3.5 - OpenAI", "native_tools": True},
         {"model": "GPT 3.5 - OpenAI", "native_tools": False},
+        {"model": "GPT 4o mini - OpenAI", "native_tools": True},
+        {"model": "GPT 4o mini - OpenAI", "native_tools": False},
         {"model": "GPT 4o - OpenAI", "native_tools": True},
         {"model": "GPT 4o - OpenAI", "native_tools": False},
         {"model": "Mistral Mixtral 8x7B", "native_tools": False},

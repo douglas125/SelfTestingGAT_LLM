@@ -19,6 +19,7 @@ class LLM_Provider:
     allowed_llms = [
         "GPT 4o - OpenAI",
         "GPT 3.5 - OpenAI",
+        "GPT 4o mini - OpenAI",
         "Claude 3.5 Sonnet - Anthropic",
         "Claude 3 Opus - Anthropic",
         "Claude 3 Haiku - Bedrock",
@@ -86,3 +87,5 @@ class LLM_Provider:
             return LLM_GPT_OpenAI(model_size="GPT3_5 OpenAI")
         elif llm == "GPT 4o - OpenAI":
             return LLM_GPT_OpenAI(model_size="GPT4o OpenAI")
+        elif llm == "GPT 4o mini - OpenAI":
+            return LLM_GPT_OpenAI(model_size="GPT4o mini OpenAI")
