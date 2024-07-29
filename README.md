@@ -124,7 +124,7 @@ To add support for a new LLM:
 
 ## Self-assessment
 
-The project includes a comprehensive self-assessment system for evaluating LLM performance in tool selection and usage.
+The project includes a comprehensive self-assessment system for evaluating LLM performance in tool selection and usage. All test cases self-generated and the test results of each LLM are stored in the folder `self_tests`.
 
 ### Self-generating Test Cases
 
