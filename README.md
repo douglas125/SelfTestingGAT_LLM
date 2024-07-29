@@ -1,4 +1,4 @@
-# Self Testing GATs (Generative AI with Tools)
+# Self Testing GATs (Generation Augmented by Tools)
 
 This project focuses on designing and self-testing GAT LLMs (Language Learning Models) that can effectively use a variety of tools to accomplish tasks.
 
