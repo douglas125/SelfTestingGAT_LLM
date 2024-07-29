@@ -19,11 +19,22 @@ class LLM_GPT_OpenAI(LLM_Service):
             self.llm_description = (
                 "OpenAI GPT4o (Large-size LLM) - directly from OpenAI"
             )
+            self.price_per_M_input_tokens = 5
+            self.price_per_M_output_tokens = 15
         elif model_size == "GPT3_5 OpenAI":
             self.model_id = "gpt-3.5-turbo-0125"
             self.llm_description = (
                 "OpenAI 3.5 Turbo (Medium-size LLM) - directly from OpenAI"
             )
+            self.price_per_M_input_tokens = 0.5
+            self.price_per_M_output_tokens = 1.5
+        elif model_size == "GPT4o mini OpenAI":
+            self.model_id = "gpt-4o-mini-2024-07-18"
+            self.llm_description = (
+                "OpenAI 4o Mini (Small-size LLM) - directly from OpenAI"
+            )
+            self.price_per_M_input_tokens = 0.15
+            self.price_per_M_output_tokens = 0.6
 
         self.config = {
             # "messages": prompt,

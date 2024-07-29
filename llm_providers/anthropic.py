@@ -17,11 +17,15 @@ class LLM_Claude3_Anthropic(LLM_Service):
         if model_size == "Sonnet 3.5 Anthropic":
             self.model_id = "claude-3-5-sonnet-20240620"
             self.llm_description = "Anthropic Claude 3.5 Sonnet (Medium-size LLM) - directly from Anthropic"
+            self.price_per_M_input_tokens = 3
+            self.price_per_M_output_tokens = 15
         elif model_size == "Opus 3 Anthropic":
             self.model_id = "claude-3-opus-20240229"
             self.llm_description = (
                 "Anthropic Claude 3 Opus (Large-size LLM) - directly from Anthropic"
             )
+            self.price_per_M_input_tokens = 15
+            self.price_per_M_output_tokens = 75
 
         self.config = {
             # "messages": prompt,

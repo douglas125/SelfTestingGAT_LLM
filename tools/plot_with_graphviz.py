@@ -1,5 +1,4 @@
 import os
-import pydot
 import numpy as np
 
 rng = np.random.default_rng()
@@ -13,7 +12,7 @@ class ToolPlotWithGraphviz:
 
         self.tool_description = {
             "name": self.name,
-            "description": f"""Generates a graph visualization using the provided custom Python code graph_code, whose only dependencies should be pydot. This tool is useful when the user requests graph visualizations to be generated.
+            "description": f"""Generates a graph visualization using the provided custom Python code graph_code, whose only dependencies should be pydot. This tool is useful when the user requests graph visualizations to be generated. Prefer to use a horizontal layout if not asked.
 
 If the user didn't specifically ask for a graph visualization, confirm if the user wants to generate a graph visualization before calling this tool.
 

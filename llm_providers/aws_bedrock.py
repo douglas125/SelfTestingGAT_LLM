@@ -18,21 +18,29 @@ class LLM_Claude3_Bedrock(LLM_Service):
             self.llm_description = (
                 "Anthropic Claude 3.0 Opus from AWS Bedrock (Large LLM)"
             )
+            self.price_per_M_input_tokens = 15
+            self.price_per_M_output_tokens = 75
         elif model_size == "Sonnet":
             self.model_id = "anthropic.claude-3-sonnet-20240229-v1:0"
             self.llm_description = (
                 "Anthropic Claude 3.0 Sonnet from AWS Bedrock (Medium-size LLM)"
             )
+            self.price_per_M_input_tokens = 3
+            self.price_per_M_output_tokens = 15
         elif model_size == "Sonnet 3.5":
             self.model_id = "anthropic.claude-3-5-sonnet-20240620-v1:0"
             self.llm_description = (
                 "Anthropic Claude 3.5 Sonnet from AWS Bedrock (Medium-size LLM)"
             )
+            self.price_per_M_input_tokens = 3
+            self.price_per_M_output_tokens = 15
         elif model_size == "Haiku":
             self.model_id = "anthropic.claude-3-haiku-20240307-v1:0"
             self.llm_description = (
                 "Anthropic Claude 3.0 Haiku from AWS Bedrock (Small-size LLM)"
             )
+            self.price_per_M_input_tokens = 0.25
+            self.price_per_M_output_tokens = 1.25
 
         self.bedrock_client = bedrock_client
         self.config = {
@@ -233,9 +241,9 @@ class LLM_Claude3_Bedrock(LLM_Service):
         self.stop_reason = stop_reason
 
 
-class LLM_Mixtral8x7b_Bedrock(LLM_Service):
+class LLM_Mistral_Bedrock(LLM_Service):
     # https://www.promptingguide.ai/models/mixtral
-    def __init__(self, bedrock_client):
+    def __init__(self, bedrock_client, model_size):
         """Constructor
         Arguments:
             bedrock_client - Instance of boto3.client(service_name='bedrock-runtime')
@@ -243,11 +251,21 @@ class LLM_Mixtral8x7b_Bedrock(LLM_Service):
         """
 
         self.bedrock_client = bedrock_client
-        self.llm_description = "Mistral Mixtral 8x7B LLM"
+        if model_size == "Mixtral 8x7B v0:1":
+            self.model_id = "mistral.mixtral-8x7b-instruct-v0:1"
+            self.llm_description = "Mistral Mixtral 8x7B LLM from Bedrock"
+            self.price_per_M_input_tokens = 0.45
+            self.price_per_M_output_tokens = 0.7
+        elif model_size == "Mistral Large v1":
+            self.model_id = "mistral.mistral-large-2402-v1:0"
+            self.llm_description = "Mistral Large LLM from Bedrock"
+            self.price_per_M_input_tokens = 4
+            self.price_per_M_output_tokens = 12
+
         self.config = {
             # "prompt": prompt,
-            "max_tokens": 1000,
-            "temperature": 0.3,  # 0.5 is default,
+            "max_tokens": 2000,
+            "temperature": 0.5,  # 0.5 is default,
             "top_k": 50,
             "top_p": 0.9,
         }
@@ -261,7 +279,13 @@ class LLM_Mixtral8x7b_Bedrock(LLM_Service):
         return format_messages_for_mistral(msg_list)
 
     def invoke_streaming(
-        self, prompt, postpend="", extra_stop_sequences=[], max_retries=25
+        self,
+        prompt,
+        postpend="",
+        extra_stop_sequences=[],
+        max_retries=25,
+        tools=None,
+        tool_invoker_fn=None,
     ):
         """
         Invokes the Llama2 large-language model to run an inference
@@ -287,10 +311,10 @@ class LLM_Mixtral8x7b_Bedrock(LLM_Service):
         for k in range(max_retries):
             # try:
             response = self.bedrock_client.invoke_model_with_response_stream(
-                modelId="mistral.mixtral-8x7b-instruct-v0:1", body=json.dumps(body)
+                modelId=self.model_id, body=json.dumps(body)
             )
             word_count = len(re.findall(r"\w+", body["prompt"]))
-            print(f"Invoking Mixtral 8x7B. Word count: {word_count}")
+            print(f"Invoking {self.llm_description}. Word count: {word_count}")
 
             cur_ans = ""
             for x in response["body"]:
@@ -350,6 +374,9 @@ class LLM_Claude2_1_Bedrock(LLM_Service):
 
         self.bedrock_client = bedrock_client
         self.llm_description = "Anthropic Claude 2.1 LLM"
+        self.price_per_M_input_tokens = 8
+        self.price_per_M_output_tokens = 24
+
         self.config = {
             # "prompt": prompt,
             "max_tokens_to_sample": 2500,
@@ -451,6 +478,8 @@ class LLM_Claude_Instant_1_2_Bedrock(LLM_Service):
 
         self.bedrock_client = bedrock_client
         self.llm_description = "Anthropic Claude Instant 1.0 LLM"
+        self.price_per_M_input_tokens = 0.8
+        self.price_per_M_output_tokens = 2.4
         self.config = {
             # "prompt": prompt,
             "max_tokens_to_sample": 600,
@@ -554,6 +583,8 @@ class LLM_Llama13b(LLM_Service):
 
         self.bedrock_client = bedrock_client
         self.llm_description = "Llama2 13b v1 LLM"
+        self.price_per_M_input_tokens = 0.75
+        self.price_per_M_output_tokens = 1
 
         self.config = {
             "max_gen_len": 1024,
@@ -659,9 +690,10 @@ class LLM_Llama70b(LLM_Service):
             bedrock_client - Instance of boto3.client(service_name='bedrock-runtime')
                 to use when making calls to bedrock models
         """
-
         self.bedrock_client = bedrock_client
         self.llm_description = "Llama2 70b v1 LLM"
+        self.price_per_M_input_tokens = 1.95
+        self.price_per_M_output_tokens = 2.56
 
         self.config = {
             "max_gen_len": 1024,
@@ -765,14 +797,17 @@ class LLM_Llama3(LLM_Service):
             bedrock_client - Instance of boto3.client(service_name='bedrock-runtime')
                 to use when making calls to bedrock models
         """
-
         self.bedrock_client = bedrock_client
         if model == "Llama3 8B Instruct - Bedrock":
             self.model_id = "meta.llama3-8b-instruct-v1:0"
             self.llm_description = "Llama3 8B Instruct LLM from Bedrock"
+            self.price_per_M_input_tokens = 0.3
+            self.price_per_M_output_tokens = 0.6
         elif model == "Llama3 70B Instruct - Bedrock":
             self.model_id = "meta.llama3-70b-instruct-v1:0"
             self.llm_description = "Llama3 70B Instruct LLM from Bedrock"
+            self.price_per_M_input_tokens = 2.65
+            self.price_per_M_output_tokens = 3.5
 
         self.config = {
             "max_gen_len": 1024,
