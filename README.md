@@ -31,6 +31,7 @@ To use this code and run the implemented tools, follow these steps:
      conda create --name llm_gat_env -c conda-forge boto3 gradio jupyterlab jupyterlab-lsp python-lsp-server openai anthropic tqdm pre-commit pydot ffmpeg qrcode matplotlib ipywidgets
      ```
    - Alternatively, install the requirements directly from `requirements.txt`
+   - Activate the environment with `conda activate llm_gat_env`
 
 3. Set up your API keys:
    - For Linux:
