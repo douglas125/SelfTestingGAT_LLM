@@ -2,6 +2,16 @@
 
 This project focuses on designing and self-testing GAT LLMs (Language Learning Models) that can effectively use a variety of tools to accomplish tasks.
 
+Demonstration (will take you to YouTube):
+
+
+
+[![GAT in action](https://img.youtube.com/vi/zVODAIgDbc4/0.jpg)](https://www.youtube.com/watch?v=zVODAIgDbc4)
+
+
+
+Coming soon: Paper pre-print
+
 ## Table of Contents
 1. [Project Overview](#project-overview)
 2. [Using this Code](#using-this-code)
@@ -28,9 +38,10 @@ To use this code and run the implemented tools, follow these steps:
 2. Set up the environment:
    - If using conda, create the environment:
      ```
-     conda create --name llm_gat_env -c conda-forge boto3 gradio jupyterlab jupyterlab-lsp python-lsp-server openai anthropic tqdm pre-commit pydot ffmpeg qrcode matplotlib ipywidgets
+     conda create --name llm_gat_env -c conda-forge boto3 gradio jupyterlab jupyterlab-lsp python-lsp-server openai anthropic tqdm pre-commit sympy pydot ffmpeg qrcode matplotlib ipywidgets
      ```
    - Alternatively, install the requirements directly from `requirements.txt`
+   - Activate the environment with `conda activate llm_gat_env`
 
 3. Set up your API keys:
    - For Linux:
