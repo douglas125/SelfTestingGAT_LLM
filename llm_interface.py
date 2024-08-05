@@ -110,6 +110,17 @@ class LLMInterface:
                     # img_html = f"<img src='/file={image_candidate}' style='width: 600px; max-width:none; max-height:none'></img>"
                     # cur_history.append([None, img_html])
 
+            # find out if we should add a downloadable file
+            file_candidates = x.split("<path_to_file>")
+            shown_files = {}
+            for k in range(1, len(file_candidates)):
+                file_candidate = file_candidates[k].split("</path_to_file>")[0]
+                if os.path.isfile(file_candidate) and not shown_files.get(
+                    file_candidate, False
+                ):
+                    cur_history.append([None, (file_candidate, "file")])
+                    shown_files[file_candidate] = True
+
             # figure out what should go into the scratchpad
             scratchpad_info = x.split("<scratchpad>")
             if len(scratchpad_info) > 1:
