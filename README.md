@@ -29,6 +29,34 @@ This project implements a flexible framework for:
 
 The system supports multiple LLM providers (including OpenAI, Anthropic, and AWS Bedrock) and a wide range of tools for tasks such as date calculations, web scraping, plotting, file operations, and more.
 
+## Current benchmarks
+
+With the current prompts, tools, descriptions and native tool configuration use settings, this is the performance of LLMs in GAT tasks.
+
+**Note: this is not a leaderboard or general evaluation of quality. It only refers to this test setting as a simulation of an industrial LLM GAT implementation.**
+
+|                                          |   ('n_invented_tools', 'sum') |   ('accuracy', '%') |   ('score', '%') |   ('USD / 1M tokens', 'Input') |   ('USD / 1M tokens', 'Output') |
+|:-----------------------------------------|------------------------------:|--------------------:|-----------------:|-------------------------------:|--------------------------------:|
+| ('Claude 3.5 Sonnet - Anthropic', False) |                             0 |                78   |             89.5 |                           3    |                           15    |
+| ('GPT 4o - OpenAI', True)                |                             1 |                79.9 |             89.4 |                           5    |                           15    |
+| ('GPT 4o mini - OpenAI', True)           |                             3 |                79.9 |             89   |                           0.15 |                            0.6  |
+| ('Claude 3.5 Sonnet - Anthropic', True)  |                             0 |                76.6 |             88.7 |                           3    |                           15    |
+| ('Claude 3 Haiku - Bedrock', True)       |                             2 |                77.5 |             88.6 |                           0.25 |                            1.25 |
+| ('GPT 4o - OpenAI', False)               |                             4 |                76.6 |             87.7 |                           5    |                           15    |
+| ('Llama3_1 405b instruct', False)        |                             3 |                75.5 |             87   |                           5.32 |                           16    |
+| ('Mistral Large v1', False)              |                             1 |                74.7 |             86.8 |                           4    |                           12    |
+| ('GPT 4o mini - OpenAI', False)          |                             3 |                73.1 |             85.1 |                           0.15 |                            0.6  |
+| ('Command RPlus - Bedrock', False)       |                             4 |                72.8 |             83.8 |                           3    |                           15    |
+| ('Claude 3 Haiku - Bedrock', False)      |                             3 |                70.6 |             83.3 |                           0.25 |                            1.25 |
+| ('Llama3_1 70b instruct', False)         |                            11 |                70   |             79.6 |                           2.65 |                            3.5  |
+| ('GPT 3.5 - OpenAI', False)              |                             2 |                65.4 |             78.6 |                           0.5  |                            1.5  |
+| ('GPT 3.5 - OpenAI', True)               |                            18 |                66.4 |             76.9 |                           0.5  |                            1.5  |
+| ('Mistral Mixtral 8x7B', False)          |                           156 |                50.1 |             67.5 |                           0.45 |                            0.7  |
+| ('Command R - Bedrock', False)           |                           117 |                49.7 |             65.4 |                           0.5  |                            1.5  |
+| ('Llama3 8b instruct', False)            |                            39 |                22.3 |             38.1 |                           0.3  |                            0.6  |
+| ('Llama3 70b instruct', False)           |                            29 |                29.1 |             36.1 |                           2.65 |                            3.5  |
+| ('Llama3_1 8b instruct', False)          |                            34 |                23.9 |             33.7 |                           0.3  |                            0.6  |
+
 ## Using this Code
 
 To use this code and run the implemented tools, follow these steps:
