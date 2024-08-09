@@ -29,7 +29,7 @@ This project implements a flexible framework for:
 
 The system supports multiple LLM providers (including OpenAI, Anthropic, and AWS Bedrock) and a wide range of tools for tasks such as date calculations, web scraping, plotting, file operations, and more.
 
-## Current benchmarks
+### Current benchmarks
 
 With the current prompts, tools, descriptions and native tool configuration use settings, this is the performance of LLMs in GAT tasks.
 
