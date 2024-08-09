@@ -30,6 +30,9 @@ class LLM_Provider:
         "Command RPlus - Bedrock",
         "Mistral Mixtral 8x7B",
         "Mistral Large v1",
+        "Llama3_1 8b instruct",
+        "Llama3_1 70b instruct",
+        "Llama3_1 405b instruct",
         # Legacy
         "Claude 2.1",
         "Claude Instant 1.2",
@@ -57,6 +60,15 @@ class LLM_Provider:
             return LLM_Llama13b(bedrock_client)
         elif llm == "Llama2 70b":
             return LLM_Llama70b(bedrock_client)
+
+        # Llama 3.1 family
+        elif llm == "Llama3_1 8b instruct":
+            return LLM_Llama3(bedrock_client, model="Llama3_1 8B Instruct - Bedrock")
+        elif llm == "Llama3_1 70b instruct":
+            return LLM_Llama3(bedrock_client, model="Llama3_1 70B Instruct - Bedrock")
+        elif llm == "Llama3_1 405b instruct":
+            return LLM_Llama3(bedrock_client, model="Llama3_1 405B Instruct - Bedrock")
+
         elif llm == "Llama3 8b instruct":
             return LLM_Llama3(bedrock_client, model="Llama3 8B Instruct - Bedrock")
         elif llm == "Llama3 70b instruct":

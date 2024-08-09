@@ -808,6 +808,21 @@ class LLM_Llama3(LLM_Service):
             self.llm_description = "Llama3 70B Instruct LLM from Bedrock"
             self.price_per_M_input_tokens = 2.65
             self.price_per_M_output_tokens = 3.5
+        elif model == "Llama3_1 70B Instruct - Bedrock":
+            self.model_id = "meta.llama3-1-70b-instruct-v1:0"
+            self.llm_description = "Llama3.1 70B Instruct LLM from Bedrock"
+            self.price_per_M_input_tokens = 2.65
+            self.price_per_M_output_tokens = 3.5
+        elif model == "Llama3_1 8B Instruct - Bedrock":
+            self.model_id = "meta.llama3-1-8b-instruct-v1:0"
+            self.llm_description = "Llama3.1 8B Instruct LLM from Bedrock"
+            self.price_per_M_input_tokens = 0.3
+            self.price_per_M_output_tokens = 0.6
+        elif model == "Llama3_1 405B Instruct - Bedrock":
+            self.model_id = "meta.llama3-1-405b-instruct-v1:0"
+            self.llm_description = "Llama3.1 405B Instruct LLM from Bedrock"
+            self.price_per_M_input_tokens = 5.32
+            self.price_per_M_output_tokens = 16.0
 
         self.config = {
             "max_gen_len": 1024,
