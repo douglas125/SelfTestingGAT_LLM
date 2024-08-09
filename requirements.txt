@@ -1,4 +1,6 @@
 boto3
+pandas
+tabulate
 gradio
 sympy
 qrcode
