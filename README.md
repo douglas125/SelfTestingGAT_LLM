@@ -33,7 +33,7 @@ The system supports multiple LLM providers (including OpenAI, Anthropic, and AWS
 
 With the current prompts, tools, descriptions and native tool configuration use settings, this is the performance of LLMs in GAT tasks.
 
-**Note: this is not a leaderboard or general evaluation of quality. It only refers to this test setting as a simulation of an internal LLM GAT implementation.**
+**Note: this is not a leaderboard or general evaluation of quality. It only refers to this test setting as a simulation of an industrial LLM GAT implementation.**
 
 |                                          |   ('n_invented_tools', 'sum') |   ('accuracy', '%') |   ('score', '%') |   ('USD / 1M tokens', 'Input') |   ('USD / 1M tokens', 'Output') |
 |:-----------------------------------------|------------------------------:|--------------------:|-----------------:|-------------------------------:|--------------------------------:|
