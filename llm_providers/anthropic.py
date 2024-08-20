@@ -7,12 +7,13 @@ from llm_providers.base_service import LLM_Service
 
 
 class LLM_Claude3_Anthropic(LLM_Service):
-    def __init__(self, model_size):
+    def __init__(self, model_size, use_caching=True):
         """Constructor
         Arguments:
             bedrock_client - Instance of boto3.client(service_name='bedrock-runtime')
                 to use when making calls to bedrock models
         """
+        self.use_caching = use_caching
         self.anthropic_client = anthropic.Anthropic()
         if model_size == "Sonnet 3.5 Anthropic":
             self.model_id = "claude-3-5-sonnet-20240620"
@@ -96,8 +97,23 @@ class LLM_Claude3_Anthropic(LLM_Service):
 
         if tools is None:
             body["messages"].append({"role": "assistant", "content": postpend})
+            if self.use_caching:
+                if isinstance(body["system"], str):
+                    body["system"] = [
+                        {
+                            "type": "text",
+                            "text": body["system"],
+                            "cache_control": {"type": "ephemeral"},
+                        }
+                    ]
+                elif isinstance(body["system"], list):
+                    body["system"][-1]["cache_control"] = {"type": "ephemeral"}
         else:
+            if self.use_caching:
+                # if caching, append the caching structure to the last tool
+                tools[-1]["cache_control"] = {"type": "ephemeral"}
             body["tools"] = tools
+
             assert postpend == "", "When using tools, postpend is not supported"
             assert (
                 tool_invoker_fn is not None
@@ -110,7 +126,15 @@ class LLM_Claude3_Anthropic(LLM_Service):
                 llm_body_changed = True
                 while llm_body_changed:
                     llm_body_changed = False
-                    response = self.anthropic_client.messages.create(**body)
+                    if self.use_caching:
+                        response = (
+                            self.anthropic_client.beta.prompt_caching.messages.create(
+                                **body
+                            )
+                        )
+                    else:
+                        response = self.anthropic_client.messages.create(**body)
+
                     word_count = len(re.findall(r"\w+", str(body["messages"])))
                     print(f"Invoking {self.llm_description}. Word count: {word_count}")
 

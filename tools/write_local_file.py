@@ -11,7 +11,7 @@ class ToolWriteLocalFile:
 Only write text files, like files with extensions .txt, .py, .md and others that usually contain only text.
 Do not attempt to write files that are usually in binary format. If the path is not specified, write the file to the media/ folder.
 
-Raises ValueError: if the file does not exist.""",
+Raises ValueError: if the file could not be written.""",
             "input_schema": {
                 "type": "object",
                 "properties": {
