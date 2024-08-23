@@ -16,6 +16,7 @@ from tools.do_date_math import ToolDoDateMath
 from tools.update_user_details import ToolUpdateUserDetails
 from tools.use_ffmpeg import ToolUseFFMPEG
 from tools.plot_with_graphviz import ToolPlotWithGraphviz
+from tools.text_to_speech import ToolTextToSpeech
 
 rng = np.random.default_rng()
 
@@ -37,6 +38,7 @@ class LLMTools:
             ToolUseFFMPEG(),
             ToolSolvePythonCode(),
             ToolPlotWithGraphviz(),
+            ToolTextToSpeech(),
         ]
 
     def __init__(self, query_llm=None, desired_tools=None):
@@ -58,6 +60,7 @@ class LLMTools:
                 ToolPlotWithGraphviz(),
                 # Being left out for now
                 # ToolSolvePythonCode(),
+                ToolTextToSpeech(),
             ]
         else:
             self.tools = desired_tools
