@@ -110,6 +110,18 @@ class LLMInterface:
                     # img_html = f"<img src='/file={image_candidate}' style='width: 600px; max-width:none; max-height:none'></img>"
                     # cur_history.append([None, img_html])
 
+            # find out if we should be showing an audio
+            audio_candidates = x.split("<path_to_audio>")
+            shown_audios = {}
+            for k in range(1, len(audio_candidates)):
+                audio_candidate = audio_candidates[k].split("</path_to_audio>")[0]
+
+                if os.path.isfile(audio_candidate) and not shown_audios.get(
+                    audio_candidate, False
+                ):
+                    cur_history.append([None, (audio_candidate, "media")])
+                    shown_audios[audio_candidate] = True
+
             # find out if we should add a downloadable file
             file_candidates = x.split("<path_to_file>")
             shown_files = {}
