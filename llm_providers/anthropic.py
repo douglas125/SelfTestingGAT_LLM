@@ -62,7 +62,7 @@ class LLM_Claude3_Anthropic(LLM_Service):
         extra_stop_sequences=[],
         tools=None,
         tool_invoker_fn=None,
-        max_retries=25,
+        max_retries=5,
     ):
         """
         Invokes the Claude 3 model to run an inference
