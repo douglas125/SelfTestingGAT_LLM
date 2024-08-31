@@ -213,6 +213,8 @@ class LLM_Claude3_Anthropic(LLM_Service):
         cur_tool_spec = None
         for x in response_body:
             txt = ""
+            if hasattr(x, "type") and x.type == "message_start":
+                print(x)
             if hasattr(x, "content_block"):
                 if x.content_block.type == "text":
                     txt = x.content_block.text
