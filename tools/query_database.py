@@ -1,3 +1,5 @@
+# Thanks to https://www.kaggle.com/datasets/kyanyoga/sample-sales-data
+# Sample CSV from that page (adjusted)
 """
 class llm_db has to have
 
@@ -41,3 +43,157 @@ sort_by: argument to SQL SORT BY
 
 max_results: integer N to use in "LIMIT N" at the end
 """
+from abc import ABC, abstractmethod
+
+import duckdb
+
+
+class LLM_Database(ABC):
+    def __init__(self):
+        pass
+
+    @abstractmethod
+    def get_database_name(self):
+        """This method should return the name of the database"""
+        pass
+
+    @abstractmethod
+    def get_database_info(self):
+        """This method should provide a comprehensive description of the
+        tables in the database as they will be accessible using the
+        self.sql_query method, and any specifics about those tables and columns
+        """
+        pass
+
+    @abstractmethod
+    def get_tables(self):
+        """This method should return a list of strings. Each contains one
+        valid table name that can be used in the query (see self.sql_query)
+        """
+        pass
+
+    @abstractmethod
+    def sql_query(self, query):
+        """This method should *safely* run queries in the database.
+        Make sure that queries run by this method cannot change the contents
+        of the database or do anything harmful. This method should also implement
+        safeguards like pre-filtering per account id.
+
+        A usual way of doing it would be:
+        WITH exposed_table AS
+        (
+            SELECT * FROM real_table
+            WHERE real_table.account_id = <ACCOUNT_ID>
+        )
+        [Insert user query that uses exposed_table]
+        """
+        pass
+
+    def get_full_database_description(self):
+        description = [
+            "Information about the tables in the dataset can be found in the <database_tables></database_tables>:"
+        ]
+        description = ["<database_tables>"]
+        for tbl in self.get_tables():
+            df = self.sql_query(f"SELECT * FROM '{tbl}' LIMIT 5")
+            description.append("<database_table>")
+            description.append(f"<table_name>{tbl}</table_name>")
+
+            # information
+            description.append(
+                f"<table_columns>{','.join(list(df.columns))}</table_columns>"
+            )
+            description.append(
+                f"<table_column_types>{','.join([str(x) for x in list(df.dtypes)])}</table_column_types>"
+            )
+            xml_sample = df.to_xml(
+                index=False, xml_declaration=False, root_name=f"table_sample_data"
+            )
+            description.append(xml_sample)
+            description.append("</database_table>")
+        description.append("</database_tables>")
+        description.append(
+            "Note that the information in <table_sample_data></table_sample_data> is just a very small sample of the records in the table. To retrieve real data, it is necessary to actually query the table."
+        )
+        description.append(self.get_database_info())
+        return "\n".join(description)
+
+
+class SampleOrder_LLM_DB(LLM_Database):
+    def __init__(self):
+        self.db_path = f"tools/query_database_sales_data_sample.csv"
+
+    def get_database_name(self):
+        return "Sales_database"
+
+    def get_tables(self):
+        return ["tblSales"]
+
+    def sql_query(self, query):
+        q = f"""
+WITH tblSales AS
+(
+    SELECT * FROM '{self.db_path}'
+)
+{query}
+"""
+        return duckdb.sql(q).df()
+
+    def get_database_info(self):
+        return f"In table tblSales: Column PRODUCTCODE is a unique identifier of the product. ORDERNUMBER is a unique identifier of the order."
+
+
+class ToolQueryLLMDB:
+    def __init__(self, LLM_Database, max_records=100):
+        self.db = LLM_Database
+        self.max_records = max_records
+        self.name = f"query_database_{self.db.get_database_name()}"
+
+        db_description = self.db.get_full_database_description()
+
+        self.tool_description = {
+            "name": self.name,
+            "description": f"""Generates SQL code that will be used to query the database {self.db.get_database_name()}.
+If the query is too complicated, involving multiple JOINs or conditions, make sure to ask the user if the results make sense.
+The details of the database are as follows:
+
+{db_description}
+
+Never use any commands that can modify the tables or records in the database.
+If the number of records exceeds {max_records}, inform that to the user and help him refine the query to narrow down the search.
+If the query is executed successfully, a table in XML format containing the results will be returned.
+If an error happens, the error description will be returned.""",
+            "input_schema": {
+                "type": "object",
+                "properties": {
+                    "sql_code": {
+                        "type": "string",
+                        "description": """Valid SQL code to query the database.""",
+                    },
+                },
+                "required": ["sql_code"],
+            },
+        }
+
+    def __call__(self, sql_code, **kwargs):
+        if len(kwargs) > 0:
+            return f"Error: Unexpected parameter(s): {','.join([x for x in kwargs])}"
+
+        try:
+            ans = self.db.sql_query(sql_code)
+            if len(ans) > self.max_records:
+                final_ans = [
+                    "SQL code NOT executed. Too many records. Please refine the search.",
+                    f"Number of records found: {len(ans)}. Maximum allowed: {self.max_records}",
+                ]
+            else:
+                final_ans = [
+                    "SQL code executed correctly. Results:",
+                    ans.to_xml(
+                        index=False, xml_declaration=False, root_name=f"query_results"
+                    ),
+                ]
+        except Exception as ex:
+            final_ans = ["SQL code NOT executed. Error description:", {str(ex)}]
+
+        return "\n".join(final_ans)

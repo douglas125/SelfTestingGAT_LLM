@@ -17,6 +17,7 @@ from tools.update_user_details import ToolUpdateUserDetails
 from tools.use_ffmpeg import ToolUseFFMPEG
 from tools.plot_with_graphviz import ToolPlotWithGraphviz
 from tools.text_to_speech import ToolTextToSpeech
+import tools.query_database as tool_query_db
 
 rng = np.random.default_rng()
 
@@ -58,6 +59,7 @@ class LLMTools:
                 ToolReadLocalFolder(),
                 ToolUseFFMPEG(),
                 ToolPlotWithGraphviz(),
+                tool_query_db.ToolQueryLLMDB(tool_query_db.SampleOrder_LLM_DB()),
                 # Being left out for now
                 # ToolSolvePythonCode(),
                 ToolTextToSpeech(),
