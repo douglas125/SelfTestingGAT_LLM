@@ -59,7 +59,7 @@ class LLMTools:
                 ToolReadLocalFolder(),
                 ToolUseFFMPEG(),
                 ToolPlotWithGraphviz(),
-                tool_query_db.ToolQueryLLMDB(tool_query_db.SampleOrder_LLM_DB()),
+                # tool_query_db.ToolQueryLLMDB(tool_query_db.SampleOrder_LLM_DB()),
                 # Being left out for now
                 # ToolSolvePythonCode(),
                 ToolTextToSpeech(),

@@ -95,19 +95,21 @@ class LLM_Claude3_Anthropic(LLM_Service):
         body["system"] = prompt["system"]
         body["messages"] = prompt["messages"].copy()
 
+        # apply caching to System Prompt
+        if self.use_caching:
+            if isinstance(body["system"], str):
+                body["system"] = [
+                    {
+                        "type": "text",
+                        "text": body["system"],
+                        "cache_control": {"type": "ephemeral"},
+                    }
+                ]
+            elif isinstance(body["system"], list):
+                body["system"][-1]["cache_control"] = {"type": "ephemeral"}
+
         if tools is None:
             body["messages"].append({"role": "assistant", "content": postpend})
-            if self.use_caching:
-                if isinstance(body["system"], str):
-                    body["system"] = [
-                        {
-                            "type": "text",
-                            "text": body["system"],
-                            "cache_control": {"type": "ephemeral"},
-                        }
-                    ]
-                elif isinstance(body["system"], list):
-                    body["system"][-1]["cache_control"] = {"type": "ephemeral"}
         else:
             if self.use_caching:
                 # if caching, append the caching structure to the last tool
