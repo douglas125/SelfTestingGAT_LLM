@@ -27,6 +27,13 @@ class LLM_Claude3_Anthropic(LLM_Service):
             )
             self.price_per_M_input_tokens = 15
             self.price_per_M_output_tokens = 75
+        elif model_size == "Haiku 3 Anthropic":
+            self.model_id = "claude-3-haiku-20240307"
+            self.llm_description = (
+                "Anthropic Claude 3 Haiku (Small-size LLM) - directly from Anthropic"
+            )
+            self.price_per_M_input_tokens = 0.25
+            self.price_per_M_output_tokens = 1.25
 
         self.config = {
             # "messages": prompt,
