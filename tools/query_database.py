@@ -194,6 +194,6 @@ If an error happens, the error description will be returned.""",
                     ),
                 ]
         except Exception as ex:
-            final_ans = ["SQL code NOT executed. Error description:", {str(ex)}]
+            final_ans = ["SQL code NOT executed. Error description:", str(ex)]
 
         return "\n".join(final_ans)
