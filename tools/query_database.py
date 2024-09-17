@@ -130,6 +130,10 @@ class SampleOrder_LLM_DB(LLM_Database):
         return ["tblSales"]
 
     def sql_query(self, query):
+        # handle when the LLM decides to use WITH
+        if len(query) > 4 and query[0:4].lower() == "with":
+            query = ", " + query[5:]
+
         q = f"""
 WITH tblSales AS
 (
