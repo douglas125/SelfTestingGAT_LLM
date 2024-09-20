@@ -129,10 +129,21 @@ class SampleOrder_LLM_DB(LLM_Database):
     def get_tables(self):
         return ["tblSales"]
 
-    def sql_query(self, query):
+    def sql_query(self, query, max_desired_results=400):
         # handle when the LLM decides to use WITH
         if len(query) > 4 and query[0:4].lower() == "with":
             query = ", " + query[5:]
+
+        # handle LIMIT
+        query_lines = [
+            x for x in query.replace(";", "").splitlines() if x.strip() != ""
+        ]
+        if "limit " not in query_lines[-1].lower():
+            query = query.replace(";", "") + f"\nLIMIT {max_desired_results + 1}"
+        else:
+            assert (
+                int(query_lines[-1].split()[-1]) <= max_desired_results
+            ), f"Error: the LIMIT clause cannot request for more than {max_desired_results} results"
 
         q = f"""
 WITH tblSales AS
@@ -184,7 +195,7 @@ If an error happens, the error description will be returned.""",
             return f"Error: Unexpected parameter(s): {','.join([x for x in kwargs])}"
 
         try:
-            ans = self.db.sql_query(sql_code)
+            ans = self.db.sql_query(sql_code, max_desired_results=self.max_records)
             if len(ans) > self.max_records:
                 final_ans = [
                     "SQL code NOT executed. Too many records. Please refine the search.",
