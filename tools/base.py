@@ -59,10 +59,10 @@ class LLMTools:
                 ToolReadLocalFolder(),
                 ToolUseFFMPEG(),
                 ToolPlotWithGraphviz(),
-                # Being left out for now
-                tool_query_db.ToolQueryLLMDB(tool_query_db.SampleOrder_LLM_DB()),
+                # Being left out for now. Just uncomment to enable
+                # tool_query_db.ToolQueryLLMDB(tool_query_db.SampleOrder_LLM_DB()),
                 # ToolSolvePythonCode(),
-                ToolTextToSpeech(),
+                # ToolTextToSpeech(),
             ]
         else:
             self.tools = desired_tools
