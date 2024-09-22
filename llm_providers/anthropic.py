@@ -27,6 +27,13 @@ class LLM_Claude3_Anthropic(LLM_Service):
             )
             self.price_per_M_input_tokens = 15
             self.price_per_M_output_tokens = 75
+        elif model_size == "Haiku 3 Anthropic":
+            self.model_id = "claude-3-haiku-20240307"
+            self.llm_description = (
+                "Anthropic Claude 3 Haiku (Small-size LLM) - directly from Anthropic"
+            )
+            self.price_per_M_input_tokens = 0.25
+            self.price_per_M_output_tokens = 1.25
 
         self.config = {
             # "messages": prompt,
@@ -95,19 +102,21 @@ class LLM_Claude3_Anthropic(LLM_Service):
         body["system"] = prompt["system"]
         body["messages"] = prompt["messages"].copy()
 
+        # apply caching to System Prompt
+        if self.use_caching:
+            if isinstance(body["system"], str):
+                body["system"] = [
+                    {
+                        "type": "text",
+                        "text": body["system"],
+                        "cache_control": {"type": "ephemeral"},
+                    }
+                ]
+            elif isinstance(body["system"], list):
+                body["system"][-1]["cache_control"] = {"type": "ephemeral"}
+
         if tools is None:
             body["messages"].append({"role": "assistant", "content": postpend})
-            if self.use_caching:
-                if isinstance(body["system"], str):
-                    body["system"] = [
-                        {
-                            "type": "text",
-                            "text": body["system"],
-                            "cache_control": {"type": "ephemeral"},
-                        }
-                    ]
-                elif isinstance(body["system"], list):
-                    body["system"][-1]["cache_control"] = {"type": "ephemeral"}
         else:
             if self.use_caching:
                 # if caching, append the caching structure to the last tool
@@ -213,6 +222,8 @@ class LLM_Claude3_Anthropic(LLM_Service):
         cur_tool_spec = None
         for x in response_body:
             txt = ""
+            if hasattr(x, "type") and x.type == "message_start":
+                print(x)
             if hasattr(x, "content_block"):
                 if x.content_block.type == "text":
                     txt = x.content_block.text

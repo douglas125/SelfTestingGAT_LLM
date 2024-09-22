@@ -1,5 +1,7 @@
 boto3
 pandas
+lxml
+duckdb
 tabulate
 gradio
 sympy

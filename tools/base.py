@@ -17,6 +17,7 @@ from tools.update_user_details import ToolUpdateUserDetails
 from tools.use_ffmpeg import ToolUseFFMPEG
 from tools.plot_with_graphviz import ToolPlotWithGraphviz
 from tools.text_to_speech import ToolTextToSpeech
+import tools.query_database as tool_query_db
 
 rng = np.random.default_rng()
 
@@ -58,9 +59,10 @@ class LLMTools:
                 ToolReadLocalFolder(),
                 ToolUseFFMPEG(),
                 ToolPlotWithGraphviz(),
-                # Being left out for now
+                # Being left out for now. Just uncomment to enable
+                # tool_query_db.ToolQueryLLMDB(tool_query_db.SampleOrder_LLM_DB()),
                 # ToolSolvePythonCode(),
-                ToolTextToSpeech(),
+                # ToolTextToSpeech(),
             ]
         else:
             self.tools = desired_tools

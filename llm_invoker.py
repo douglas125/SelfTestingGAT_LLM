@@ -22,6 +22,7 @@ class LLM_Provider:
         "GPT 4o mini - OpenAI",
         "Claude 3.5 Sonnet - Anthropic",
         "Claude 3 Opus - Anthropic",
+        "Claude 3 Haiku - Anthropic",
         "Claude 3 Haiku - Bedrock",
         "Claude 3 Sonnet - Bedrock",
         "Claude 3.5 Sonnet - Bedrock",
@@ -95,6 +96,8 @@ class LLM_Provider:
             return LLM_Claude3_Anthropic(model_size="Sonnet 3.5 Anthropic")
         elif llm == "Claude 3 Opus - Anthropic":
             return LLM_Claude3_Anthropic(model_size="Opus 3 Anthropic")
+        elif llm == "Claude 3 Haiku - Anthropic":
+            return LLM_Claude3_Anthropic(model_size="Haiku 3 Anthropic")
         elif llm == "GPT 3.5 - OpenAI":
             return LLM_GPT_OpenAI(model_size="GPT3_5 OpenAI")
         elif llm == "GPT 4o - OpenAI":
