@@ -9,8 +9,9 @@ class ToolSummarizePast:
 
         self.tool_description = {
             "name": self.name,
-            "description": """Summarizes all previous conversations when the user switches context, to avoid keeping in memory a very long conversation that is no longer relevant.
+            "description": f"""Summarizes all previous conversations when the user switches context, to avoid keeping in memory a very long conversation that is no longer relevant.
 
+Before calling any other tool, evaluate if {self.name} should be called.
 Before every answer, use the <scratchpad></scratchpad> to evaluate if the next answer is unrelated to the previous topics.
 
 CRITICAL: This tool is essential for maintaining conversation efficiency and relevance. Use it proactively to manage memory and context.
