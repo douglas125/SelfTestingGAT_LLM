@@ -48,6 +48,9 @@ Raises ValueError: if one of the parameters is invalid.""",
         self.tool_summary = self.tool_description
 
     def __call__(self, base_date, deltas, delta_type, **kwargs):
+        if len(kwargs) > 0:
+            return f"Error: Unexpected parameter(s): {','.join([x for x in kwargs])}"
+
         allowed_delta_types = ["day", "week", "month", "year"]
         if delta_type not in allowed_delta_types:
             return f"Error: delta_type must be one of {allowed_delta_types}"

@@ -19,7 +19,7 @@ class LLM_Service:
         extra_stop_sequences=[],
         tools=None,
         tool_invoker_fn=None,
-        max_retries=1,
+        max_retries=3,
     ):
         """Calls the LLM in streaming mode
         Arguments:
@@ -53,7 +53,12 @@ class LLM_Service:
             )
 
     def _prepare_call_list_from_history(
-        self, system_prompt, msg, b64image, chat_history
+        self,
+        system_prompt,
+        msg,
+        b64image,
+        chat_history,
+        context_reset_string="[|[PAST_FORGOTTEN]|]",
     ):
         """Prepares the prompt for the next interaction with the LLM.
         This image preparation is suited for Anthropic's Claude
@@ -62,7 +67,16 @@ class LLM_Service:
             {"role": "system", "content": system_prompt},
         ]
         for x in chat_history:
-            if isinstance(x, dict):
+            # allows the LLM to determine that the past is no longer relevant, to free up context
+            if context_reset_string in str(x):
+                history_list = [
+                    history_list[0],
+                    {
+                        "role": "user",
+                        "content": str(x),
+                    },
+                ]
+            elif isinstance(x, dict):
                 history_list.append(x)
             else:
                 history_list.append({"role": "user", "content": x[0]})

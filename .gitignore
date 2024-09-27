@@ -1,6 +1,7 @@
 media/
 user_info/
 ui_debug_prompt.txt
+debug.txt
 default_gen_chatbot_prompt.txt
 .virtual_documents/
 
