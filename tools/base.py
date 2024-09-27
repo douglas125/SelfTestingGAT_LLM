@@ -18,6 +18,7 @@ from tools.use_ffmpeg import ToolUseFFMPEG
 from tools.plot_with_graphviz import ToolPlotWithGraphviz
 from tools.text_to_speech import ToolTextToSpeech
 import tools.query_database as tool_query_db
+from tools.summarize_past import ToolSummarizePast
 
 rng = np.random.default_rng()
 
@@ -40,6 +41,8 @@ class LLMTools:
             ToolSolvePythonCode(),
             ToolPlotWithGraphviz(),
             ToolTextToSpeech(),
+            ToolSummarizePast(),
+            tool_query_db.ToolQueryLLMDB(tool_query_db.SampleOrder_LLM_DB()),
         ]
 
     def __init__(self, query_llm=None, desired_tools=None):
@@ -48,7 +51,6 @@ class LLMTools:
         if desired_tools is None:
             self.tools = [
                 ToolDoDateMath(),
-                ToolUpdateUserDetails(),
                 ToolMakeCustomPlot(),
                 ToolSolveSymbolic(),
                 ToolSolveNumeric(),
@@ -59,7 +61,9 @@ class LLMTools:
                 ToolReadLocalFolder(),
                 ToolUseFFMPEG(),
                 ToolPlotWithGraphviz(),
+                ToolSummarizePast(),
                 # Being left out for now. Just uncomment to enable
+                # ToolUpdateUserDetails(),
                 # tool_query_db.ToolQueryLLMDB(tool_query_db.SampleOrder_LLM_DB()),
                 # ToolSolvePythonCode(),
                 # ToolTextToSpeech(),
