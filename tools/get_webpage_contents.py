@@ -6,6 +6,40 @@ from bs4.element import Comment
 import urllib.request
 
 
+def extract_visible_html(html):
+    soup = BeautifulSoup(html, "html.parser")
+
+    # Remove script, style, meta, head, link, hidden, aria-hidden, and other non-visible elements
+    for hidden in soup(
+        ["script", "style", "meta", "head", "link", "[hidden]", '[aria-hidden="true"]']
+    ):
+        hidden.decompose()
+
+    # Remove elements with inline styles that hide them
+    for element in soup.find_all(True):
+        style = element.get("style", "")
+
+        # Check for display: none, visibility: hidden, or opacity: 0 in the style attribute
+        if (
+            "display: none" in style
+            or "visibility: hidden" in style
+            or "opacity: 0" in style
+        ):
+            element.decompose()
+
+    # Remove comment nodes
+    for comment in soup.findAll(string=lambda text: isinstance(text, Comment)):
+        comment.extract()
+
+    # Loop through all elements and remove tags that are empty or hidden
+    for element in soup.find_all(True):
+        if not element.get_text(strip=True):  # Remove elements without visible text
+            element.decompose()
+
+    # Return the modified HTML as a string
+    return soup.prettify()
+
+
 def get_text_and_urls(url_content):
     # Parse the HTML content
     soup = BeautifulSoup(url_content, "html.parser")
@@ -112,21 +146,31 @@ Raises ValueError: if the request is invalid.""",
 <website_prompt_example>Read this web page and extract only the URLs related to economic news.</website_prompt_example>
 </website_prompt_examples>""",
                     },
+                    "return_all_visible_html": {
+                        "type": "string",
+                        "enum": ["True", "False"],
+                        "description": """Allowed choices are True and False.
+If True, returns all raw HTML that contains visible elements.
+If False, only returns the visible text of the website and a list of URLs found.""",
+                    },
                 },
                 "required": ["internet_urls"],
             },
         }
 
-    def __call__(self, internet_urls, prompt="", **kwargs):
+    def __call__(
+        self, internet_urls, prompt="", return_all_visible_html=False, **kwargs
+    ):
         if len(kwargs) > 0:
             return f"Error: Unexpected parameter(s): {','.join([x for x in kwargs])}"
+        return_all_visible_html = return_all_visible_html.lower().strip() == "true"
         internet_urls = internet_urls.split(",")
         internet_urls = [x.strip() for x in internet_urls]
         ans = []
         for u in internet_urls:
             ans.append("<url_content>")
             ans.append(f"<url>{u}</url>")
-            content = self._get_url_content(u)
+            content = self._get_url_content(u, return_all_visible_html)
             if prompt.strip() != "":
                 if self.query_llm is None:
                     content = "Could not answer prompt because a Language Model was not provided."
@@ -142,7 +186,6 @@ Raises ValueError: if the request is invalid.""",
                         prompt,
                         system_prompt=sys_prompt,
                     )
-                    prev = ""
                     for x in llm_ans:
                         pass
                     content = x
@@ -151,17 +194,22 @@ Raises ValueError: if the request is invalid.""",
             ans.append("</url_content>")
         return "\n".join(ans)
 
-    def _get_url_content(self, internet_url):
+    def _get_url_content(self, internet_url, return_all_visible_html):
         try:
             headers = {
                 "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36"
             }
             c = requests.get(internet_url, headers=headers)
-            # texts = get_text_and_urls(c.content)
-            # return texts
 
-            texts, urls = text_from_html(c.text)
-            ans = f"<source_url>{c.url}</source_url><status_code>{c.status_code}</status_code>\n<contents>{texts}</contents>\n<linked_urls>{urls}</linked_urls>"
+            if return_all_visible_html:
+                # return all visible HTML (remove only scripts and hidden elements)
+                visible_html = extract_visible_html(c.content)
+                ans = f"<source_url>{c.url}</source_url><status_code>{c.status_code}</status_code>\n<contents>{visible_html}</contents>"
+            else:
+                # only extract texts and URLs
+                texts, urls = text_from_html(c.text)
+                ans = f"<source_url>{c.url}</source_url><status_code>{c.status_code}</status_code>\n<contents>{texts}</contents><urls>{urls}</urls>"
+
             return ans
         except Exception as e:
             return f"Could not retrieve page from URL.\nError description: {str(e)}"
