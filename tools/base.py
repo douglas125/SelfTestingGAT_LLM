@@ -19,6 +19,7 @@ from tools.plot_with_graphviz import ToolPlotWithGraphviz
 from tools.text_to_speech import ToolTextToSpeech
 import tools.query_database as tool_query_db
 from tools.summarize_past import ToolSummarizePast
+from tools.text_to_image import ToolTextToImage
 
 rng = np.random.default_rng()
 
@@ -41,6 +42,7 @@ class LLMTools:
             ToolSolvePythonCode(),
             ToolPlotWithGraphviz(),
             ToolTextToSpeech(),
+            ToolTextToImage(),
             ToolSummarizePast(),
             tool_query_db.ToolQueryLLMDB(tool_query_db.SampleOrder_LLM_DB()),
         ]
@@ -67,6 +69,7 @@ class LLMTools:
                 # tool_query_db.ToolQueryLLMDB(tool_query_db.SampleOrder_LLM_DB()),
                 # ToolSolvePythonCode(),
                 ToolTextToSpeech(),
+                ToolTextToImage(),
             ]
         else:
             self.tools = desired_tools
