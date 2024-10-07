@@ -66,7 +66,7 @@ class LLMTools:
                 # ToolUpdateUserDetails(),
                 # tool_query_db.ToolQueryLLMDB(tool_query_db.SampleOrder_LLM_DB()),
                 # ToolSolvePythonCode(),
-                # ToolTextToSpeech(),
+                ToolTextToSpeech(),
             ]
         else:
             self.tools = desired_tools
