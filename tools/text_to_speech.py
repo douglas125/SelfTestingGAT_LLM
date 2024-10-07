@@ -2,6 +2,7 @@ import os
 
 import boto3
 import numpy as np
+from openai import OpenAI
 
 from contextlib import closing
 
@@ -49,34 +50,70 @@ Raises ValueError: if not able to generate the audio.""",
                         "enum": ["male", "female"],
                         "description": "Desired gender of the speaker. Default is female. Can be male or female.",
                     },
+                    "tts_engine": {
+                        "type": "string",
+                        "enum": ["aws_polly", "openai"],
+                        "description": """Must be aws_polly or openai.
+Select the neural engine that will be used to generate the audio. Defaults to OpenAI text to speech. If not available, you must manually select the other.""",
+                    },
                 },
                 "required": ["input_text", "language"],
             },
         }
-        self.polly_client = boto3.client(service_name="polly", region_name="us-west-2")
+        self.polly_client = None
+        self.openai_client = None
 
-    def __call__(self, input_text, language, speaker_gender="female", **kwargs):
+    def __call__(
+        self,
+        input_text,
+        language,
+        speaker_gender="female",
+        tts_engine="openai",
+        **kwargs,
+    ):
         os.makedirs("media", exist_ok=True)
         if len(kwargs) > 0:
             return f"Error: Unexpected parameter(s): {','.join([x for x in kwargs])}"
+
+        # pick TTS engine
+        tts_engine = tts_engine.lower().strip()
+        valid_tts_engines = ["aws_polly", "openai"]
+        assert (
+            tts_engine in valid_tts_engines
+        ), f"Invalid text to speech engine: {tts_engine}. Must be one of {valid_tts_engines}."
+        if tts_engine == "openai" and self.openai_client is None:
+            self.openai_client = OpenAI()
+        elif tts_engine == "aws_polly" and self.polly_client is None:
+            self.polly_client = boto3.client(
+                service_name="polly", region_name="us-west-2"
+            )
 
         rng_num = rng.integers(low=0, high=900000)
         target_file = f"media/audio_{rng_num}.mp3"
 
         try:
-            # Request speech synthesis
-            response = self.polly_client.synthesize_speech(
-                Text=input_text,
-                OutputFormat="mp3",
-                VoiceId=VOICE_MAP[
-                    (language.lower(), speaker_gender.lower())
-                ],  # "Danielle",
-                Engine="neural",
-            )
-            if "AudioStream" in response:
-                with closing(response["AudioStream"]) as stream:
-                    with open(target_file, "wb") as file:
-                        file.write(stream.read())
+            if tts_engine == "aws_polly":
+                # Request speech synthesis
+                response = self.polly_client.synthesize_speech(
+                    Text=input_text,
+                    OutputFormat="mp3",
+                    VoiceId=VOICE_MAP[
+                        (language.lower(), speaker_gender.lower())
+                    ],  # "Danielle",
+                    Engine="neural",
+                )
+                if "AudioStream" in response:
+                    with closing(response["AudioStream"]) as stream:
+                        with open(target_file, "wb") as file:
+                            file.write(stream.read())
+            elif tts_engine == "openai":
+                response = self.openai_client.audio.speech.create(
+                    model="tts-1",
+                    voice="onyx" if speaker_gender == "male" else "nova",
+                    input=input_text,
+                )
+
+                response.stream_to_file(target_file)
         except Exception as e:
             return f"Audio was NOT generated.\nError description: {str(e)}"
 
