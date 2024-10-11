@@ -63,13 +63,13 @@ class LLMTools:
                 ToolReadLocalFolder(),
                 ToolUseFFMPEG(),
                 ToolPlotWithGraphviz(),
-                ToolSummarizePast(),
                 # Being left out for now. Just uncomment to enable
+                # ToolSummarizePast(),
                 # ToolUpdateUserDetails(),
                 # tool_query_db.ToolQueryLLMDB(tool_query_db.SampleOrder_LLM_DB()),
                 # ToolSolvePythonCode(),
-                ToolTextToSpeech(),
-                ToolTextToImage(),
+                # ToolTextToSpeech(),
+                # ToolTextToImage(),
             ]
         else:
             self.tools = desired_tools

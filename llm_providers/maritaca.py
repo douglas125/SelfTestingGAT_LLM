@@ -1,3 +1,4 @@
+import os
 import re
 import json
 import time
@@ -6,35 +7,22 @@ from openai import OpenAI
 from llm_providers.base_service import LLM_Service
 
 
-class LLM_GPT_OpenAI(LLM_Service):
+class LLM_Maritalk(LLM_Service):
     def __init__(self, model_size):
         """Constructor
         Arguments:
             bedrock_client - Instance of boto3.client(service_name='bedrock-runtime')
                 to use when making calls to bedrock models
         """
-        self.openai_client = OpenAI()
-        if model_size == "GPT4o OpenAI":
-            self.model_id = "gpt-4o-2024-05-13"
-            self.llm_description = (
-                "OpenAI GPT4o (Large-size LLM) - directly from OpenAI"
-            )
-            self.price_per_M_input_tokens = 5
-            self.price_per_M_output_tokens = 15
-        elif model_size == "GPT3_5 OpenAI":
-            self.model_id = "gpt-3.5-turbo-0125"
-            self.llm_description = (
-                "OpenAI 3.5 Turbo (Medium-size LLM) - directly from OpenAI"
-            )
-            self.price_per_M_input_tokens = 0.5
-            self.price_per_M_output_tokens = 1.5
-        elif model_size == "GPT4o mini OpenAI":
-            self.model_id = "gpt-4o-mini-2024-07-18"
-            self.llm_description = (
-                "OpenAI 4o Mini (Small-size LLM) - directly from OpenAI"
-            )
-            self.price_per_M_input_tokens = 0.15
-            self.price_per_M_output_tokens = 0.6
+        self.openai_client = OpenAI(
+            api_key=os.environ.get("MARITACA_API_KEY"),
+            base_url="https://chat.maritaca.ai/api",
+        )
+        if model_size == "Sabia3 Maritaca":
+            self.model_id = "sabia-3"
+            self.llm_description = "Sabia-3 (medium-sized LLM) - directly from Maritaca"
+            self.price_per_M_input_tokens = 0.95
+            self.price_per_M_output_tokens = 1.9
 
         self.config = {
             # "messages": prompt,
@@ -102,7 +90,7 @@ class LLM_GPT_OpenAI(LLM_Service):
         max_retries=25,
     ):
         """
-        Invokes the OpenAI model to run an inference
+        Invokes the Maritaca model to run an inference
         using the input provided in the request body.
 
         :param prompt: The prompt to be answered.
