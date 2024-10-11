@@ -94,7 +94,10 @@ class LLMInterface:
                 cur_ans = ans_only[-1]
             elif show_ans_only:
                 cur_ans = ""
-            cur_history.append([message, cur_ans])
+            cur_history += [
+                {"role": "user", "content": message},
+                {"role": "assistant", "content": cur_ans},
+            ]
 
             # find out if we should be showing an image
             image_candidates = x.split("<path_to_image>")
@@ -105,10 +108,13 @@ class LLMInterface:
                 if os.path.isfile(image_candidate) and not shown_images.get(
                     image_candidate, False
                 ):
-                    cur_history.append([None, (image_candidate, "media")])
+                    cur_history.append(
+                        {
+                            "role": "assistant",
+                            "content": {"path": image_candidate, "alt_text": "media"},
+                        }
+                    )
                     shown_images[image_candidate] = True
-                    # img_html = f"<img src='/file={image_candidate}' style='width: 600px; max-width:none; max-height:none'></img>"
-                    # cur_history.append([None, img_html])
 
             # find out if we should be showing an audio
             audio_candidates = x.split("<path_to_audio>")
@@ -119,7 +125,12 @@ class LLMInterface:
                 if os.path.isfile(audio_candidate) and not shown_audios.get(
                     audio_candidate, False
                 ):
-                    cur_history.append([None, (audio_candidate, "media")])
+                    cur_history.append(
+                        {
+                            "role": "assistant",
+                            "content": {"path": audio_candidate, "alt_text": "media"},
+                        }
+                    )
                     shown_audios[audio_candidate] = True
 
             # find out if we should add a downloadable file
@@ -130,7 +141,12 @@ class LLMInterface:
                 if os.path.isfile(file_candidate) and not shown_files.get(
                     file_candidate, False
                 ):
-                    cur_history.append([None, (file_candidate, "file")])
+                    cur_history.append(
+                        {
+                            "role": "assistant",
+                            "content": {"path": file_candidate, "alt_text": "media"},
+                        }
+                    )
                     shown_files[file_candidate] = True
 
             # figure out what should go into the scratchpad
@@ -176,13 +192,13 @@ class LLMInterface:
         cur_log = {"Function calls": []}
 
         if len(ui_history) > 0:
-            chat_id = ui_history[0][1]
+            chat_id = ui_history[0]["content"]
             history = self.history_log[chat_id]
             # with open('ui_debug.txt', 'w') as f:
             #    f.write(str([msg, history]))
         else:
             chat_id = str(uuid.uuid4())
-            ui_history = [[None, chat_id]]
+            ui_history = [{"role": "assistant", "content": chat_id}]
             history = []
 
         cur_log["Prepare initial prompt"] = {"exec_time": time.time() - t0}
@@ -277,6 +293,7 @@ class LLMInterface:
             tool_results.append("\n")
             for x in self.llm.tool_use_added_msgs:
                 history_to_append.append(x)
+
                 # enable media display in the Gradio UI - anthropic
                 if x["role"] == "user":
                     cur_tool_result = x["content"][0]["content"]
