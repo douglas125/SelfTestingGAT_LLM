@@ -44,7 +44,7 @@ class LLMTools:
             ToolTextToSpeech(),
             ToolTextToImage(),
             ToolSummarizePast(),
-            tool_query_db.ToolQueryLLMDB(tool_query_db.SampleOrder_LLM_DB()),
+            # tool_query_db.ToolQueryLLMDB(tool_query_db.SampleOrder_LLM_DB()),
         ]
 
     def __init__(self, query_llm=None, desired_tools=None):
