@@ -129,6 +129,7 @@ class LLM_Maritalk(LLM_Service):
                 cur_desc = x.copy()
                 cur_desc["parameters"] = cur_desc["input_schema"]
                 cur_desc.pop("input_schema", None)
+
                 adj_tools.append(
                     {
                         "type": "function",
@@ -172,12 +173,7 @@ class LLM_Maritalk(LLM_Service):
                         # append assistant responses
                         assistant_msg = {
                             "role": "assistant",
-                            "content": [
-                                {
-                                    "type": "text",
-                                    "text": cur_ans,
-                                },
-                            ],
+                            "content": cur_ans,
                             "tool_calls": [
                                 {
                                     "id": self.cur_tool_spec["id"],

@@ -64,7 +64,7 @@ class LLMTools:
                 ToolUseFFMPEG(),
                 ToolPlotWithGraphviz(),
                 # Being left out for now. Just uncomment to enable
-                # ToolSummarizePast(),
+                ToolSummarizePast(),
                 # ToolUpdateUserDetails(),
                 # tool_query_db.ToolQueryLLMDB(tool_query_db.SampleOrder_LLM_DB()),
                 # ToolSolvePythonCode(),
