@@ -44,9 +44,11 @@ With the current prompts, tools, descriptions and native tool configuration use 
 | ('GPT 4o mini - OpenAI', False)          |                             3 |                73.1 |             85.1 |                           0.15 |                            0.6  |
 | ('Command RPlus - Bedrock', False)       |                             4 |                72.8 |             83.8 |                           3    |                           15    |
 | ('Claude 3 Haiku - Bedrock', False)      |                             3 |                70.6 |             83.3 |                           0.25 |                            1.25 |
+| ('Sabia3 - Maritaca', True)              |                             6 |                70.6 |             83.2 |                           0.95 |                            1.9  |
 | ('Llama3_1 70b instruct', False)         |                            11 |                70   |             79.6 |                           2.65 |                            3.5  |
 | ('GPT 3.5 - OpenAI', False)              |                             2 |                65.4 |             78.6 |                           0.5  |                            1.5  |
 | ('GPT 3.5 - OpenAI', True)               |                            18 |                66.4 |             76.9 |                           0.5  |                            1.5  |
+| ('Sabia3 - Maritaca', False)             |                            14 |                61.8 |             75.7 |                           0.95 |                            1.9  |
 | ('Mistral Mixtral 8x7B', False)          |                           156 |                50.1 |             67.5 |                           0.45 |                            0.7  |
 | ('Command R - Bedrock', False)           |                           117 |                49.7 |             65.4 |                           0.5  |                            1.5  |
 | ('Llama3 8b instruct', False)            |                            39 |                22.3 |             38.1 |                           0.3  |                            0.6  |

@@ -18,7 +18,8 @@ class SelfTestPerformer(SelfTestBase):
         all_results = []
         all_tools = LLMTools.get_all_tools(self.llm)
         li = self.get_llm_interface(all_tools)
-        for test_case in tqdm(test_cases):
+        progbar = tqdm(test_cases)
+        for test_case in progbar:
             try:
                 q = ["Consider the following <question></question>:"]
                 q.append("<question>")
@@ -53,6 +54,7 @@ class SelfTestPerformer(SelfTestBase):
                         "expected_answer": test_case["appropriate_tools"],
                     }
                 )
+                progbar.set_description(f"Results so far: {len(all_results)}")
             except Exception as err:
                 print(f"Unexpected {err}")
         return all_results
@@ -88,6 +90,8 @@ if __name__ == "__main__":
         {"model": "Mistral Large v1", "native_tools": False},
         {"model": "Command R - Bedrock", "native_tools": False},
         {"model": "Command RPlus - Bedrock", "native_tools": False},
+        {"model": "Sabia3 - Maritaca", "native_tools": True},
+        {"model": "Sabia3 - Maritaca", "native_tools": False},
     ]
     test_files = [
         os.path.join(
