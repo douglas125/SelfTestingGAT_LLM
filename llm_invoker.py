@@ -13,10 +13,12 @@ from llm_providers.anthropic import LLM_Claude3_Anthropic
 from llm_providers.aws_bedrock import LLM_Claude3_Bedrock
 from llm_providers.aws_bedrock import LLM_Mistral_Bedrock
 from llm_providers.aws_bedrock_cohere import LLM_Command_Cohere
+from llm_providers.maritaca import LLM_Maritalk
 
 
 class LLM_Provider:
     allowed_llms = [
+        "Sabia3 - Maritaca",
         "GPT 4o - OpenAI",
         "GPT 3.5 - OpenAI",
         "GPT 4o mini - OpenAI",
@@ -61,6 +63,10 @@ class LLM_Provider:
             return LLM_Llama13b(bedrock_client)
         elif llm == "Llama2 70b":
             return LLM_Llama70b(bedrock_client)
+
+        # Maritaca
+        elif llm == "Sabia3 - Maritaca":
+            return LLM_Maritalk(model_size="Sabia3 Maritaca")
 
         # Llama 3.1 family
         elif llm == "Llama3_1 8b instruct":
