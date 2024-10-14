@@ -18,3 +18,4 @@ jupyterlab-lsp
 python-lsp-server
 openai
 anthropic
+beautifulsoup4

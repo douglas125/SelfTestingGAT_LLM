@@ -29,7 +29,7 @@ Raises ValueError: if not able to generate the image.""",
                 "required": ["input_text"],
             },
         }
-        self.openai_client = OpenAI()
+        self.openai_client = None
 
     def __call__(
         self,
@@ -37,6 +37,8 @@ Raises ValueError: if not able to generate the image.""",
         **kwargs,
     ):
         os.makedirs("media", exist_ok=True)
+        if self.openai_client is None:
+            self.openai_client = OpenAI()
         if len(kwargs) > 0:
             return f"Error: Unexpected parameter(s): {','.join([x for x in kwargs])}"
 

@@ -59,23 +59,24 @@ With the current prompts, tools, descriptions and native tool configuration use 
 
 To use this code and run the implemented tools, follow these steps:
 
-1. Clone this repository
+1. Clone this repository and `cd` to the repository folder.
 
 2. Set up the environment:
    - If using conda, create the environment:
      ```
-     conda create --name llm_gat_env -c conda-forge boto3 gradio jupyterlab jupyterlab-lsp python-lsp-server openai anthropic tqdm pre-commit sympy pydot ffmpeg qrcode matplotlib ipywidgets
+     conda env create -f environment.yml
      ```
    - Alternatively, install the requirements directly from `requirements.txt`
    - Activate the environment with `conda activate llm_gat_env`
 
-3. Set up your API keys:
+3. Set up your API keys (depending on what tools and LLM providers you need):
    - For Linux:
      ```
      export AWS_ACCESS_KEY_ID=your_aws_access_key
      export AWS_SECRET_ACCESS_KEY=your_aws_secret_key
      export ANTHROPIC_API_KEY=your_anthropic_key
      export OPENAI_API_KEY=your_openai_key
+	 export MARITACA_API_KEY=your_maritaca_key
      ```
    - For Windows:
      ```
@@ -83,6 +84,7 @@ To use this code and run the implemented tools, follow these steps:
      set AWS_SECRET_ACCESS_KEY=your_aws_secret_key
      set ANTHROPIC_API_KEY=your_anthropic_key
      set OPENAI_API_KEY=your_openai_key
+	 set MARITACA_API_KEY=your_maritaca_key
      ```
 
 4. Open and run `GAT-demo.ipynb` to launch the Gradio demo
