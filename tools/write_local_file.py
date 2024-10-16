@@ -35,7 +35,7 @@ Raises ValueError: if the file could not be written.""",
 
         final_ans = ["<outcome>"]
         if not os.path.isfile(path_to_file):
-            with open(path_to_file, "w", encoding="latin-1") as f:
+            with open(path_to_file, "w", encoding="utf-8") as f:
                 f.write(text_content)
                 final_ans.append("File written successfully")
                 final_ans.append(f"<path_to_file>{path_to_file}</path_to_file>")
