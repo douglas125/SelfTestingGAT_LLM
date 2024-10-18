@@ -163,7 +163,7 @@ If False, only returns the visible text of the website and a list of URLs found.
     ):
         if len(kwargs) > 0:
             return f"Error: Unexpected parameter(s): {','.join([x for x in kwargs])}"
-        return_all_visible_html = return_all_visible_html.lower().strip() == "true"
+        return_all_visible_html = str(return_all_visible_html).lower().strip() == "true"
         internet_urls = internet_urls.split(",")
         internet_urls = [x.strip() for x in internet_urls]
         ans = []
