@@ -1,9 +1,7 @@
 import requests
-from bs4 import BeautifulSoup, NavigableString, CData, Tag
+from bs4 import BeautifulSoup, NavigableString, Tag
 
-from bs4 import BeautifulSoup
 from bs4.element import Comment
-import urllib.request
 
 
 def extract_visible_html(html):
@@ -58,7 +56,7 @@ def get_text_and_urls(url_content):
 
 
 def tag_visible(element):
-    if element.parent.name in ["a"]:
+    if element.parent.name in ["a", "p"]:
         return True
 
     if element.parent.name in [
@@ -67,7 +65,7 @@ def tag_visible(element):
         "head",
         "title",
         "meta",
-        "[document]",
+        # "[document]",
     ]:
         return False
     if isinstance(element, Comment):
@@ -77,10 +75,9 @@ def tag_visible(element):
 
 def text_from_html(body):
     soup = MyBeautifulSoup(body, "html.parser")
-    texts = soup.findAll(text=True)
+    texts = soup.findAll(string=True)
     visible_texts = filter(tag_visible, texts)
 
-    urls = soup.find_all("a")
     url_list = []
     for link in soup.find_all("a"):
         url_list.append(f"[ {link.get('href')} ] {link.text}")
