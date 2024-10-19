@@ -10,6 +10,7 @@ dependencies:
   - pip
   - tqdm
   - pre-commit
+  - graphviz
   - pydot
   - sympy
   - ffmpeg

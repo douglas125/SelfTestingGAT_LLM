@@ -8,6 +8,7 @@ sympy
 qrcode
 ffmpeg
 matplotlib
+graphviz
 pydot
 black
 pre-commit
