@@ -6,25 +6,24 @@ dependencies:
   - jupyterlab
   - jupyterlab-lsp
   - python-lsp-server
-  - beautifulsoup4=4.12.3
-  - boto3=1.35.16
-  - pre-commit
-  - pydot=3.0.1
-  - tqdm
-  - sympy=1.13.2
-  - tabulate
-  - ffmpeg=7.0.2
-  - qrcode=7.4.2
-  - matplotlib=3.9.2
-  - ipywidgets
-  - pandas=2.2.2
-  - lxml
-  - duckdb=1.0
-  - pillow=10.4.0
+  - boto3
   - pip
+  - tqdm
+  - pre-commit
+  - pydot
+  - sympy
+  - ffmpeg
+  - qrcode
+  - matplotlib
+  - ipywidgets
+  - pandas
+  - lxml
+  - duckdb
+  - pillow
+  - tabulate
+  - coverage
+  - pytest
   - pip:
-      - gradio==5.0.2
-      - gradio-client==1.4.0
-      - huggingface-hub==0.25.2
-      - openai
+      - gradio
       - anthropic
+      - openai
