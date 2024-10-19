@@ -43,6 +43,11 @@ jobs:
           pip install pytest
           pip install -r requirements.txt
 
+      - name: Run pre-commit checks
+        run: |
+          pre-commit install
+          pre-commit run --all-files --show-diff-on-failure
+
       - name: Run tests
         run: |
           pytest -v
