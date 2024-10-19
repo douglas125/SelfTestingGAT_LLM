@@ -1,4 +1,4 @@
-name: Python package
+name: GAT-LLM toolkit
 
 on:
   push:
