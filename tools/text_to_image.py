@@ -38,10 +38,7 @@ Raises ValueError: if not able to generate the image.""",
     ):
         os.makedirs("media", exist_ok=True)
         if self.openai_client is None:
-            try:
-                self.openai_client = OpenAI()
-            except:
-                pass
+            self.openai_client = OpenAI()
         if len(kwargs) > 0:
             return f"Error: Unexpected parameter(s): {','.join([x for x in kwargs])}"
 
