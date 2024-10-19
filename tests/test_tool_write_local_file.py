@@ -32,7 +32,7 @@ def test_write_local_file_success(mock_os_path_isfile, mock_os_makedirs):
     assert "File written successfully" in result
     assert "<path_to_file>path/to/file.txt</path_to_file>" in result
     assert "</outcome>" in result
-    mock_file.assert_called_once_with("path/to/file.txt", "w", encoding="latin-1")
+    mock_file.assert_called_once_with("path/to/file.txt", "w", encoding="utf-8")
     mock_file().write.assert_called_once_with("Test content")
 
 
@@ -65,7 +65,7 @@ def test_write_local_file_various_types(
     assert "File written successfully" in result
     assert f"<path_to_file>{file_path}</path_to_file>" in result
     assert "</outcome>" in result
-    mock_file.assert_called_once_with(file_path, "w", encoding="latin-1")
+    mock_file.assert_called_once_with(file_path, "w", encoding="utf-8")
     mock_file().write.assert_called_once_with(content)
 
 
