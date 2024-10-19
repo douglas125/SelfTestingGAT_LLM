@@ -34,13 +34,13 @@ subfolder/file3.docx
             return f"Error: Unexpected parameter(s): {','.join([x for x in kwargs])}"
 
         final_ans = ["<files>"]
-        all_files = [x for x in path_to_files.splitlines() if x.strip() != ""]
+        all_files = [x.strip() for x in path_to_files.splitlines() if x.strip() != ""]
         for path_to_file in all_files:
             if not os.path.isfile(path_to_file):
                 ans = f"Error: Did not find file `{path_to_file}`"
                 ans = f"<error>\n{ans}\n</error>"
             else:
-                with open(path_to_file, "r", encoding="latin-1") as f:
+                with open(path_to_file, "r", encoding="utf-8") as f:
                     ans = f.read()
                 ans = f"<contents>\n{ans}\n</contents>"
 

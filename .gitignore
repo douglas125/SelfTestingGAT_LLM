@@ -4,6 +4,7 @@ ui_debug_prompt.txt
 debug.txt
 default_gen_chatbot_prompt.txt
 .virtual_documents/
+.gradio/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

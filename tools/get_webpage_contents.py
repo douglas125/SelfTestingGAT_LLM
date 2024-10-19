@@ -1,9 +1,7 @@
 import requests
-from bs4 import BeautifulSoup, NavigableString, CData, Tag
+from bs4 import BeautifulSoup, NavigableString, Tag
 
-from bs4 import BeautifulSoup
 from bs4.element import Comment
-import urllib.request
 
 
 def extract_visible_html(html):
@@ -58,7 +56,7 @@ def get_text_and_urls(url_content):
 
 
 def tag_visible(element):
-    if element.parent.name in ["a"]:
+    if element.parent.name in ["a", "p"]:
         return True
 
     if element.parent.name in [
@@ -67,7 +65,7 @@ def tag_visible(element):
         "head",
         "title",
         "meta",
-        "[document]",
+        # "[document]",
     ]:
         return False
     if isinstance(element, Comment):
@@ -77,10 +75,9 @@ def tag_visible(element):
 
 def text_from_html(body):
     soup = MyBeautifulSoup(body, "html.parser")
-    texts = soup.findAll(text=True)
+    texts = soup.findAll(string=True)
     visible_texts = filter(tag_visible, texts)
 
-    urls = soup.find_all("a")
     url_list = []
     for link in soup.find_all("a"):
         url_list.append(f"[ {link.get('href')} ] {link.text}")
@@ -163,7 +160,7 @@ If False, only returns the visible text of the website and a list of URLs found.
     ):
         if len(kwargs) > 0:
             return f"Error: Unexpected parameter(s): {','.join([x for x in kwargs])}"
-        return_all_visible_html = return_all_visible_html.lower().strip() == "true"
+        return_all_visible_html = str(return_all_visible_html).lower().strip() == "true"
         internet_urls = internet_urls.split(",")
         internet_urls = [x.strip() for x in internet_urls]
         ans = []
@@ -201,7 +198,7 @@ If False, only returns the visible text of the website and a list of URLs found.
             }
             c = requests.get(internet_url, headers=headers)
 
-            if return_all_visible_html:
+            if str(return_all_visible_html).lower().strip() == "true":
                 # return all visible HTML (remove only scripts and hidden elements)
                 visible_html = extract_visible_html(c.content)
                 ans = f"<source_url>{c.url}</source_url><status_code>{c.status_code}</status_code>\n<contents>{visible_html}</contents>"

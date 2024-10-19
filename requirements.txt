@@ -8,6 +8,7 @@ sympy
 qrcode
 ffmpeg
 matplotlib
+graphviz
 pydot
 black
 pre-commit
@@ -19,3 +20,5 @@ python-lsp-server
 openai
 anthropic
 beautifulsoup4
+pytest
+coverage
