@@ -201,7 +201,7 @@ If False, only returns the visible text of the website and a list of URLs found.
             }
             c = requests.get(internet_url, headers=headers)
 
-            if return_all_visible_html:
+            if str(return_all_visible_html).lower().strip() == "true":
                 # return all visible HTML (remove only scripts and hidden elements)
                 visible_html = extract_visible_html(c.content)
                 ans = f"<source_url>{c.url}</source_url><status_code>{c.status_code}</status_code>\n<contents>{visible_html}</contents>"
