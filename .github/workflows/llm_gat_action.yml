@@ -45,6 +45,7 @@ jobs:
 
       - name: Run pre-commit checks
         run: |
+          pre-commit autoupdate --repo https://github.com/pre-commit/pre-commit-hooks
           pre-commit install
           pre-commit run --all-files --show-diff-on-failure
 
