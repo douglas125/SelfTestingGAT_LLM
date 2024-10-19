@@ -19,3 +19,5 @@ python-lsp-server
 openai
 anthropic
 beautifulsoup4
+pytest
+coverage
