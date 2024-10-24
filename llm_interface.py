@@ -1,5 +1,6 @@
 import os
 import re
+import json
 import time
 import uuid
 import base64
@@ -217,12 +218,6 @@ class LLMInterface:
             tool_invoker_fn=self.lt.invoke_tool if self.lt is not None else None,
         )
 
-        try:
-            with open("ui_debug_prompt.txt", "w", encoding="utf-8") as f:
-                f.write(str(self.llm.last_prompt))
-        except:
-            pass
-
         for x in ans2:
             # pass
             yield self._format_msg(x, msg, ui_history)
@@ -312,6 +307,14 @@ class LLMInterface:
 
         tool_results = "\n".join(tool_results)
         self.history_log[chat_id] = history + history_to_append
+
+        try:
+            chat_log_dir = "chat_logs"
+            os.makedirs(chat_log_dir, exist_ok=True)
+            with open(f"{chat_log_dir}/{chat_id}.json", "w", encoding="utf-8") as f:
+                f.write(json.dumps(self.history_log[chat_id]))
+        except:
+            pass
 
         final_response_ui = self._format_msg(cur_answer + tool_results, msg, ui_history)
         yield final_response_ui
