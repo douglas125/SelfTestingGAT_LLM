@@ -23,11 +23,13 @@ class LLM_Provider:
         "GPT 3.5 - OpenAI",
         "GPT 4o mini - OpenAI",
         "Claude 3.5 Sonnet - Anthropic",
+        "Claude 3.5 Haiku - Anthropic",
         "Claude 3 Opus - Anthropic",
         "Claude 3 Haiku - Anthropic",
         "Claude 3 Haiku - Bedrock",
         "Claude 3 Sonnet - Bedrock",
         "Claude 3.5 Sonnet - Bedrock",
+        "Claude 3.5 Haiku - Bedrock",
         "Claude 3 Opus - Bedrock",
         "Command R - Bedrock",
         "Command RPlus - Bedrock",
@@ -90,20 +92,30 @@ class LLM_Provider:
             return LLM_Mistral_Bedrock(bedrock_client, model_size="Mixtral 8x7B v0:1")
         elif llm == "Mistral Large v1":
             return LLM_Mistral_Bedrock(bedrock_client, model_size="Mistral Large v1")
+
+        # Legacy Claude
         elif llm == "Claude 3 Opus - Bedrock":
             return LLM_Claude3_Bedrock(bedrock_client, model_size="Opus")
         elif llm == "Claude 3 Sonnet - Bedrock":
             return LLM_Claude3_Bedrock(bedrock_client, model_size="Sonnet")
         elif llm == "Claude 3 Haiku - Bedrock":
             return LLM_Claude3_Bedrock(bedrock_client, model_size="Haiku")
-        elif llm == "Claude 3.5 Sonnet - Bedrock":
-            return LLM_Claude3_Bedrock(bedrock_client, model_size="Sonnet 3.5")
-        elif llm == "Claude 3.5 Sonnet - Anthropic":
-            return LLM_Claude3_Anthropic(model_size="Sonnet 3.5 Anthropic")
         elif llm == "Claude 3 Opus - Anthropic":
             return LLM_Claude3_Anthropic(model_size="Opus 3 Anthropic")
         elif llm == "Claude 3 Haiku - Anthropic":
             return LLM_Claude3_Anthropic(model_size="Haiku 3 Anthropic")
+
+        # current Claude
+        elif llm == "Claude 3.5 Sonnet - Bedrock":
+            return LLM_Claude3_Bedrock(bedrock_client, model_size="Sonnet 3.5")
+        elif llm == "Claude 3.5 Haiku - Bedrock":
+            return LLM_Claude3_Bedrock(bedrock_client, model_size="Haiku 3.5")
+        elif llm == "Claude 3.5 Sonnet - Anthropic":
+            return LLM_Claude3_Anthropic(model_size="Sonnet 3.5 Anthropic")
+        elif llm == "Claude 3.5 Haiku - Anthropic":
+            return LLM_Claude3_Anthropic(model_size="Haiku 3.5 Anthropic")
+
+        # OpenAI
         elif llm == "GPT 3.5 - OpenAI":
             return LLM_GPT_OpenAI(model_size="GPT3_5 OpenAI")
         elif llm == "GPT 4o - OpenAI":

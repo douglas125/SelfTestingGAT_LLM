@@ -16,10 +16,17 @@ class LLM_Claude3_Anthropic(LLM_Service):
         self.use_caching = use_caching
         self.anthropic_client = anthropic.Anthropic()
         if model_size == "Sonnet 3.5 Anthropic":
-            self.model_id = "claude-3-5-sonnet-20240620"
+            self.model_id = "claude-3-5-sonnet-20241022"
             self.llm_description = "Anthropic Claude 3.5 Sonnet (Medium-size LLM) - directly from Anthropic"
             self.price_per_M_input_tokens = 3
             self.price_per_M_output_tokens = 15
+        elif model_size == "Haiku 3.5 Anthropic":
+            self.model_id = "claude-3-5-haiku-20241022"
+            self.llm_description = (
+                "Anthropic Claude 3.5 Haiku (Small-size LLM) - directly from Anthropic"
+            )
+            self.price_per_M_input_tokens = 1
+            self.price_per_M_output_tokens = 5
         elif model_size == "Opus 3 Anthropic":
             self.model_id = "claude-3-opus-20240229"
             self.llm_description = (

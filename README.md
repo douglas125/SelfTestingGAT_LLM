@@ -36,8 +36,10 @@ With the current prompts, tools, descriptions and native tool configuration use 
 | ('Claude 3.5 Sonnet - Anthropic', False) |                             0 |                78   |             89.5 |                           3    |                           15    |
 | ('GPT 4o - OpenAI', True)                |                             1 |                79.9 |             89.4 |                           5    |                           15    |
 | ('GPT 4o mini - OpenAI', True)           |                             3 |                79.9 |             89   |                           0.15 |                            0.6  |
+| ('Claude 3.5 Haiku - Anthropic', True)   |                             2 |                76.6 |             89   |                           1    |                            5    |
 | ('Claude 3.5 Sonnet - Anthropic', True)  |                             0 |                76.6 |             88.7 |                           3    |                           15    |
 | ('Claude 3 Haiku - Bedrock', True)       |                             2 |                77.5 |             88.6 |                           0.25 |                            1.25 |
+| ('Claude 3.5 Haiku - Anthropic', False)  |                             9 |                73.9 |             87.9 |                           1    |                            5    |
 | ('GPT 4o - OpenAI', False)               |                             4 |                76.6 |             87.7 |                           5    |                           15    |
 | ('Llama3_1 405b instruct', False)        |                             3 |                75.5 |             87   |                           5.32 |                           16    |
 | ('Mistral Large v1', False)              |                             1 |                74.7 |             86.8 |                           4    |                           12    |
