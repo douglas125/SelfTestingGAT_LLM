@@ -28,12 +28,19 @@ class LLM_Claude3_Bedrock(LLM_Service):
             self.price_per_M_input_tokens = 3
             self.price_per_M_output_tokens = 15
         elif model_size == "Sonnet 3.5":
-            self.model_id = "anthropic.claude-3-5-sonnet-20240620-v1:0"
+            self.model_id = "anthropic.claude-3-5-sonnet-20241022-v2:0"
             self.llm_description = (
                 "Anthropic Claude 3.5 Sonnet from AWS Bedrock (Medium-size LLM)"
             )
             self.price_per_M_input_tokens = 3
             self.price_per_M_output_tokens = 15
+        elif model_size == "Haiku 3.5":
+            self.model_id = "anthropic.claude-3-5-haiku-20241022-v1:0"
+            self.llm_description = (
+                "Anthropic Claude 3.5 Haiku from AWS Bedrock (Small-size LLM)"
+            )
+            self.price_per_M_input_tokens = 1
+            self.price_per_M_output_tokens = 5
         elif model_size == "Haiku":
             self.model_id = "anthropic.claude-3-haiku-20240307-v1:0"
             self.llm_description = (

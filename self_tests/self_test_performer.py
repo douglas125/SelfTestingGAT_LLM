@@ -80,6 +80,8 @@ if __name__ == "__main__":
         {"model": "Llama3 8b instruct", "native_tools": False},
         {"model": "Claude 3.5 Sonnet - Anthropic", "native_tools": True},
         {"model": "Claude 3.5 Sonnet - Anthropic", "native_tools": False},
+        {"model": "Claude 3.5 Haiku - Anthropic", "native_tools": True},
+        {"model": "Claude 3.5 Haiku - Anthropic", "native_tools": False},
         {"model": "GPT 3.5 - OpenAI", "native_tools": True},
         {"model": "GPT 3.5 - OpenAI", "native_tools": False},
         {"model": "GPT 4o mini - OpenAI", "native_tools": True},
