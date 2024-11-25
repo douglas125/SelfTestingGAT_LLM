@@ -110,6 +110,8 @@ class LLM_Claude3_Anthropic(LLM_Service):
         body["messages"] = prompt["messages"].copy()
 
         # apply caching to System Prompt
+        with open("chat_logs/last_body.json", "w") as f:
+            f.write(json.dumps(body))
         if self.use_caching:
             if isinstance(body["system"], str):
                 body["system"] = [
@@ -142,6 +144,8 @@ class LLM_Claude3_Anthropic(LLM_Service):
                 llm_body_changed = True
                 while llm_body_changed:
                     llm_body_changed = False
+                    with open("chat_logs/last_body.json", "w") as f:
+                        f.write(json.dumps(body))
                     if self.use_caching:
                         response = (
                             self.anthropic_client.beta.prompt_caching.messages.create(
@@ -172,16 +176,22 @@ class LLM_Claude3_Anthropic(LLM_Service):
                         )
 
                         # append assistant responses
-                        assistant_msg = {
-                            "role": "assistant",
-                            "content": [
-                                {
-                                    "type": "text",
-                                    "text": cur_ans,
-                                },
-                                self.cur_tool_spec,
-                            ],
-                        }
+                        if cur_ans.strip() != "":
+                            assistant_msg = {
+                                "role": "assistant",
+                                "content": [
+                                    {
+                                        "type": "text",
+                                        "text": cur_ans,
+                                    },
+                                    self.cur_tool_spec,
+                                ],
+                            }
+                        else:
+                            assistant_msg = {
+                                "role": "assistant",
+                                "content": [self.cur_tool_spec],
+                            }
 
                         next_user_msg = {
                             "role": "user",

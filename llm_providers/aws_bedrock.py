@@ -163,16 +163,22 @@ class LLM_Claude3_Bedrock(LLM_Service):
                         )
 
                         # append assistant responses
-                        assistant_msg = {
-                            "role": "assistant",
-                            "content": [
-                                {
-                                    "type": "text",
-                                    "text": cur_ans,
-                                },
-                                self.cur_tool_spec,
-                            ],
-                        }
+                        if cur_ans.strip() != "":
+                            assistant_msg = {
+                                "role": "assistant",
+                                "content": [
+                                    {
+                                        "type": "text",
+                                        "text": cur_ans,
+                                    },
+                                    self.cur_tool_spec,
+                                ],
+                            }
+                        else:
+                            assistant_msg = {
+                                "role": "assistant",
+                                "content": [self.cur_tool_spec],
+                            }
 
                         next_user_msg = {
                             "role": "user",

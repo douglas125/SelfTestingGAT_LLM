@@ -186,6 +186,8 @@ class LLMTools:
                         "result_length": len(ans),
                     }
                 )
+                if ans is None:
+                    ans = f"Error: tool {tool_name} returned `None`"
                 if return_results_only:
                     return ans
                 else:
