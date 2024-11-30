@@ -1,4 +1,6 @@
+import re
 import requests
+from urllib.parse import urljoin
 from bs4 import BeautifulSoup, NavigableString, Tag
 
 from bs4.element import Comment
@@ -109,18 +111,25 @@ class MyBeautifulSoup(BeautifulSoup):
 
 
 class ToolGetUrlContent:
-    def __init__(self, query_llm):
+    def __init__(self, query_llm, max_subpages_to_read=60):
         self.name = "get_url_content"
         self.query_llm = query_llm
+        self.max_subpages_to_read = max_subpages_to_read
 
         self.tool_description = {
             "name": self.name,
             "description": f"""Retrieves the contents of one or more internet URLs specified by internet_urls, separated by commas. For example, use this tool when the user requests you to read a webpage, or find something on the internet. A prompt should be provided to extract only the desired relevant content from the URLs. If the prompt is left empty, the raw contents of the webpage are returned. Note that the prompt will be provided individually to query each URL.
 
-You can use {self.name} in these <use_cases></use_cases> and others as needed:
+You can use {self.name} in these <use_cases></use_cases> and others as needed when:
 <use_cases>
-<use_case>When it is easy to retrieve up-to-date information from a webpage</use_case>
-<use_case>When it is necessary to navigate internet web pages to retrieve information</use_case>
+<use_case>It is easy to retrieve up-to-date information from a webpage</use_case>
+<use_case>It is necessary to navigate internet web pages to retrieve information</use_case>
+<use_case>The user wants to browse websites containing news. In this case, follow the steps:
+
+- Read the initial URL using recursion_level=0 to find the URLs to the webpages linked.
+- Find a pattern that will retrieve only the relevant URLs. In general, strings like "/news/" or "/economy/" will be contained in the URL.
+- Read the initial URL using recursion_level=1 and the appropriate recursion_regex_condition to retrieve only relevant news.
+</use_case>
 </use_cases>
 
 Raises ValueError: if the request is invalid.""",
@@ -141,7 +150,9 @@ Raises ValueError: if the request is invalid.""",
 <website_prompt_examples>
 <website_prompt_example>Summarize the contents of this web page. Make sure to include all links in the page.</website_prompt_example>
 <website_prompt_example>Read this web page and extract only the URLs related to economic news.</website_prompt_example>
-</website_prompt_examples>""",
+</website_prompt_examples>
+Leave argument prompt empty ("") to retrieve the raw text.
+""",
                     },
                     "return_all_visible_html": {
                         "type": "string",
@@ -150,24 +161,53 @@ Raises ValueError: if the request is invalid.""",
 If True, returns all raw HTML that contains visible elements.
 If False, only returns the visible text of the website and a list of URLs found.""",
                     },
+                    "recursion_level": {
+                        "type": "integer",
+                        "default": 0,
+                        "description": """Read all links from the original webpage recursion_level times. Default is 0.
+If recursion_level is greater than 0, also read and return the contents of links found in the webpages.
+This is useful to automatically follow links and retrieve detailed contents from pages.
+For example: if the user requests reading news from a webpage, setting recursion_level to 1 will usually also retrieve the contents of the articles.
+""",
+                    },
+                    "recursion_regex_condition": {
+                        "type": "string",
+                        "description": """If recursion_level is greater than 0, child pages must match this regex to be loaded.
+Use this parameter to avoid reading an excessive amount of useless data in subpaged.
+Note that the webpage URL will be checked using python's regex re package using: re.match(recursion_regex_condition, URL)
+""",
+                    },
                 },
                 "required": ["internet_urls"],
             },
         }
 
     def __call__(
-        self, internet_urls, prompt="", return_all_visible_html=False, **kwargs
+        self,
+        internet_urls,
+        prompt="",
+        return_all_visible_html=False,
+        recursion_level=0,
+        recursion_regex_condition="",
+        **kwargs,
     ):
         if len(kwargs) > 0:
             return f"Error: Unexpected parameter(s): {','.join([x for x in kwargs])}"
+
         return_all_visible_html = str(return_all_visible_html).lower().strip() == "true"
+        recursion_level = int(recursion_level)
         internet_urls = internet_urls.split(",")
         internet_urls = [x.strip() for x in internet_urls]
         ans = []
         for u in internet_urls:
             ans.append("<url_content>")
             ans.append(f"<url>{u}</url>")
-            content = self._get_url_content(u, return_all_visible_html)
+            content = self._get_url_content(
+                u,
+                return_all_visible_html,
+                max_recursion_level=recursion_level,
+                recursion_regex_condition=recursion_regex_condition,
+            )
             if prompt.strip() != "":
                 if self.query_llm is None:
                     content = "Could not answer prompt because a Language Model was not provided."
@@ -191,7 +231,27 @@ If False, only returns the visible text of the website and a list of URLs found.
             ans.append("</url_content>")
         return "\n".join(ans)
 
-    def _get_url_content(self, internet_url, return_all_visible_html):
+    def _get_url_content(
+        self,
+        internet_url,
+        return_all_visible_html,
+        cur_recursion_level=0,
+        max_recursion_level=0,
+        recursion_regex_condition="",
+    ):
+        """Retrieves URL contents
+
+        Arguments:
+            internet_url: URL to read
+            return_all_visible_html: whether to return all HTML that renders visible elements or just the text
+            cur_recursion_level: current recursion level, for cases when subpages need to be retrieved
+            max_recursion_level: maximum recursion level to go to
+        """
+        # keep track of pages already visited to avoid looping
+        print(internet_url)
+        if cur_recursion_level == 0:
+            self.retrieved_pages = {internet_url: True}
+
         try:
             headers = {
                 "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36"
@@ -205,10 +265,70 @@ If False, only returns the visible text of the website and a list of URLs found.
             else:
                 # only extract texts and URLs
                 texts, urls = text_from_html(c.text)
-                ans = f"<source_url>{c.url}</source_url><status_code>{c.status_code}</status_code>\n<contents>{texts}</contents><urls>{urls}</urls>"
+                # don't return URLs if navigating sub-URLs
+                if max_recursion_level == 0:
+                    ans = f"<source_url>{c.url}</source_url><status_code>{c.status_code}</status_code>\n<contents>{texts}</contents><urls>{urls}</urls>"
+                else:
+                    ans = f"<source_url>{c.url}</source_url><status_code>{c.status_code}</status_code>\n<contents>{texts}</contents>"
+
+            # if the user requested sublinks:
+            if cur_recursion_level < max_recursion_level:
+                sub_links = self._extract_links(c.content)
+                sub_links = [
+                    x
+                    for x in sub_links
+                    if (
+                        re.match(recursion_regex_condition, x)
+                        or recursion_regex_condition in x
+                    )
+                ]
+                assert (
+                    len(sub_links) < self.max_subpages_to_read
+                ), f"""Error: tried to read too many sublinks: {len(sub_links)}.
+The maximum allowed is {self.max_subpages_to_read}.
+Please narrow down the number of webpages using a recursion_regex_condition.
+Tried to read the following pages:
+{sub_links}
+"""
+                sub_contents = []
+                for sub_link in sub_links:
+                    if not self.retrieved_pages.get(sub_link, False):
+                        sub_content = self._get_url_content(
+                            sub_link,
+                            return_all_visible_html,
+                            cur_recursion_level + 1,
+                            max_recursion_level,
+                        )
+                        self.retrieved_pages[sub_link] = True
+                        sub_contents.append(sub_content)
+                ans = ans + "\n" + "\n".join(sub_contents)
 
             return ans
         except Exception as e:
-            return f"Could not retrieve page from URL.\nError description: {str(e)}"
+            return f"Could not retrieve page from URL {internet_url}.\nError description: {str(e)}"
 
         return str(ans)
+
+    def _extract_links(self, html_text, base_url=None):
+        """
+        Extracts all URLs from the given HTML text.
+
+        Parameters:
+            html_text (str): The HTML content to parse.
+            base_url (str): The base URL to resolve relative links (optional).
+
+        Returns:
+            list: A list of all extracted URLs.
+        """
+        soup = BeautifulSoup(html_text, "html.parser")
+        links = []
+
+        # Find all 'a' tags with an 'href' attribute
+        for a_tag in soup.find_all("a", href=True):
+            href = a_tag["href"]
+            if base_url:
+                # Resolve relative links against the base URL
+                href = urljoin(base_url, href)
+            links.append(href)
+
+        return [x.strip() for x in links]
