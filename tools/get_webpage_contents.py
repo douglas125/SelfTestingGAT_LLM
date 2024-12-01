@@ -248,7 +248,6 @@ Note that the webpage URL will be checked using python's regex re package using:
             max_recursion_level: maximum recursion level to go to
         """
         # keep track of pages already visited to avoid looping
-        print(internet_url)
         if cur_recursion_level == 0:
             self.retrieved_pages = {internet_url: True}
 
