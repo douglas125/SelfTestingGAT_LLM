@@ -289,8 +289,16 @@ class LLMInterface:
             for x in self.llm.tool_use_added_msgs:
                 history_to_append.append(x)
 
+                # enable media display in the Gradio UI - amazon Nova
+                if x["role"] == "user" and x["content"][0].get("toolResult"):
+                    cur_tool_result = x["content"][0]["toolResult"]["content"][0][
+                        "text"
+                    ]
+                    tool_results.append(
+                        cur_tool_result if "<path_to_" in cur_tool_result else ""
+                    )
                 # enable media display in the Gradio UI - anthropic
-                if x["role"] == "user":
+                if x["role"] == "user" and x["content"][0].get("content"):
                     cur_tool_result = x["content"][0]["content"]
                     tool_results.append(
                         cur_tool_result if "<path_to_" in cur_tool_result else ""

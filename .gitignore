@@ -3,6 +3,7 @@ media/
 user_info/
 ui_debug_prompt.txt
 debug.txt
+debug.json
 default_gen_chatbot_prompt.txt
 .virtual_documents/
 .gradio/

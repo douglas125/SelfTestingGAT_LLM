@@ -20,7 +20,9 @@ from llm_providers.aws_bedrock_nova import LLM_Nova_Bedrock
 class LLM_Provider:
     allowed_llms = [
         # AWS
-        "Amazon Nova 1.0 - Bedrock",
+        "Amazon Nova Micro 1.0 - Bedrock",
+        "Amazon Nova Lite 1.0 - Bedrock",
+        "Amazon Nova Pro 1.0 - Bedrock",
         # Maritaca
         "Sabia3 - Maritaca",
         # OpenAI
@@ -74,8 +76,12 @@ class LLM_Provider:
             return LLM_Llama70b(bedrock_client)
 
         # Amazon
-        elif llm == "Amazon Nova 1.0 - Bedrock":
+        elif llm == "Amazon Nova Micro 1.0 - Bedrock":
             return LLM_Nova_Bedrock(bedrock_client, model_size="Nova_Micro")
+        elif llm == "Amazon Nova Lite 1.0 - Bedrock":
+            return LLM_Nova_Bedrock(bedrock_client, model_size="Nova_Lite")
+        elif llm == "Amazon Nova Pro 1.0 - Bedrock":
+            return LLM_Nova_Bedrock(bedrock_client, model_size="Nova_Pro")
 
         # Maritaca
         elif llm == "Sabia3 - Maritaca":

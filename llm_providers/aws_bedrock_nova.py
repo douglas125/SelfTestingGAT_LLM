@@ -20,12 +20,12 @@ class LLM_Nova_Bedrock(LLM_Service):
             self.price_per_M_input_tokens = 0.035
             self.price_per_M_output_tokens = 0.14
         elif model_size == "Nova_Lite":
-            self.model_id = "amazon.nova-lite-v1:0"
+            self.model_id = "us.amazon.nova-lite-v1:0"
             self.llm_description = "Amazon Nova Lite v1.0 from AWS Bedrock (Small LLM)"
             self.price_per_M_input_tokens = 0.06
             self.price_per_M_output_tokens = 0.24
         elif model_size == "Nova_Pro":
-            self.model_id = "amazon.nova-pro-v1:0"
+            self.model_id = "us.amazon.nova-pro-v1:0"
             self.llm_description = "Amazon Nova Pro v1.0 from AWS Bedrock (Large LLM)"
             self.price_per_M_input_tokens = 0.8
             self.price_per_M_output_tokens = 3.2
@@ -188,6 +188,7 @@ class LLM_Nova_Bedrock(LLM_Service):
 
                         # keep a log of messages that had to be appended due to tool use
                         self.tool_use_added_msgs.append(assistant_msg)
+                        self.tool_use_added_msgs.append(assistant_msg2)
                         self.tool_use_added_msgs.append(next_user_msg)
                         llm_body_changed = True
 
