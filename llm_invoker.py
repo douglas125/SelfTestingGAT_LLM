@@ -14,14 +14,20 @@ from llm_providers.aws_bedrock import LLM_Claude3_Bedrock
 from llm_providers.aws_bedrock import LLM_Mistral_Bedrock
 from llm_providers.aws_bedrock_cohere import LLM_Command_Cohere
 from llm_providers.maritaca import LLM_Maritalk
+from llm_providers.aws_bedrock_nova import LLM_Nova_Bedrock
 
 
 class LLM_Provider:
     allowed_llms = [
+        # AWS
+        "Amazon Nova 1.0 - Bedrock",
+        # Maritaca
         "Sabia3 - Maritaca",
+        # OpenAI
         "GPT 4o - OpenAI",
         "GPT 3.5 - OpenAI",
         "GPT 4o mini - OpenAI",
+        # Anthropic
         "Claude 3.5 Sonnet - Anthropic",
         "Claude 3.5 Haiku - Anthropic",
         "Claude 3 Opus - Anthropic",
@@ -31,6 +37,7 @@ class LLM_Provider:
         "Claude 3.5 Sonnet - Bedrock",
         "Claude 3.5 Haiku - Bedrock",
         "Claude 3 Opus - Bedrock",
+        # Misc
         "Command R - Bedrock",
         "Command RPlus - Bedrock",
         "Mistral Mixtral 8x7B",
@@ -65,6 +72,10 @@ class LLM_Provider:
             return LLM_Llama13b(bedrock_client)
         elif llm == "Llama2 70b":
             return LLM_Llama70b(bedrock_client)
+
+        # Amazon
+        elif llm == "Amazon Nova 1.0 - Bedrock":
+            return LLM_Nova_Bedrock(bedrock_client, model_size="Nova_Micro")
 
         # Maritaca
         elif llm == "Sabia3 - Maritaca":
