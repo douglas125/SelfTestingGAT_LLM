@@ -71,6 +71,9 @@ class SelfTestPerformer(SelfTestBase):
 if __name__ == "__main__":
     # configure tests
     llms_to_test = [
+        {"model": "Amazon Nova Micro 1.0 - Bedrock", "native_tools": True},
+        {"model": "Amazon Nova Lite 1.0 - Bedrock", "native_tools": True},
+        {"model": "Amazon Nova Pro 1.0 - Bedrock", "native_tools": True},
         {"model": "Claude 3 Haiku - Bedrock", "native_tools": True},
         {"model": "Claude 3 Haiku - Bedrock", "native_tools": False},
         {"model": "Llama3_1 8b instruct", "native_tools": False},

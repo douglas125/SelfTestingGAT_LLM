@@ -124,8 +124,6 @@ class LLM_Nova_Bedrock(LLM_Service):
                 llm_body_changed = True
                 while llm_body_changed:
                     llm_body_changed = False
-                    with open("debug.json", "w") as f:
-                        f.write(json.dumps(body))
                     response = self.bedrock_client.invoke_model_with_response_stream(
                         modelId=self.model_id, body=json.dumps(body)
                     )
