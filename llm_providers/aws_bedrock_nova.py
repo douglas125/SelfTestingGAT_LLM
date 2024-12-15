@@ -49,11 +49,26 @@ class LLM_Nova_Bedrock(LLM_Service):
         """
         ans = {}
         if msg_list[0]["role"] == "system":
-            ans["system"] = msg_list[0]["content"]
+            ans["system"] = [{"text": msg_list[0]["content"]}]
         ans["messages"] = []
         for msg in msg_list[1:]:
             if isinstance(msg["content"], str):
                 msg["content"] = [{"text": msg["content"]}]
+            elif isinstance(msg["content"], list):
+                for k in range(len(msg["content"])):
+                    if msg["content"][k].get("type") == "text":
+                        adj_msg = {"text": msg["content"][k]["text"]}
+                        msg["content"][k] = adj_msg
+                    elif msg["content"][k].get("type") == "image":
+                        adj_msg = {
+                            "image": {
+                                "format": "jpeg",
+                                "source": {
+                                    "bytes": msg["content"][k]["source"]["data"],
+                                },
+                            }
+                        }
+                        msg["content"][k] = adj_msg
             ans["messages"].append(msg)
         return ans
 
@@ -97,7 +112,6 @@ class LLM_Nova_Bedrock(LLM_Service):
             body["inferenceConfig"]["stopSequences"] + extra_stop_sequences
         )
 
-        body["system"] = [{"text": prompt["system"]}]
         body["messages"] = prompt["messages"].copy()
 
         if tools is None:
@@ -117,10 +131,9 @@ class LLM_Nova_Bedrock(LLM_Service):
                 tool_invoker_fn is not None
             ), "When using tools, a tool invoker must be provided"
 
-        cur_fail_sleep = 60
+        cur_fail_sleep = 6
         for k in range(max_retries):
             try:
-                # print(body)
                 llm_body_changed = True
                 while llm_body_changed:
                     llm_body_changed = False
