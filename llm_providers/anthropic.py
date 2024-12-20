@@ -142,14 +142,7 @@ class LLM_Claude3_Anthropic(LLM_Service):
                 llm_body_changed = True
                 while llm_body_changed:
                     llm_body_changed = False
-                    if self.use_caching:
-                        response = (
-                            self.anthropic_client.beta.prompt_caching.messages.create(
-                                **body
-                            )
-                        )
-                    else:
-                        response = self.anthropic_client.messages.create(**body)
+                    response = self.anthropic_client.messages.create(**body)
 
                     word_count = len(re.findall(r"\w+", str(body["messages"])))
                     print(f"Invoking {self.llm_description}. Word count: {word_count}")
