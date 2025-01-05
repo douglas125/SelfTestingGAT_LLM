@@ -3,7 +3,7 @@ import copy
 import json
 import time
 
-from llm_providers.base_service import LLM_Service
+from .base_service import LLM_Service
 
 
 class LLM_Command_Cohere(LLM_Service):

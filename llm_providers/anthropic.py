@@ -3,7 +3,7 @@ import json
 import time
 
 import anthropic
-from llm_providers.base_service import LLM_Service
+from .base_service import LLM_Service
 
 
 class LLM_Claude3_Anthropic(LLM_Service):

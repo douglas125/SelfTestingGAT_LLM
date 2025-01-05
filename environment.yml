@@ -25,6 +25,7 @@ dependencies:
   - tabulate
   - coverage
   - pytest
+  - pytest-timeout
   - pip:
       - gradio
       - anthropic

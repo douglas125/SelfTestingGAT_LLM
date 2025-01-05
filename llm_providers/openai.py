@@ -3,7 +3,7 @@ import json
 import time
 
 from openai import OpenAI
-from llm_providers.base_service import LLM_Service
+from .base_service import LLM_Service
 
 
 class LLM_GPT_OpenAI(LLM_Service):
@@ -13,7 +13,7 @@ class LLM_GPT_OpenAI(LLM_Service):
             bedrock_client - Instance of boto3.client(service_name='bedrock-runtime')
                 to use when making calls to bedrock models
         """
-        self.openai_client = OpenAI()
+        self.openai_client = None
         if model_size == "GPT4o OpenAI":
             self.model_id = "gpt-4o-2024-05-13"
             self.llm_description = (
@@ -116,6 +116,10 @@ class LLM_GPT_OpenAI(LLM_Service):
                 kwargs - arguments to the tool that will be called
         :return: Inference response from the model.
         """
+        # create client if it hasn't been created already
+        if self.openai_client is None:
+            self.openai_client = OpenAI()
+
         # Messages that had to be added because of function use
         self.tool_use_added_msgs = []
 

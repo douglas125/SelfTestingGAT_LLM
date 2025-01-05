@@ -3,7 +3,7 @@ import json
 import time
 
 from typing import Dict, List
-from llm_providers.base_service import LLM_Service
+from .base_service import LLM_Service
 
 
 class LLM_Claude3_Bedrock(LLM_Service):
