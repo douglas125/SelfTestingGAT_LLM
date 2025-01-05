@@ -21,4 +21,5 @@ openai
 anthropic
 beautifulsoup4
 pytest
+pytest-timeout
 coverage

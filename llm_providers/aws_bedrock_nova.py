@@ -4,7 +4,7 @@ import re
 import json
 import time
 
-from llm_providers.base_service import LLM_Service
+from .base_service import LLM_Service
 
 
 class LLM_Nova_Bedrock(LLM_Service):

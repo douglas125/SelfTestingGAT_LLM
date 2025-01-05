@@ -1,23 +1,41 @@
 """ Set of available and useful LLMs (mostly posted on AWS Bedrock)
 """
+import warnings
+
 # outdated
-from llm_providers.aws_bedrock import LLM_Llama13b
-from llm_providers.aws_bedrock import LLM_Llama70b
-from llm_providers.aws_bedrock import LLM_Llama3
-from llm_providers.aws_bedrock import LLM_Claude2_1_Bedrock
-from llm_providers.aws_bedrock import LLM_Claude_Instant_1_2_Bedrock
+from .llm_providers.aws_bedrock import LLM_Llama13b
+from .llm_providers.aws_bedrock import LLM_Llama70b
+from .llm_providers.aws_bedrock import LLM_Llama3
+from .llm_providers.aws_bedrock import LLM_Claude2_1_Bedrock
+from .llm_providers.aws_bedrock import LLM_Claude_Instant_1_2_Bedrock
 
 # current
-from llm_providers.openai import LLM_GPT_OpenAI
-from llm_providers.anthropic import LLM_Claude3_Anthropic
-from llm_providers.aws_bedrock import LLM_Claude3_Bedrock
-from llm_providers.aws_bedrock import LLM_Mistral_Bedrock
-from llm_providers.aws_bedrock_cohere import LLM_Command_Cohere
-from llm_providers.maritaca import LLM_Maritalk
-from llm_providers.aws_bedrock_nova import LLM_Nova_Bedrock
+from .llm_providers.openai import LLM_GPT_OpenAI
+from .llm_providers.anthropic import LLM_Claude3_Anthropic
+from .llm_providers.aws_bedrock import LLM_Claude3_Bedrock
+from .llm_providers.aws_bedrock import LLM_Mistral_Bedrock
+from .llm_providers.aws_bedrock_cohere import LLM_Command_Cohere
+from .llm_providers.maritaca import LLM_Maritalk
+from .llm_providers.aws_bedrock_nova import LLM_Nova_Bedrock
+
+warnings.simplefilter("always", DeprecationWarning)
 
 
 class LLM_Provider:
+    outdated_llms = [
+        "Claude 3 Opus - Anthropic",
+        "Claude 3 Haiku - Anthropic",
+        "Claude 3 Haiku - Bedrock",
+        "Claude 3 Sonnet - Bedrock",
+        "Claude 3 Opus - Bedrock",
+        "Claude 2.1",
+        "Claude Instant 1.2",
+        "Llama2 13b",
+        "Llama2 70b",
+        "Llama3 8b instruct",
+        "Llama3 70b instruct",
+    ]
+
     allowed_llms = [
         # AWS
         "Amazon Nova Micro 1.0 - Bedrock",
@@ -32,13 +50,8 @@ class LLM_Provider:
         # Anthropic
         "Claude 3.5 Sonnet - Anthropic",
         "Claude 3.5 Haiku - Anthropic",
-        "Claude 3 Opus - Anthropic",
-        "Claude 3 Haiku - Anthropic",
-        "Claude 3 Haiku - Bedrock",
-        "Claude 3 Sonnet - Bedrock",
         "Claude 3.5 Sonnet - Bedrock",
         "Claude 3.5 Haiku - Bedrock",
-        "Claude 3 Opus - Bedrock",
         # Misc
         "Command R - Bedrock",
         "Command RPlus - Bedrock",
@@ -47,13 +60,6 @@ class LLM_Provider:
         "Llama3_1 8b instruct",
         "Llama3_1 70b instruct",
         "Llama3_1 405b instruct",
-        # Legacy
-        "Claude 2.1",
-        "Claude Instant 1.2",
-        "Llama2 13b",
-        "Llama2 70b",
-        "Llama3 8b instruct",
-        "Llama3 70b instruct",
     ]
 
     def get_llm(bedrock_client, llm):
@@ -63,8 +69,12 @@ class LLM_Provider:
                 to use when making calls to bedrock models
             llm - which LLM to use. Check LLM_Service.allowed_llms for a list
         """
+        if llm in LLM_Provider.outdated_llms:
+            warn_msg = f"Selected model is outdated: {llm}. Consider switching to a newer model."
+            warnings.warn(warn_msg, DeprecationWarning)
+
         assert (
-            llm in LLM_Provider.allowed_llms
+            llm in LLM_Provider.allowed_llms + LLM_Provider.outdated_llms
         ), f"LLM has to be one of {LLM_Provider.allowed_llms}"
         if llm == "Claude 2.1":
             return LLM_Claude2_1_Bedrock(bedrock_client)

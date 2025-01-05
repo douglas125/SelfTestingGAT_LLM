@@ -4,7 +4,7 @@ import json
 import time
 
 from openai import OpenAI
-from llm_providers.base_service import LLM_Service
+from .base_service import LLM_Service
 
 
 class LLM_Maritalk(LLM_Service):
@@ -14,10 +14,7 @@ class LLM_Maritalk(LLM_Service):
             bedrock_client - Instance of boto3.client(service_name='bedrock-runtime')
                 to use when making calls to bedrock models
         """
-        self.openai_client = OpenAI(
-            api_key=os.environ.get("MARITACA_API_KEY"),
-            base_url="https://chat.maritaca.ai/api",
-        )
+        self.openai_client = None
         if model_size == "Sabia3 Maritaca":
             self.model_id = "sabia-3"
             self.llm_description = "Sabia-3 (medium-sized LLM) - directly from Maritaca"
@@ -104,6 +101,13 @@ class LLM_Maritalk(LLM_Service):
                 kwargs - arguments to the tool that will be called
         :return: Inference response from the model.
         """
+        # create client if it hasn't been created already
+        if self.openai_client is None:
+            self.openai_client = OpenAI(
+                api_key=os.environ.get("MARITACA_API_KEY"),
+                base_url="https://chat.maritaca.ai/api",
+            )
+
         # Messages that had to be added because of function use
         self.tool_use_added_msgs = []
 
