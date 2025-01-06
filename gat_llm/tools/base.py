@@ -3,23 +3,23 @@ import xml.etree.ElementTree as ET
 
 import numpy as np
 
-from tools.make_custom_plot import ToolMakeCustomPlot
-from tools.solve_symbolic import ToolSolveSymbolic
-from tools.solve_numeric import ToolSolveNumeric
-from tools.solve_python_code import ToolSolvePythonCode
-from tools.get_webpage_contents import ToolGetUrlContent
-from tools.make_qr_code import ToolMakeQRCode
-from tools.read_local_file import ToolReadLocalFile
-from tools.write_local_file import ToolWriteLocalFile
-from tools.read_file_names_in_local_folder import ToolReadLocalFolder
-from tools.do_date_math import ToolDoDateMath
-from tools.update_user_details import ToolUpdateUserDetails
-from tools.use_ffmpeg import ToolUseFFMPEG
-from tools.plot_with_graphviz import ToolPlotWithGraphviz
-from tools.text_to_speech import ToolTextToSpeech
-import tools.query_database as tool_query_db
-from tools.summarize_past import ToolSummarizePast
-from tools.text_to_image import ToolTextToImage
+from .make_custom_plot import ToolMakeCustomPlot
+from .solve_symbolic import ToolSolveSymbolic
+from .solve_numeric import ToolSolveNumeric
+from .solve_python_code import ToolSolvePythonCode
+from .get_webpage_contents import ToolGetUrlContent
+from .make_qr_code import ToolMakeQRCode
+from .read_local_file import ToolReadLocalFile
+from .write_local_file import ToolWriteLocalFile
+from .read_file_names_in_local_folder import ToolReadLocalFolder
+from .do_date_math import ToolDoDateMath
+from .update_user_details import ToolUpdateUserDetails
+from .use_ffmpeg import ToolUseFFMPEG
+from .plot_with_graphviz import ToolPlotWithGraphviz
+from .text_to_speech import ToolTextToSpeech
+from .query_database import SampleOrder_LLM_DB
+from .summarize_past import ToolSummarizePast
+from .text_to_image import ToolTextToImage
 
 rng = np.random.default_rng()
 
@@ -44,7 +44,7 @@ class LLMTools:
             ToolTextToSpeech(),
             ToolTextToImage(),
             ToolSummarizePast(),
-            # tool_query_db.ToolQueryLLMDB(tool_query_db.SampleOrder_LLM_DB()),
+            # tool_query_db.ToolQueryLLMDB(SampleOrder_LLM_DB()),
         ]
 
     def __init__(self, query_llm=None, desired_tools=None):
