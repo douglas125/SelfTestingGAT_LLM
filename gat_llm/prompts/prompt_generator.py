@@ -15,13 +15,13 @@ class RAGPromptGenerator:
         self.use_native_tools = use_native_tools
         if not use_native_tools:
             with open(
-                os.path.join("prompts", "prompt_GAT.txt"), "r", encoding="utf-8"
+                os.path.join("gat_llm/prompts", "prompt_GAT.txt"), "r", encoding="utf-8"
             ) as f:
                 self.prompt += f.read()
 
         # base prompt
         with open(
-            os.path.join("prompts", "prompt_base.txt"), "r", encoding="utf-8"
+            os.path.join("gat_llm/prompts", "prompt_base.txt"), "r", encoding="utf-8"
         ) as f:
             self.prompt += f.read()
 

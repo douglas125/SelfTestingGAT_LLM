@@ -1,10 +1,10 @@
 import boto3
 import botocore
 
-import llm_invoker as inv
-from tools.base import LLMTools
-from llm_interface import LLMInterface
-from prompts.prompt_generator import RAGPromptGenerator
+import gat_llm.llm_invoker as inv
+from gat_llm.tools.base import LLMTools
+from gat_llm.llm_interface import LLMInterface
+from gat_llm.prompts.prompt_generator import RAGPromptGenerator
 
 
 class SelfTestBase:

@@ -121,7 +121,7 @@ class LLM_Database(ABC):
 
 class SampleOrder_LLM_DB(LLM_Database):
     def __init__(self):
-        self.db_path = f"tools/query_database_sales_data_sample.csv"
+        self.db_path = f"gat_llm/tools/query_database_sales_data_sample.csv"
 
     def get_database_name(self):
         return "Sales_database"
