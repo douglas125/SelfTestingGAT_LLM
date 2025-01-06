@@ -4,7 +4,7 @@ import json
 import pandas as pd
 from tqdm import tqdm
 
-from tools.base import LLMTools
+from gat_llm.tools.base import LLMTools
 from self_tests.self_test_base import SelfTestBase
 
 
