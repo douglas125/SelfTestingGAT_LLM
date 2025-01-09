@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch, mock_open
-from ..tools.update_user_details import ToolUpdateUserDetails
+from gat_llm.tools.update_user_details import ToolUpdateUserDetails
 
 
 @pytest.fixture

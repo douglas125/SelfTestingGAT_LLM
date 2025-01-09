@@ -1,5 +1,5 @@
 import pytest
-from ..tools.solve_python_code import ToolSolvePythonCode
+from gat_llm.tools.solve_python_code import ToolSolvePythonCode
 
 
 def test_unexpected_arg(unexpected_param_msg):

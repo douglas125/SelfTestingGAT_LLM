@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch
-from ..tools.read_file_names_in_local_folder import ToolReadLocalFolder
+from gat_llm.tools.read_file_names_in_local_folder import ToolReadLocalFolder
 
 
 @pytest.fixture

@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch, Mock
-from ..tools.get_webpage_contents import ToolGetUrlContent
+from gat_llm.tools.get_webpage_contents import ToolGetUrlContent
 
 
 @pytest.fixture

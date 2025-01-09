@@ -1,5 +1,5 @@
 import pytest
-from ..tools.solve_symbolic import ToolSolveSymbolic
+from gat_llm.tools.solve_symbolic import ToolSolveSymbolic
 
 
 def test_unexpected_arg(unexpected_param_msg):

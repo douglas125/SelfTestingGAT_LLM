@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch, mock_open
-from ..tools.make_custom_plot import ToolMakeCustomPlot
+from gat_llm.tools.make_custom_plot import ToolMakeCustomPlot
 
 
 @pytest.fixture

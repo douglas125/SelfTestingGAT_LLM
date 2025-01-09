@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch, Mock
-from ..tools.plot_with_graphviz import ToolPlotWithGraphviz
+from gat_llm.tools.plot_with_graphviz import ToolPlotWithGraphviz
 
 
 @pytest.fixture

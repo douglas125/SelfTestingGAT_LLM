@@ -2,7 +2,7 @@
 
 import pytest
 from unittest.mock import patch, mock_open
-from ..tools.write_local_file import ToolWriteLocalFile
+from gat_llm.tools.write_local_file import ToolWriteLocalFile
 
 
 @pytest.fixture

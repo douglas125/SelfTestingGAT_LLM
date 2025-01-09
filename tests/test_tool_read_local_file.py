@@ -1,6 +1,6 @@
 from unittest.mock import call, patch, mock_open
 
-from ..tools.read_local_file import ToolReadLocalFile
+from gat_llm.tools.read_local_file import ToolReadLocalFile
 
 
 def test_unexpected_arg(unexpected_param_msg):

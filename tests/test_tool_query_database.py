@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import patch, Mock
 import pandas as pd
-from ..tools.query_database import ToolQueryLLMDB, SampleOrder_LLM_DB
+from gat_llm.tools.query_database import ToolQueryLLMDB, SampleOrder_LLM_DB
 
 
 @pytest.fixture

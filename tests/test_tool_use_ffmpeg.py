@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch, Mock
-from ..tools.use_ffmpeg import ToolUseFFMPEG
+from gat_llm.tools.use_ffmpeg import ToolUseFFMPEG
 
 
 @pytest.fixture

@@ -1,6 +1,6 @@
 import pytest
 
-from ..tools.summarize_past import ToolSummarizePast
+from gat_llm.tools.summarize_past import ToolSummarizePast
 
 
 def test_unexpected_arg(unexpected_param_msg):
