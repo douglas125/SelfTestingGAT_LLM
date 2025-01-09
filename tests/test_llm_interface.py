@@ -1,7 +1,7 @@
 import types
 from unittest.mock import Mock
 
-from ..llm_interface import LLMInterface
+from gat_llm.llm_interface import LLMInterface
 
 
 def test_return_any_answer():

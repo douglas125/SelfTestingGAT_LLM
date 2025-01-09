@@ -5,7 +5,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from ..llm_invoker import LLM_Provider
+from gat_llm.llm_invoker import LLM_Provider
 
 
 @pytest.mark.parametrize(

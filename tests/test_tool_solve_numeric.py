@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch
-from ..tools.solve_numeric import ToolSolveNumeric
+from gat_llm.tools.solve_numeric import ToolSolveNumeric
 
 
 def test_unexpected_arg(unexpected_param_msg):

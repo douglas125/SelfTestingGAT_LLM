@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch, Mock
-from ..tools.make_qr_code import ToolMakeQRCode
+from gat_llm.tools.make_qr_code import ToolMakeQRCode
 
 
 @pytest.fixture
