@@ -140,6 +140,7 @@ class LLM_Claude3_Bedrock(LLM_Service):
 
                     # stream responses
                     partial_ans = self._response_gen(response["body"], postpend)
+                    x = ""
                     for x in partial_ans:
                         yield x
                     cur_ans = x
@@ -155,16 +156,15 @@ class LLM_Claude3_Bedrock(LLM_Service):
                         )
 
                         # append assistant responses
-                        assistant_msg = {
-                            "role": "assistant",
-                            "content": [
+                        assistant_msg = {"role": "assistant", "content": []}
+                        if cur_ans is not None and cur_ans.strip() != "":
+                            assistant_msg["content"].append(
                                 {
                                     "type": "text",
                                     "text": cur_ans,
                                 },
-                                self.cur_tool_spec,
-                            ],
-                        }
+                            )
+                        assistant_msg["content"].append(self.cur_tool_spec)
 
                         next_user_msg = {
                             "role": "user",

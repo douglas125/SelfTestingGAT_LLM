@@ -218,8 +218,8 @@ class LLMInterface:
             tool_invoker_fn=self.lt.invoke_tool if self.lt is not None else None,
         )
 
+        x = ""
         for x in ans2:
-            # pass
             yield self._format_msg(x, msg, ui_history)
         # initial_ans = self._format_msg(x, msg, ui_history)
         # yield initial_ans
