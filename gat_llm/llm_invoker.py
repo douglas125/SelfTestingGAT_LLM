@@ -17,6 +17,7 @@ from .llm_providers.aws_bedrock import LLM_Mistral_Bedrock
 from .llm_providers.aws_bedrock_cohere import LLM_Command_Cohere
 from .llm_providers.maritaca import LLM_Maritalk
 from .llm_providers.aws_bedrock_nova import LLM_Nova_Bedrock
+from .llm_providers.deepseek import LLM_Deepseek
 
 warnings.simplefilter("always", DeprecationWarning)
 
@@ -53,6 +54,7 @@ class LLM_Provider:
         "Claude 3.5 Sonnet - Bedrock",
         "Claude 3.5 Haiku - Bedrock",
         # Misc
+        "DeepSeekV3 Chat - DeepSeek",
         "Command R - Bedrock",
         "Command RPlus - Bedrock",
         "Mistral Mixtral 8x7B",
@@ -96,6 +98,12 @@ class LLM_Provider:
         # Maritaca
         elif llm == "Sabia3 - Maritaca":
             return LLM_Maritalk(model_size="Sabia3 Maritaca")
+
+        # DeepSeek
+        elif llm == "DeepSeekV3 Chat - DeepSeek":
+            return LLM_Deepseek(model_size="Deepseek Chat")
+        elif llm == "DeepSeekR1 Reasoner - DeepSeek":
+            return LLM_Deepseek(model_size="Deepseek Reasoner")
 
         # Llama 3.1 family
         elif llm == "Llama3_1 8b instruct":

@@ -33,6 +33,7 @@ With the current prompts, tools, descriptions and native tool configuration use 
 
 |                                           |   ('n_invented_tools', 'sum') |   ('accuracy', '%') |   ('score', '%') |   ('USD / 1M tokens', 'Input') |   ('USD / 1M tokens', 'Output') |
 |:------------------------------------------|------------------------------:|--------------------:|-----------------:|-------------------------------:|--------------------------------:|
+| ('DeepSeekV3 Chat - DeepSeek', False)     |                             1 |                79.4 |             89.6 |                          0.27  |                            1.1  |
 | ('Claude 3.5 Sonnet - Anthropic', False)  |                             0 |                78   |             89.5 |                          3     |                           15    |
 | ('GPT 4o - OpenAI', True)                 |                             1 |                79.9 |             89.4 |                          5     |                           15    |
 | ('GPT 4o mini - OpenAI', True)            |                             3 |                79.9 |             89   |                          0.15  |                            0.6  |
