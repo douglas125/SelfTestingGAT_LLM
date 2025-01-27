@@ -1,3 +1,4 @@
+# python -m self_tests.self_test_performer
 import os
 import json
 
@@ -97,6 +98,7 @@ if __name__ == "__main__":
         {"model": "Command RPlus - Bedrock", "native_tools": False},
         {"model": "Sabia3 - Maritaca", "native_tools": True},
         {"model": "Sabia3 - Maritaca", "native_tools": False},
+        {"model": "DeepSeekV3 Chat - DeepSeek", "native_tools": False},
     ]
     test_files = [
         os.path.join(
