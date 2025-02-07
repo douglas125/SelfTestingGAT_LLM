@@ -17,6 +17,7 @@ from .update_user_details import ToolUpdateUserDetails
 from .use_ffmpeg import ToolUseFFMPEG
 from .plot_with_graphviz import ToolPlotWithGraphviz
 from .text_to_speech import ToolTextToSpeech
+from .speech_to_text import ToolSpeechToText
 from .query_database import SampleOrder_LLM_DB
 from .summarize_past import ToolSummarizePast
 from .text_to_image import ToolTextToImage
@@ -42,6 +43,7 @@ class LLMTools:
             ToolSolvePythonCode(),
             ToolPlotWithGraphviz(),
             ToolTextToSpeech(),
+            ToolSpeechToText(),
             ToolTextToImage(),
             ToolSummarizePast(),
             # tool_query_db.ToolQueryLLMDB(SampleOrder_LLM_DB()),
@@ -69,6 +71,7 @@ class LLMTools:
                 # tool_query_db.ToolQueryLLMDB(tool_query_db.SampleOrder_LLM_DB()),
                 # ToolSolvePythonCode(),
                 ToolTextToSpeech(),
+                ToolSpeechToText(),
                 ToolTextToImage(),
             ]
         else:
