@@ -40,7 +40,15 @@ def _adjust_msg_for_gradio_ui(x, show_scratchpad=False, show_calls=False):
 
 
 class LLMInterface:
-    def __init__(self, system_prompt, llm, llm_tools, rpg, output_mode="chat_bot"):
+    def __init__(
+        self,
+        system_prompt,
+        llm,
+        llm_tools,
+        rpg,
+        output_mode="chat_bot",
+        chat_log_folder="chat_logs",
+    ):
         """Constructor
 
         Arguments
@@ -50,11 +58,13 @@ class LLMInterface:
         rpg: Instance of RAGPromptGenerator. Needs to have post_anti_hallucination property
         output_mode: chat_bot uses Gradio customized chatbot that has to
             receive the whole history. Otherwise uses gradio chatinterface
+        chat_log_folder: folder to save chat to. If None, does not save chat
         """
         self.system_prompt = system_prompt
         self.llm = llm
         self.lt = llm_tools
         self.rpg = rpg
+        self.chat_log_folder = chat_log_folder
 
         # keep a hash of histories so we can send to the UI
         # something different than what has been generated
@@ -317,12 +327,15 @@ class LLMInterface:
         self.history_log[chat_id] = history + history_to_append
 
         try:
-            chat_log_dir = "chat_logs"
-            os.makedirs(chat_log_dir, exist_ok=True)
-            with open(f"{chat_log_dir}/{chat_id}.json", "w", encoding="utf-8") as f:
-                f.write(json.dumps(self.history_log[chat_id]))
-        except:
-            pass
+            chat_log_dir = self.chat_log_folder
+            if chat_log_dir is not None:
+                os.makedirs(chat_log_dir, exist_ok=True)
+                with open(f"{chat_log_dir}/{chat_id}.json", "w", encoding="utf-8") as f:
+                    f.write(json.dumps(self.history_log[chat_id]))
+        except Exception as ex:
+            print(
+                f"Could not log chat to folder `{self.chat_log_folder}`. Reason: {str(ex)}"
+            )
 
         final_response_ui = self._format_msg(cur_answer + tool_results, msg, ui_history)
         yield final_response_ui
