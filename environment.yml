@@ -11,6 +11,8 @@ dependencies:
   - tqdm
   - git
   - pre-commit
+  - requests
+  - beautifulsoup4
   - graphviz
   - pydot
   - sympy
