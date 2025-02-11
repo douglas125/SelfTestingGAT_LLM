@@ -65,6 +65,104 @@ With the current prompts, tools, descriptions and native tool configuration use 
 
 To use this code and run the implemented tools, follow these steps:
 
+### With PIP
+
+1. `pip install gat_llm`
+2. Set up your API keys (depending on what tools and LLM providers you need):
+   - For Linux:
+     ```
+     export AWS_ACCESS_KEY_ID=your_aws_access_key
+     export AWS_SECRET_ACCESS_KEY=your_aws_secret_key
+     export ANTHROPIC_API_KEY=your_anthropic_key
+     export OPENAI_API_KEY=your_openai_key
+	 export MARITACA_API_KEY=your_maritaca_key
+     ```
+   - For Windows:
+     ```
+     set AWS_ACCESS_KEY_ID=your_aws_access_key
+     set AWS_SECRET_ACCESS_KEY=your_aws_secret_key
+     set ANTHROPIC_API_KEY=your_anthropic_key
+     set OPENAI_API_KEY=your_openai_key
+	 set MARITACA_API_KEY=your_maritaca_key
+     ```
+3. Create a test file `test_gat.py` to check if the tools are being called correctly:
+```
+# Imports
+import boto3
+import botocore
+
+import gat_llm.llm_invoker as inv
+from gat_llm.tools.base import LLMTools
+from gat_llm.prompts.prompt_generator import RAGPromptGenerator
+
+use_native_LLM_tools = True
+
+# pick one depending on which API key you want to use
+llm_name = "GPT 4o - OpenAI"
+llm_name = 'Claude 3.5 Sonnet - Bedrock'
+llm_name = 'Claude 3.5 Sonnet - Anthropic'
+
+config = botocore.client.Config(connect_timeout=9000, read_timeout=9000, region_name="us-west-2")  # us-east-1  us-west-2
+bedrock_client = boto3.client(service_name='bedrock-runtime', config=config)
+
+llm = inv.LLM_Provider.get_llm(bedrock_client, llm_name)
+query_llm = inv.LLM_Provider.get_llm(bedrock_client, llm_name)
+
+print("Testing LLM invoke")
+ans = llm("and at night? Enclose your answer within <my_ans></my_ans> tags. Then explain further.",
+          chat_history=[["What color is the sky?", "Blue"]],
+          system_prompt="You are a very knowledgeable truck driver. Use a strong truck driver's language and make sure to mention your name is Jack.",
+         )
+prev = ""
+for x in ans:
+    cur_ans = x
+    print('.', end='')
+print('\n')
+print(x)
+
+# Test tool use
+print("Testing GAT - LLM tool use")
+lt = LLMTools(query_llm=query_llm)
+tool_descriptions = lt.get_tool_descriptions()
+rpg = RAGPromptGenerator(use_native_tools=use_native_LLM_tools)
+system_prompt = rpg.prompt.replace('{{TOOLS}}', tool_descriptions)
+
+cur_tools = [x.tool_description for x in lt.tools]
+
+ans = llm(
+    "What date will it be 10 days from now? Today is June 4, 2024. Use your tool do_date_math. Before calling any tools, explain your thoughts. Then, make a plot of y=x^2.",
+    chat_history=[["I need to do some date math.", "Sure. I will help."]],
+    system_prompt="You are a helpful assistant. Prefer to use tools when possible. Never mention tool names in the answer.",
+    tools=cur_tools,
+    tool_invoker_fn=lt.invoke_tool,
+)
+
+prev = ""
+for x in ans:
+    cur_ans = x
+    print('.', end='')
+print(cur_ans)
+```
+4. Run `python test_gat.py`. You should see a response like:
+```
+Testing LLM invoke
+..................................
+
+<my_ans>Black as the inside of my trailer, with little white dots all over it</my_ans>
+
+Hey there, Jack here. Been drivin' rigs for over 20 years now, and let me tell ya, when you're haulin' freight through the night, that sky turns darker than a pot of truck stop coffee. You got them stars scattered all over like chrome bits on a custom Peterbilt, and sometimes that moon hangs up there like a big ol' headlight in the sky.
+
+When you're cruisin' down them highways at 3 AM, with nothin' but your high beams and them stars above, it's one hell of a sight. Makes ya feel pretty damn small in your rig, if ya know what I mean. Course, sometimes you get them city lights polluting the view, but out in the boonies, man, that night sky is somethin' else.
+
+Shoot, reminds me of this one haul I did through Montana - clearest dang night sky you'll ever see. But I better wrap this up, my 30-minute break is almost over, and I got another 400 miles to cover before sunrise.
+
+Testing GAT - LLM tool use
+
+In 10 days from June 4, 2024, it will be June 14, 2024 (Friday). I've also generated a plot showing the quadratic function y = x².
+```
+
+### From the repository
+
 1. Clone this repository and `cd` to the repository folder.
 
 2. Set up the environment:

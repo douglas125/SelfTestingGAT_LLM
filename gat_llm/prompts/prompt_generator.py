@@ -1,5 +1,6 @@
 import os
 import datetime
+import importlib.resources
 
 
 class RAGPromptGenerator:
@@ -14,15 +15,15 @@ class RAGPromptGenerator:
         self.prompt = ""
         self.use_native_tools = use_native_tools
         if not use_native_tools:
-            with open(
-                os.path.join("gat_llm/prompts", "prompt_GAT.txt"), "r", encoding="utf-8"
-            ) as f:
-                self.prompt += f.read()
+            with importlib.resources.files("gat_llm.prompts").joinpath(
+                "prompt_GAT.txt"
+            ).open("r", encoding="utf-8") as f:
+                return f.read()
 
         # base prompt
-        with open(
-            os.path.join("gat_llm/prompts", "prompt_base.txt"), "r", encoding="utf-8"
-        ) as f:
+        with importlib.resources.files("gat_llm.prompts").joinpath(
+            "prompt_base.txt"
+        ).open("r", encoding="utf-8") as f:
             self.prompt += f.read()
 
         dt0 = datetime.datetime.today()

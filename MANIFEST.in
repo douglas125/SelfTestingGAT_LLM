@@ -1,0 +1,4 @@
+recursive-include gat_llm *.txt *.csv
+recursive-include gat_llm/tools *.txt *.csv
+recursive-include gat_llm/prompts *.txt *.csv
+recursive-include gat_llm/llm_providers *.txt *.csv

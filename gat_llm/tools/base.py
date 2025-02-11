@@ -69,7 +69,7 @@ class LLMTools:
                 # Being left out for now. Just uncomment to enable
                 # ToolSummarizePast(),
                 # ToolUpdateUserDetails(),
-                ToolQueryLLMDB(SampleOrder_LLM_DB()),
+                # ToolQueryLLMDB(SampleOrder_LLM_DB()),
                 # ToolSolvePythonCode(),
                 ToolTextToSpeech(),
                 ToolSpeechToText(),
