@@ -2,6 +2,8 @@ boto3
 pandas
 lxml
 duckdb
+requests
+beautifulsoup4
 tabulate
 gradio
 sympy
