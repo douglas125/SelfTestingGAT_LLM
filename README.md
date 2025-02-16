@@ -4,7 +4,7 @@ This project focuses on designing and self-testing GAT LLMs (Language Learning M
 
 Demonstration (will take you to YouTube):
 
-[![GAT in action](https://img.youtube.com/vi/zVODAIgDbc4/0.jpg)](https://www.youtube.com/watch?v=zVODAIgDbc4)
+[![GAT in action](https://img.youtube.com/vi/U1oxouaOf5g/0.jpg)](https://www.youtube.com/watch?v=U1oxouaOf5g)
 
 **Paper pre-print**: in the folder `paper`
 
