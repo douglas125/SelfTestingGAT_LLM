@@ -22,6 +22,7 @@ from .summarize_past import ToolSummarizePast
 from .text_to_image import ToolTextToImage
 from .query_database import ToolQueryLLMDB
 from .query_database import SampleOrder_LLM_DB
+from .run_with_python import ToolRunWithPython
 
 rng = np.random.default_rng()
 
@@ -48,6 +49,7 @@ class LLMTools:
             ToolTextToImage(),
             ToolSummarizePast(),
             ToolQueryLLMDB(SampleOrder_LLM_DB()),
+            ToolRunWithPython(),
         ]
 
     def __init__(self, query_llm=None, desired_tools=None):
@@ -66,6 +68,7 @@ class LLMTools:
                 ToolReadLocalFolder(),
                 ToolUseFFMPEG(),
                 ToolPlotWithGraphviz(),
+                ToolRunWithPython(),
                 # Being left out for now. Just uncomment to enable
                 # ToolSummarizePast(),
                 # ToolUpdateUserDetails(),
