@@ -82,6 +82,7 @@ if __name__ == "__main__":
         {"model": "Llama3_1 405b instruct", "native_tools": False},
         {"model": "Llama3 70b instruct", "native_tools": False},
         {"model": "Llama3 8b instruct", "native_tools": False},
+        {"model": "Claude 3.7 Sonnet - Anthropic", "native_tools": True},
         {"model": "Claude 3.5 Sonnet - Anthropic", "native_tools": True},
         {"model": "Claude 3.5 Sonnet - Anthropic", "native_tools": False},
         {"model": "Claude 3.5 Haiku - Anthropic", "native_tools": True},
