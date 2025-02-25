@@ -17,7 +17,7 @@ class SelfTestPerformer(SelfTestBase):
     def test_tool_use(self, test_cases, source_file):
         print(f"Testing {self.ref_llm}. Native tools: {self.use_native_LLM_tools}")
         all_results = []
-        all_tools = LLMTools.get_all_tools(self.llm)
+        all_tools = LLMTools.get_all_tools()
         li = self.get_llm_interface(all_tools)
         progbar = tqdm(test_cases)
         for test_case in progbar:
