@@ -44,6 +44,7 @@ With the current prompts, tools, descriptions and native tool configuration use 
 | ('Claude 3.5 Haiku - Anthropic', False)   |                             9 |                73.9 |             87.9 |                          1     |                            5    |
 | ('GPT 4o - OpenAI', False)                |                             4 |                76.6 |             87.7 |                          5     |                           15    |
 | ('Llama3_1 405b instruct', False)         |                             3 |                75.5 |             87   |                          5.32  |                           16    |
+| ('Claude 3.7 Sonnet - Anthropic', True)   |                             2 |                74.7 |             86.9 |                          3     |                           15    |
 | ('Mistral Large v1', False)               |                             1 |                74.7 |             86.8 |                          4     |                           12    |
 | ('GPT 4o mini - OpenAI', False)           |                             3 |                73.1 |             85.1 |                          0.15  |                            0.6  |
 | ('Command RPlus - Bedrock', False)        |                             4 |                72.8 |             83.8 |                          3     |                           15    |

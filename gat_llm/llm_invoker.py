@@ -49,8 +49,10 @@ class LLM_Provider:
         "GPT 3.5 - OpenAI",
         "GPT 4o mini - OpenAI",
         # Anthropic
+        "Claude 3.7 Sonnet - Anthropic",
         "Claude 3.5 Sonnet - Anthropic",
         "Claude 3.5 Haiku - Anthropic",
+        "Claude 3.7 Sonnet - Bedrock",
         "Claude 3.5 Sonnet - Bedrock",
         "Claude 3.5 Haiku - Bedrock",
         # Misc
@@ -141,12 +143,16 @@ class LLM_Provider:
             return LLM_Claude3_Anthropic(model_size="Haiku 3 Anthropic")
 
         # current Claude
+        elif llm == "Claude 3.7 Sonnet - Bedrock":
+            return LLM_Claude3_Bedrock(bedrock_client, model_size="Sonnet 3.7")
         elif llm == "Claude 3.5 Sonnet - Bedrock":
             return LLM_Claude3_Bedrock(bedrock_client, model_size="Sonnet 3.5")
         elif llm == "Claude 3.5 Haiku - Bedrock":
             return LLM_Claude3_Bedrock(bedrock_client, model_size="Haiku 3.5")
         elif llm == "Claude 3.5 Sonnet - Anthropic":
             return LLM_Claude3_Anthropic(model_size="Sonnet 3.5 Anthropic")
+        elif llm == "Claude 3.7 Sonnet - Anthropic":
+            return LLM_Claude3_Anthropic(model_size="Sonnet 3.7 Anthropic")
         elif llm == "Claude 3.5 Haiku - Anthropic":
             return LLM_Claude3_Anthropic(model_size="Haiku 3.5 Anthropic")
 
