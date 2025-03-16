@@ -189,7 +189,14 @@ class LLMInterface:
         return str([x for x in history if x[0] is not None])
 
     def chat_with_function_caller(self, msg, image, ui_history=[], username=""):
-        """Performs conversation with the LLM agent"""
+        """Performs conversation with the LLM agent
+
+        Arguments:
+            msg: next user message
+            image: user input image
+            ui_history: history in the user interface. The first is used to recover the state in memory
+            username: user name of the user logged in the UI
+        """
         image_string = None
         if image is not None:
             npimg = np.array(image, dtype=np.uint8)
@@ -328,9 +335,17 @@ class LLMInterface:
 
         try:
             chat_log_dir = self.chat_log_folder
+            if username is not None and username.strip() != "":
+                cur_user_to_log = username
+            else:
+                cur_user_to_log = "unknown"
             if chat_log_dir is not None:
                 os.makedirs(chat_log_dir, exist_ok=True)
-                with open(f"{chat_log_dir}/{chat_id}.json", "w", encoding="utf-8") as f:
+                with open(
+                    f"{chat_log_dir}/{cur_user_to_log}-{chat_id}.json",
+                    "w",
+                    encoding="utf-8",
+                ) as f:
                     f.write(json.dumps(self.history_log[chat_id]))
         except Exception as ex:
             print(
