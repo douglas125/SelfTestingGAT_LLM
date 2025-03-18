@@ -99,4 +99,21 @@ def test_if_llm_responds(llm_name, ret_val):
     ans = llm("Dummy message")
     for x in ans:
         pass
+
     assert x == ret_val
+
+
+@pytest.mark.parametrize(
+    "llm_name", LLM_Provider.allowed_llms + LLM_Provider.outdated_llms
+)
+def test_if_llm_exits_gracefully(llm_name):
+    # Checks if the llms exit gracefully, i.e., don't raise an error
+    # in this case they all should raise an error because there is no valid token
+    bedrock_client = None
+    llm = LLM_Provider.get_llm(bedrock_client, llm_name)
+
+    ans = llm("Dummy message", max_retries=1, cur_fail_sleep=0)
+    for x in ans:
+        pass
+
+    assert x == "Could not invoke the AI model."

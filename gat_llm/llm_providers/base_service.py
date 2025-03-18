@@ -20,6 +20,7 @@ class LLM_Service:
         tools=None,
         tool_invoker_fn=None,
         max_retries=3,
+        cur_fail_sleep=60,
     ):
         """Calls the LLM in streaming mode
         Arguments:
@@ -41,6 +42,7 @@ class LLM_Service:
                 postpend=postpend,
                 extra_stop_sequences=extra_stop_sequences,
                 max_retries=max_retries,
+                cur_fail_sleep=cur_fail_sleep,
             )
         else:
             return self.invoke_streaming(
@@ -50,6 +52,7 @@ class LLM_Service:
                 tools=tools,
                 tool_invoker_fn=tool_invoker_fn,
                 max_retries=max_retries,
+                cur_fail_sleep=cur_fail_sleep,
             )
 
     def _prepare_call_list_from_history(
