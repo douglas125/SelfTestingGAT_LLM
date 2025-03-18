@@ -90,9 +90,7 @@ class LLMInterface:
             self.tool_invoker_fn = None
             self.extra_stop_sequences = ["</function_calls>"]
 
-    def _format_msg(
-        self, x, message, chat_history, include_logs=False, show_ans_only=False
-    ):
+    def _format_msg(self, x, message, chat_history, show_ans_only=False):
         # the "<path_to_" substring from native tools has to be appended to the final answer for file display
         if self.output_mode == "chat_interface":
             return _adjust_msg_for_gradio_ui(x)
@@ -176,11 +174,6 @@ class LLMInterface:
                     + func_call_info[-1].split("</function_calls>")[0]
                 )
 
-            # retrieve last log
-            if include_logs:
-                cur_log = self.log[-1]
-                scratchpad_info = scratchpad_info + "\n" + str(cur_log)
-
             # make sure to send ChatBot history last
             return "", scratchpad_info, None, cur_history
 
@@ -207,8 +200,6 @@ class LLMInterface:
 
         t0 = time.time()
 
-        cur_log = {"Function calls": []}
-
         if len(ui_history) > 0:
             chat_id = ui_history[0]["content"]
             history = self.history_log[chat_id]
@@ -218,9 +209,6 @@ class LLMInterface:
             chat_id = str(uuid.uuid4())
             ui_history = [{"role": "assistant", "content": chat_id}]
             history = []
-
-        cur_log["Prepare initial prompt"] = {"exec_time": time.time() - t0}
-        t0 = time.time()
 
         ans2 = self.llm(
             msg,
@@ -242,11 +230,6 @@ class LLMInterface:
         # yield initial_ans
 
         cur_answer = x
-        cur_log["Compute initial response"] = {
-            "exec_time": time.time() - t0,
-            "word_count": self.llm.word_counts[-1],
-        }
-        t0 = time.time()
 
         cur_answer_split = cur_answer.split("<function_calls>")
         while (
@@ -293,10 +276,6 @@ class LLMInterface:
             cur_answer = x
             last_update = cur_answer.replace(cur_postpend, "")
             cur_answer_split = last_update.split("<function_calls>")
-
-            cur_log["Function calls"].append(cur_func_log)
-
-        self.log.append(cur_log)
 
         history_to_append = []
         tool_results = []

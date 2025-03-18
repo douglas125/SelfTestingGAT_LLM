@@ -82,6 +82,7 @@ class LLM_Claude3_Anthropic(LLM_Service):
         tools=None,
         tool_invoker_fn=None,
         max_retries=5,
+        cur_fail_sleep=6,
     ):
         """
         Invokes the Claude 3 model to run an inference
@@ -96,6 +97,8 @@ class LLM_Claude3_Anthropic(LLM_Service):
                 function name - function to call
                 return_results_only - we set to True because we already use Claude format
                 kwargs - arguments to the tool that will be called
+        max_retries: how many attempts to call the model
+        cur_fail_sleep: how long to wait between model calls (this gets incremented)
         :return: Inference response from the model.
         """
         # Messages that had to be added because of function use
@@ -140,7 +143,6 @@ class LLM_Claude3_Anthropic(LLM_Service):
                 tool_invoker_fn is not None
             ), "When using tools, a tool invoker must be provided"
 
-        cur_fail_sleep = 60
         for k in range(max_retries):
             try:
                 self.debug_body = body
@@ -213,13 +215,10 @@ class LLM_Claude3_Anthropic(LLM_Service):
                     )
                 return
             except Exception as e:
-                print(
-                    f'Error {str(e)}. Prompt length: {len(str(body["messages"]))}\n\nRetrying {k}...'
-                )
+                yield f"Error {str(e)}. Waiting {int(cur_fail_sleep)} s. Retrying {k+1}/{max_retries}..."
                 time.sleep(int(cur_fail_sleep))
                 cur_fail_sleep *= 1.2
-
-        raise
+        yield "Could not invoke the AI model."
 
     def _response_gen(self, response_body, postpend=""):
         cur_ans = ""
