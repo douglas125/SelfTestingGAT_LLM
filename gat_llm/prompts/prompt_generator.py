@@ -18,7 +18,7 @@ class RAGPromptGenerator:
             with importlib.resources.files("gat_llm.prompts").joinpath(
                 "prompt_GAT.txt"
             ).open("r", encoding="utf-8") as f:
-                return f.read()
+                self.prompt += f.read()
 
         # base prompt
         with importlib.resources.files("gat_llm.prompts").joinpath(
