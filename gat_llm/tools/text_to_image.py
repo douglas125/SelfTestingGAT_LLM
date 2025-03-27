@@ -12,19 +12,17 @@ rng = np.random.default_rng()
 class ToolTextToImage:
     def _gen_img_bedrock(self, input_text, target_file, default_region="us-west-2"):
         if self.bedrock_client is None:
-            self.bedrock_client = boto3.client("bedrock-runtime", region_name=default_region)
+            self.bedrock_client = boto3.client(
+                "bedrock-runtime", region_name=default_region
+            )
         model_id = "stability.stable-image-ultra-v1:0"
 
         # seed = int(rng.integers(low=0, high=4294967295))
         native_request = {
             "prompt": input_text,
         }
-        # Convert the native request to JSON.
         request = json.dumps(native_request)
-
-        # Invoke the model with the request.
         response = self.bedrock_client.invoke_model(modelId=model_id, body=request)
-
         output_body = json.loads(response["body"].read().decode("utf-8"))
         base64_output_image = output_body["images"][0]
 
