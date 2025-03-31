@@ -30,7 +30,7 @@ class SelfTestPerformer(SelfTestBase):
                     "Plan what tool or tools are needed to answer the previous question."
                 )
                 q.append(
-                    "Do NOT use any tools yet - only mention which ones will be necessary. Do not repeat the question."
+                    "Do NOT use any tools yet - only mention which ones will be necessary. Do not repeat the question. Do not make tool calls."
                 )
                 q.append("Explain your choices before giving the final answer.")
                 q.append(
@@ -100,6 +100,7 @@ if __name__ == "__main__":
         {"model": "Sabia3 - Maritaca", "native_tools": True},
         {"model": "Sabia3 - Maritaca", "native_tools": False},
         {"model": "DeepSeekV3 Chat - DeepSeek", "native_tools": False},
+        {"model": "Grok2Vision - Grok", "native_tools": True},
     ]
     test_files = [
         os.path.join(

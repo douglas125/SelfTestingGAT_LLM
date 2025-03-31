@@ -61,6 +61,7 @@ With the current prompts, tools, descriptions and native tool configuration use 
 | ('Llama3 8b instruct', False)             |                            39 |                22.3 |             38.1 |                          0.3   |                            0.6  |
 | ('Llama3 70b instruct', False)            |                            29 |                29.1 |             36.1 |                          2.65  |                            3.5  |
 | ('Llama3_1 8b instruct', False)           |                            34 |                23.9 |             33.7 |                          0.3   |                            0.6  |
+| ('Grok2Vision - Grok', True)              |                             1 |                25   |             29   |                          2     |                           10    |
 
 ## Using this Code
 
