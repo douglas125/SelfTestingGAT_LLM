@@ -18,6 +18,7 @@ from .llm_providers.aws_bedrock_cohere import LLM_Command_Cohere
 from .llm_providers.maritaca import LLM_Maritalk
 from .llm_providers.aws_bedrock_nova import LLM_Nova_Bedrock
 from .llm_providers.deepseek import LLM_Deepseek
+from .llm_providers.grok import LLM_Grok
 
 warnings.simplefilter("always", DeprecationWarning)
 
@@ -42,6 +43,8 @@ class LLM_Provider:
         "Amazon Nova Micro 1.0 - Bedrock",
         "Amazon Nova Lite 1.0 - Bedrock",
         "Amazon Nova Pro 1.0 - Bedrock",
+        # Grok
+        "Grok2Vision - Grok",
         # Maritaca
         "Sabia3 - Maritaca",
         # OpenAI
@@ -100,6 +103,10 @@ class LLM_Provider:
         # Maritaca
         elif llm == "Sabia3 - Maritaca":
             return LLM_Maritalk(model_size="Sabia3 Maritaca")
+
+        # Grok
+        elif llm == "Grok2Vision - Grok":
+            return LLM_Grok(model_size="Grok2Vision xAI")
 
         # DeepSeek
         elif llm == "DeepSeekV3 Chat - DeepSeek":

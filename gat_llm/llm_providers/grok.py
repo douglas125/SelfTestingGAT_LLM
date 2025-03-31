@@ -7,18 +7,19 @@ from openai import OpenAI
 from .base_service import LLM_Service
 
 
-class LLM_Maritalk(LLM_Service):
+class LLM_Grok(LLM_Service):
     def __init__(self, model_size):
         """Constructor
         Arguments:
-            model_size - Maritaca model to use to make LLM calls
+            model_size - Instance of boto3.client(service_name='bedrock-runtime')
+                to use when making calls to bedrock models
         """
         self.openai_client = None
-        if model_size == "Sabia3 Maritaca":
-            self.model_id = "sabia-3"
-            self.llm_description = "Sabia-3 (medium-sized LLM) - directly from Maritaca"
-            self.price_per_M_input_tokens = 0.95
-            self.price_per_M_output_tokens = 1.9
+        if model_size == "Grok2Vision xAI":
+            self.model_id = "grok-2-vision-1212"
+            self.llm_description = "Grok 2 (medium-sized LLM) - directly from xAI"
+            self.price_per_M_input_tokens = 2
+            self.price_per_M_output_tokens = 10
 
         self.config = {
             # "messages": prompt,
@@ -105,8 +106,8 @@ class LLM_Maritalk(LLM_Service):
         if self.openai_client is None:
             try:
                 self.openai_client = OpenAI(
-                    api_key=os.environ.get("MARITACA_API_KEY"),
-                    base_url="https://chat.maritaca.ai/api",
+                    api_key=os.environ.get("GROK_API_KEY"),
+                    base_url="https://api.x.ai/v1",
                 )
             except Exception:
                 pass
