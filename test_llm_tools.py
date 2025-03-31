@@ -104,14 +104,24 @@ def main():
         with gr.Column():
             with gr.Row():
                 available_models = inv.LLM_Provider.allowed_llms
+                if os.environ.get("ANTHROPIC_API_KEY") is None:
+                    available_models = [
+                        "[UNAVAILABLE] " + x if "anthropic" in x.lower() else x
+                        for x in available_models
+                    ]
                 if os.environ.get("OPENAI_API_KEY") is None:
                     available_models = [
-                        "[UNAVAILABLE] " + x if "maritaca" in x.lower() else x
+                        "[UNAVAILABLE] " + x if "openai" in x.lower() else x
                         for x in available_models
                     ]
                 if os.environ.get("MARITACA_API_KEY") is None:
                     available_models = [
                         "[UNAVAILABLE] " + x if "maritaca" in x.lower() else x
+                        for x in available_models
+                    ]
+                if os.environ.get("GROK_API_KEY") is None:
+                    available_models = [
+                        "[UNAVAILABLE] " + x if "grok" in x.lower() else x
                         for x in available_models
                     ]
                 if os.environ.get("DEEPSEEK_API_KEY") is None:
