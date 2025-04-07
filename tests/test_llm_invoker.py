@@ -39,18 +39,29 @@ def test_model_creation(llm):
     LLM_Provider.get_llm(bedrock_client, llm)
 
 
-def dummy_response_gen(text, postpend=""):
-    # just mocks the yield part of the response
-    if isinstance(text, str):
-        yield text
-    else:
-        yield "Dummy LLM generation"
+def dummy_response_gen(ret_val):
+    def resp_gen_func(text, postpend=""):
+        # just mocks the yield part of the response
+        if isinstance(text, str):
+            yield text
+        else:
+            yield ret_val
+
+    return resp_gen_func
 
 
 @pytest.mark.parametrize(
     "llm_name", LLM_Provider.allowed_llms + LLM_Provider.outdated_llms
 )
-def test_if_llm_responds(llm_name):
+@pytest.mark.parametrize(
+    "ret_val",
+    [
+        "Dummy LLM generation",
+        # Test cases when the LLM returns nothing (e.g. pure tool use)
+        "",
+    ],
+)
+def test_if_llm_responds(llm_name, ret_val):
     # Checks if the llms actually produce an answer when required
     bedrock_client = None
     llm = LLM_Provider.get_llm(bedrock_client, llm_name)
@@ -61,10 +72,8 @@ def test_if_llm_responds(llm_name):
     llm.openai_client = MagicMock()
 
     # mocks the invoke methods
-    llm.anthropic_client.messages.create = Mock(return_value="Dummy LLM generation")
-    llm.openai_client.chat.completions.create = Mock(
-        return_value="Dummy LLM generation"
-    )
+    llm.anthropic_client.messages.create = Mock(return_value=ret_val)
+    llm.openai_client.chat.completions.create = Mock(return_value=ret_val)
     llm.bedrock_client.invoke_model_with_response_stream = Mock(
         return_value={
             "body": [
@@ -72,9 +81,9 @@ def test_if_llm_responds(llm_name):
                     "chunk": {
                         "bytes": json.dumps(
                             {
-                                "generation": "Dummy LLM generation",
-                                "outputs": [{"text": "Dummy LLM generation"}],
-                                "completion": "Dummy LLM generation",
+                                "generation": ret_val,
+                                "outputs": [{"text": ret_val}],
+                                "completion": ret_val,
                                 "stop": "",
                             }
                         )
@@ -86,8 +95,25 @@ def test_if_llm_responds(llm_name):
 
     llm.cur_tool_spec = None
     llm.stop_reason = None
-    llm._response_gen = dummy_response_gen
+    llm._response_gen = dummy_response_gen(ret_val)
     ans = llm("Dummy message")
     for x in ans:
         pass
-    assert x == "Dummy LLM generation"
+
+    assert x == ret_val
+
+
+@pytest.mark.parametrize(
+    "llm_name", LLM_Provider.allowed_llms + LLM_Provider.outdated_llms
+)
+def test_if_llm_exits_gracefully(llm_name):
+    # Checks if the llms exit gracefully, i.e., don't raise an error
+    # in this case they all should raise an error because there is no valid token
+    bedrock_client = None
+    llm = LLM_Provider.get_llm(bedrock_client, llm_name)
+
+    ans = llm("Dummy message", max_retries=1, cur_fail_sleep=0)
+    for x in ans:
+        pass
+
+    assert x == "Could not invoke the AI model."

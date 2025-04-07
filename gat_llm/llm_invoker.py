@@ -17,6 +17,8 @@ from .llm_providers.aws_bedrock import LLM_Mistral_Bedrock
 from .llm_providers.aws_bedrock_cohere import LLM_Command_Cohere
 from .llm_providers.maritaca import LLM_Maritalk
 from .llm_providers.aws_bedrock_nova import LLM_Nova_Bedrock
+from .llm_providers.deepseek import LLM_Deepseek
+from .llm_providers.grok import LLM_Grok
 
 warnings.simplefilter("always", DeprecationWarning)
 
@@ -41,6 +43,8 @@ class LLM_Provider:
         "Amazon Nova Micro 1.0 - Bedrock",
         "Amazon Nova Lite 1.0 - Bedrock",
         "Amazon Nova Pro 1.0 - Bedrock",
+        # Grok
+        "Grok2Vision - Grok",
         # Maritaca
         "Sabia3 - Maritaca",
         # OpenAI
@@ -48,11 +52,14 @@ class LLM_Provider:
         "GPT 3.5 - OpenAI",
         "GPT 4o mini - OpenAI",
         # Anthropic
+        "Claude 3.7 Sonnet - Anthropic",
         "Claude 3.5 Sonnet - Anthropic",
         "Claude 3.5 Haiku - Anthropic",
+        "Claude 3.7 Sonnet - Bedrock",
         "Claude 3.5 Sonnet - Bedrock",
         "Claude 3.5 Haiku - Bedrock",
         # Misc
+        "DeepSeekV3 Chat - DeepSeek",
         "Command R - Bedrock",
         "Command RPlus - Bedrock",
         "Mistral Mixtral 8x7B",
@@ -97,6 +104,16 @@ class LLM_Provider:
         elif llm == "Sabia3 - Maritaca":
             return LLM_Maritalk(model_size="Sabia3 Maritaca")
 
+        # Grok
+        elif llm == "Grok2Vision - Grok":
+            return LLM_Grok(model_size="Grok2Vision xAI")
+
+        # DeepSeek
+        elif llm == "DeepSeekV3 Chat - DeepSeek":
+            return LLM_Deepseek(model_size="Deepseek Chat")
+        elif llm == "DeepSeekR1 Reasoner - DeepSeek":
+            return LLM_Deepseek(model_size="Deepseek Reasoner")
+
         # Llama 3.1 family
         elif llm == "Llama3_1 8b instruct":
             return LLM_Llama3(bedrock_client, model="Llama3_1 8B Instruct - Bedrock")
@@ -133,12 +150,16 @@ class LLM_Provider:
             return LLM_Claude3_Anthropic(model_size="Haiku 3 Anthropic")
 
         # current Claude
+        elif llm == "Claude 3.7 Sonnet - Bedrock":
+            return LLM_Claude3_Bedrock(bedrock_client, model_size="Sonnet 3.7")
         elif llm == "Claude 3.5 Sonnet - Bedrock":
             return LLM_Claude3_Bedrock(bedrock_client, model_size="Sonnet 3.5")
         elif llm == "Claude 3.5 Haiku - Bedrock":
             return LLM_Claude3_Bedrock(bedrock_client, model_size="Haiku 3.5")
         elif llm == "Claude 3.5 Sonnet - Anthropic":
             return LLM_Claude3_Anthropic(model_size="Sonnet 3.5 Anthropic")
+        elif llm == "Claude 3.7 Sonnet - Anthropic":
+            return LLM_Claude3_Anthropic(model_size="Sonnet 3.7 Anthropic")
         elif llm == "Claude 3.5 Haiku - Anthropic":
             return LLM_Claude3_Anthropic(model_size="Haiku 3.5 Anthropic")
 

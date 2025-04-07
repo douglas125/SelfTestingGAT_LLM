@@ -37,6 +37,13 @@ class LLM_Claude3_Bedrock(LLM_Service):
             )
             self.price_per_M_input_tokens = 3
             self.price_per_M_output_tokens = 15
+        elif model_size == "Sonnet 3.7":
+            self.model_id = "us.anthropic.claude-3-7-sonnet-20250219-v1:0"
+            self.llm_description = (
+                "Anthropic Claude 3.7 Sonnet from AWS Bedrock (Medium-size LLM)"
+            )
+            self.price_per_M_input_tokens = 3
+            self.price_per_M_output_tokens = 15
         elif model_size == "Haiku 3.5":
             self.model_id = "anthropic.claude-3-5-haiku-20241022-v1:0"
             self.llm_description = (
@@ -87,6 +94,7 @@ class LLM_Claude3_Bedrock(LLM_Service):
         tools=None,
         tool_invoker_fn=None,
         max_retries=25,
+        cur_fail_sleep=60,
     ):
         """
         Invokes the Claude 3 model to run an inference
@@ -144,7 +152,6 @@ class LLM_Claude3_Bedrock(LLM_Service):
                 tool_invoker_fn is not None
             ), "When using tools, a tool invoker must be provided"
 
-        cur_fail_sleep = 60
         for k in range(max_retries):
             try:
                 # print(body)
@@ -163,6 +170,7 @@ class LLM_Claude3_Bedrock(LLM_Service):
 
                     # stream responses
                     partial_ans = self._response_gen(response["body"], postpend)
+                    x = ""
                     for x in partial_ans:
                         yield x
                     cur_ans = x
@@ -175,16 +183,15 @@ class LLM_Claude3_Bedrock(LLM_Service):
                         )
 
                         # append assistant responses
-                        assistant_msg = {
-                            "role": "assistant",
-                            "content": [
+                        assistant_msg = {"role": "assistant", "content": []}
+                        if cur_ans is not None and cur_ans.strip() != "":
+                            assistant_msg["content"].append(
                                 {
                                     "type": "text",
                                     "text": cur_ans,
                                 },
-                                self.cur_tool_spec,
-                            ],
-                        }
+                            )
+                        assistant_msg["content"].append(self.cur_tool_spec)
 
                         next_user_msg = {
                             "role": "user",
@@ -219,18 +226,10 @@ class LLM_Claude3_Bedrock(LLM_Service):
                     )
                 return
             except Exception as e:
-                print(
-                    f'Error {str(e)}. Prompt length: {len(str(body["messages"]))}\n\nRetrying {k}...'
-                )
+                yield f"Error {str(e)}. Waiting {int(cur_fail_sleep)} s. Retrying {k+1}/{max_retries}..."
                 time.sleep(int(cur_fail_sleep))
                 cur_fail_sleep *= 1.2
-
-        raise
-        # return response
-
-        # except ClientError:
-        #    logger.error("Couldn't invoke Claude")
-        #    raise
+        yield "Could not invoke the AI model."
 
     def _response_gen(self, response_body, postpend=""):
         cur_ans = ""
@@ -314,6 +313,7 @@ class LLM_Mistral_Bedrock(LLM_Service):
         max_retries=25,
         tools=None,
         tool_invoker_fn=None,
+        cur_fail_sleep=6,
     ):
         """
         Invokes the Llama2 large-language model to run an inference
@@ -335,61 +335,53 @@ class LLM_Mistral_Bedrock(LLM_Service):
         # body['stop_sequences'] = body['stop_sequences'] + extra_stop_sequences
         body["prompt"] = prompt + postpend
 
-        cur_fail_sleep = 1
         for k in range(max_retries):
-            # try:
-            response = self.bedrock_client.invoke_model_with_response_stream(
-                modelId=self.model_id, body=json.dumps(body)
-            )
-            word_count = len(re.findall(r"\w+", body["prompt"]))
-            print(f"Invoking {self.llm_description}. Word count: {word_count}")
+            try:
+                response = self.bedrock_client.invoke_model_with_response_stream(
+                    modelId=self.model_id, body=json.dumps(body)
+                )
+                word_count = len(re.findall(r"\w+", body["prompt"]))
+                print(f"Invoking {self.llm_description}. Word count: {word_count}")
 
-            cur_ans = ""
-            for x in response["body"]:
-                partial = json.loads(x["chunk"]["bytes"])["outputs"][0]["text"]
-                cur_ans += partial
+                cur_ans = ""
+                for x in response["body"]:
+                    partial = json.loads(x["chunk"]["bytes"])["outputs"][0]["text"]
+                    cur_ans += partial
 
-                # we include those again so there's no need to leave these in the answer
-                cur_ans = cur_ans.replace("<s>", "").replace("</s>", "")
+                    # we include those again so there's no need to leave these in the answer
+                    cur_ans = cur_ans.replace("<s>", "").replace("</s>", "")
 
-                # we have to manually check for stopword generation
-                extra_stop_break = False
-                for x in extra_stop_sequences:
-                    cur_split = cur_ans.split(x)
-                    if len(cur_split) > 1:
-                        cur_ans = cur_split[0] + x
-                        extra_stop_break = True
+                    # we have to manually check for stopword generation
+                    extra_stop_break = False
+                    for x in extra_stop_sequences:
+                        cur_split = cur_ans.split(x)
+                        if len(cur_split) > 1:
+                            cur_ans = cur_split[0] + x
+                            extra_stop_break = True
+                            break
+
+                    yield postpend + cur_ans
+
+                    if extra_stop_break:
                         break
+                    # stop_reason = json.loads(x['chunk']['bytes'])['stop_reason']
 
-                yield postpend + cur_ans
-
-                if extra_stop_break:
-                    break
-                # stop_reason = json.loads(x['chunk']['bytes'])['stop_reason']
-
-            ans_word_count = len(re.findall(r"\w+", postpend + cur_ans))
-            self.word_counts.append(
-                {
-                    "request_word_count": word_count,
-                    "answer_word_count": ans_word_count,
-                    "price_estimate": 0.001
-                    * (0.00195 * word_count + 0.00256 * ans_word_count),
-                    "exec_time_in_s": time.time() - t0,
-                }
-            )
-
-            return
-        # except Exception as e:
-        #    print(f'Error {str(e)}. Prompt length: {len(body["prompt"])}\n\nRetrying {k}...')
-        #    time.sleep(int(cur_fail_sleep))
-        #    cur_fail_sleep *= 1.2
-
-        raise
-        # return response
-
-        # except ClientError:
-        #    logger.error("Couldn't invoke Claude")
-        #    raise
+                ans_word_count = len(re.findall(r"\w+", postpend + cur_ans))
+                self.word_counts.append(
+                    {
+                        "request_word_count": word_count,
+                        "answer_word_count": ans_word_count,
+                        "price_estimate": 0.001
+                        * (0.00195 * word_count + 0.00256 * ans_word_count),
+                        "exec_time_in_s": time.time() - t0,
+                    }
+                )
+                return
+            except Exception as e:
+                yield f"Error {str(e)}. Waiting {int(cur_fail_sleep)} s. Retrying {k+1}/{max_retries}..."
+                time.sleep(int(cur_fail_sleep))
+                cur_fail_sleep *= 1.2
+        yield "Could not invoke the AI model."
 
 
 class LLM_Claude2_1_Bedrock(LLM_Service):
@@ -424,7 +416,12 @@ class LLM_Claude2_1_Bedrock(LLM_Service):
         return format_messages_for_claude(msg_list)
 
     def invoke_streaming(
-        self, prompt, postpend="", extra_stop_sequences=[], max_retries=25
+        self,
+        prompt,
+        postpend="",
+        extra_stop_sequences=[],
+        max_retries=25,
+        cur_fail_sleep=6,
     ):
         """
         Invokes the Claude large-language model to run an inference
@@ -446,7 +443,6 @@ class LLM_Claude2_1_Bedrock(LLM_Service):
         body["stop_sequences"] = body["stop_sequences"] + extra_stop_sequences
         body["prompt"] = prompt + postpend
 
-        cur_fail_sleep = 1
         for k in range(max_retries):
             try:
                 response = self.bedrock_client.invoke_model_with_response_stream(
@@ -479,21 +475,12 @@ class LLM_Claude2_1_Bedrock(LLM_Service):
                         "exec_time_in_s": time.time() - t0,
                     }
                 )
-
                 return
             except Exception as e:
-                print(
-                    f'Error {str(e)}. Prompt length: {len(body["prompt"])}\n\nRetrying {k}...'
-                )
+                yield f"Error {str(e)}. Waiting {int(cur_fail_sleep)} s. Retrying {k+1}/{max_retries}..."
                 time.sleep(int(cur_fail_sleep))
                 cur_fail_sleep *= 1.2
-
-        raise
-        # return response
-
-        # except ClientError:
-        #    logger.error("Couldn't invoke Claude")
-        #    raise
+        yield "Could not invoke the AI model."
 
 
 class LLM_Claude_Instant_1_2_Bedrock(LLM_Service):
@@ -527,7 +514,12 @@ class LLM_Claude_Instant_1_2_Bedrock(LLM_Service):
         return format_messages_for_claude(msg_list)
 
     def invoke_streaming(
-        self, prompt, postpend="", extra_stop_sequences=[], max_retries=25
+        self,
+        prompt,
+        postpend="",
+        extra_stop_sequences=[],
+        max_retries=25,
+        cur_fail_sleep=1,
     ):
         """
         Invokes the Claude large-language model to run an inference
@@ -549,7 +541,6 @@ class LLM_Claude_Instant_1_2_Bedrock(LLM_Service):
         body["stop_sequences"] = body["stop_sequences"] + extra_stop_sequences
         body["prompt"] = prompt + postpend
 
-        cur_fail_sleep = 1
         for k in range(max_retries):
             try:
                 response = self.bedrock_client.invoke_model_with_response_stream(
@@ -582,21 +573,12 @@ class LLM_Claude_Instant_1_2_Bedrock(LLM_Service):
                         "exec_time_in_s": time.time() - t0,
                     }
                 )
-
                 return
             except Exception as e:
-                print(
-                    f'Error {str(e)}. Prompt length: {len(body["prompt"])}\n\nRetrying {k}...'
-                )
+                yield f"Error {str(e)}. Waiting {int(cur_fail_sleep)} s. Retrying {k+1}/{max_retries}..."
                 time.sleep(int(cur_fail_sleep))
                 cur_fail_sleep *= 1.2
-
-        raise
-        # return response
-
-        # except ClientError:
-        #    logger.error("Couldn't invoke Claude")
-        #    raise
+        yield "Could not invoke the AI model."
 
 
 class LLM_Llama13b(LLM_Service):
@@ -630,7 +612,12 @@ class LLM_Llama13b(LLM_Service):
         return format_messages_for_llama(msg_list)
 
     def invoke_streaming(
-        self, prompt, postpend="", extra_stop_sequences=[], max_retries=25
+        self,
+        prompt,
+        postpend="",
+        extra_stop_sequences=[],
+        max_retries=25,
+        cur_fail_sleep=1,
     ):
         """
         Invokes the Llama2 large-language model to run an inference
@@ -652,61 +639,53 @@ class LLM_Llama13b(LLM_Service):
         # body['stop_sequences'] = body['stop_sequences'] + extra_stop_sequences
         body["prompt"] = prompt + postpend
 
-        cur_fail_sleep = 1
         for k in range(max_retries):
-            # try:
-            response = self.bedrock_client.invoke_model_with_response_stream(
-                modelId="meta.llama2-13b-chat-v1", body=json.dumps(body)
-            )
-            word_count = len(re.findall(r"\w+", body["prompt"]))
-            print(f"Invoking Llama 2 chat 13b. Word count: {word_count}")
+            try:
+                response = self.bedrock_client.invoke_model_with_response_stream(
+                    modelId="meta.llama2-13b-chat-v1", body=json.dumps(body)
+                )
+                word_count = len(re.findall(r"\w+", body["prompt"]))
+                print(f"Invoking Llama 2 chat 13b. Word count: {word_count}")
 
-            cur_ans = ""
-            for x in response["body"]:
-                partial = json.loads(x["chunk"]["bytes"])["generation"]
-                cur_ans += partial
+                cur_ans = ""
+                for x in response["body"]:
+                    partial = json.loads(x["chunk"]["bytes"])["generation"]
+                    cur_ans += partial
 
-                # we include those again so there's no need to leave these in the answer
-                cur_ans = cur_ans.replace("<s>", "").replace("</s>", "")
+                    # we include those again so there's no need to leave these in the answer
+                    cur_ans = cur_ans.replace("<s>", "").replace("</s>", "")
 
-                # we have to manually check for stopword generation
-                extra_stop_break = False
-                for x in extra_stop_sequences:
-                    cur_split = cur_ans.split(x)
-                    if len(cur_split) > 1:
-                        cur_ans = cur_split[0] + x
-                        extra_stop_break = True
+                    # we have to manually check for stopword generation
+                    extra_stop_break = False
+                    for x in extra_stop_sequences:
+                        cur_split = cur_ans.split(x)
+                        if len(cur_split) > 1:
+                            cur_ans = cur_split[0] + x
+                            extra_stop_break = True
+                            break
+
+                    yield postpend + cur_ans
+
+                    if extra_stop_break:
                         break
+                    # stop_reason = json.loads(x['chunk']['bytes'])['stop_reason']
 
-                yield postpend + cur_ans
-
-                if extra_stop_break:
-                    break
-                # stop_reason = json.loads(x['chunk']['bytes'])['stop_reason']
-
-            ans_word_count = len(re.findall(r"\w+", postpend + cur_ans))
-            self.word_counts.append(
-                {
-                    "request_word_count": word_count,
-                    "answer_word_count": ans_word_count,
-                    "price_estimate": 0.001
-                    * (0.00075 * word_count + 0.001 * ans_word_count),
-                    "exec_time_in_s": time.time() - t0,
-                }
-            )
-
-            return
-        # except Exception as e:
-        #    print(f'Error {str(e)}. Prompt length: {len(body["prompt"])}\n\nRetrying {k}...')
-        #    time.sleep(int(cur_fail_sleep))
-        #    cur_fail_sleep *= 1.2
-
-        raise
-        # return response
-
-        # except ClientError:
-        #    logger.error("Couldn't invoke Claude")
-        #    raise
+                ans_word_count = len(re.findall(r"\w+", postpend + cur_ans))
+                self.word_counts.append(
+                    {
+                        "request_word_count": word_count,
+                        "answer_word_count": ans_word_count,
+                        "price_estimate": 0.001
+                        * (0.00075 * word_count + 0.001 * ans_word_count),
+                        "exec_time_in_s": time.time() - t0,
+                    }
+                )
+                return
+            except Exception as e:
+                yield f"Error {str(e)}. Waiting {int(cur_fail_sleep)} s. Retrying {k+1}/{max_retries}..."
+                time.sleep(int(cur_fail_sleep))
+                cur_fail_sleep *= 1.2
+        yield "Could not invoke the AI model."
 
 
 class LLM_Llama70b(LLM_Service):
@@ -739,7 +718,12 @@ class LLM_Llama70b(LLM_Service):
         return format_messages_for_llama(msg_list)
 
     def invoke_streaming(
-        self, prompt, postpend="", extra_stop_sequences=[], max_retries=25
+        self,
+        prompt,
+        postpend="",
+        extra_stop_sequences=[],
+        max_retries=25,
+        cur_fail_sleep=1,
     ):
         """
         Invokes the Llama2 large-language model to run an inference
@@ -761,61 +745,53 @@ class LLM_Llama70b(LLM_Service):
         # body['stop_sequences'] = body['stop_sequences'] + extra_stop_sequences
         body["prompt"] = prompt + postpend
 
-        cur_fail_sleep = 1
         for k in range(max_retries):
-            # try:
-            response = self.bedrock_client.invoke_model_with_response_stream(
-                modelId="meta.llama2-70b-chat-v1", body=json.dumps(body)
-            )
-            word_count = len(re.findall(r"\w+", body["prompt"]))
-            print(f"Invoking Llama 2 chat 70b. Word count: {word_count}")
+            try:
+                response = self.bedrock_client.invoke_model_with_response_stream(
+                    modelId="meta.llama2-70b-chat-v1", body=json.dumps(body)
+                )
+                word_count = len(re.findall(r"\w+", body["prompt"]))
+                print(f"Invoking Llama 2 chat 70b. Word count: {word_count}")
 
-            cur_ans = ""
-            for x in response["body"]:
-                partial = json.loads(x["chunk"]["bytes"])["generation"]
-                cur_ans += partial
+                cur_ans = ""
+                for x in response["body"]:
+                    partial = json.loads(x["chunk"]["bytes"])["generation"]
+                    cur_ans += partial
 
-                # we include those again so there's no need to leave these in the answer
-                cur_ans = cur_ans.replace("<s>", "").replace("</s>", "")
+                    # we include those again so there's no need to leave these in the answer
+                    cur_ans = cur_ans.replace("<s>", "").replace("</s>", "")
 
-                # we have to manually check for stopword generation
-                extra_stop_break = False
-                for x in extra_stop_sequences:
-                    cur_split = cur_ans.split(x)
-                    if len(cur_split) > 1:
-                        cur_ans = cur_split[0] + x
-                        extra_stop_break = True
+                    # we have to manually check for stopword generation
+                    extra_stop_break = False
+                    for x in extra_stop_sequences:
+                        cur_split = cur_ans.split(x)
+                        if len(cur_split) > 1:
+                            cur_ans = cur_split[0] + x
+                            extra_stop_break = True
+                            break
+
+                    yield postpend + cur_ans
+
+                    if extra_stop_break:
                         break
+                    # stop_reason = json.loads(x['chunk']['bytes'])['stop_reason']
 
-                yield postpend + cur_ans
-
-                if extra_stop_break:
-                    break
-                # stop_reason = json.loads(x['chunk']['bytes'])['stop_reason']
-
-            ans_word_count = len(re.findall(r"\w+", postpend + cur_ans))
-            self.word_counts.append(
-                {
-                    "request_word_count": word_count,
-                    "answer_word_count": ans_word_count,
-                    "price_estimate": 0.001
-                    * (0.00195 * word_count + 0.00256 * ans_word_count),
-                    "exec_time_in_s": time.time() - t0,
-                }
-            )
-
-            return
-        # except Exception as e:
-        #    print(f'Error {str(e)}. Prompt length: {len(body["prompt"])}\n\nRetrying {k}...')
-        #    time.sleep(int(cur_fail_sleep))
-        #    cur_fail_sleep *= 1.2
-
-        raise
-        # return response
-
-        # except ClientError:
-        #    logger.error("Couldn't invoke Claude")
-        #    raise
+                ans_word_count = len(re.findall(r"\w+", postpend + cur_ans))
+                self.word_counts.append(
+                    {
+                        "request_word_count": word_count,
+                        "answer_word_count": ans_word_count,
+                        "price_estimate": 0.001
+                        * (0.00195 * word_count + 0.00256 * ans_word_count),
+                        "exec_time_in_s": time.time() - t0,
+                    }
+                )
+                return
+            except Exception as e:
+                yield f"Error {str(e)}. Waiting {int(cur_fail_sleep)} s. Retrying {k+1}/{max_retries}..."
+                time.sleep(int(cur_fail_sleep))
+                cur_fail_sleep *= 1.2
+        yield "Could not invoke the AI model."
 
 
 class LLM_Llama3(LLM_Service):
@@ -895,6 +871,7 @@ class LLM_Llama3(LLM_Service):
         max_retries=25,
         tools=None,
         tool_invoker_fn=None,
+        cur_fail_sleep=1,
     ):
         """
         Invokes the Llama3 large-language model to run an inference
@@ -919,58 +896,50 @@ class LLM_Llama3(LLM_Service):
         # body['stop_sequences'] = body['stop_sequences'] + extra_stop_sequences
         body["prompt"] = prompt + postpend
 
-        cur_fail_sleep = 1
         for k in range(max_retries):
-            # try:
-            response = self.bedrock_client.invoke_model_with_response_stream(
-                modelId=self.model_id, body=json.dumps(body)
-            )
-            word_count = len(re.findall(r"\w+", body["prompt"]))
-            print(f"Invoking {self.llm_description}. Word count: {word_count}")
+            try:
+                response = self.bedrock_client.invoke_model_with_response_stream(
+                    modelId=self.model_id, body=json.dumps(body)
+                )
+                word_count = len(re.findall(r"\w+", body["prompt"]))
+                print(f"Invoking {self.llm_description}. Word count: {word_count}")
 
-            cur_ans = ""
-            for x in response["body"]:
-                partial = json.loads(x["chunk"]["bytes"])["generation"]
-                cur_ans += partial
+                cur_ans = ""
+                for x in response["body"]:
+                    partial = json.loads(x["chunk"]["bytes"])["generation"]
+                    cur_ans += partial
 
-                # we have to manually check for stopword generation
-                extra_stop_break = False
-                for x in extra_stop_sequences:
-                    cur_split = cur_ans.split(x)
-                    if len(cur_split) > 1:
-                        cur_ans = cur_split[0] + x
-                        extra_stop_break = True
+                    # we have to manually check for stopword generation
+                    extra_stop_break = False
+                    for x in extra_stop_sequences:
+                        cur_split = cur_ans.split(x)
+                        if len(cur_split) > 1:
+                            cur_ans = cur_split[0] + x
+                            extra_stop_break = True
+                            break
+
+                    yield postpend + cur_ans
+
+                    if extra_stop_break:
                         break
+                    # stop_reason = json.loads(x['chunk']['bytes'])['stop_reason']
 
-                yield postpend + cur_ans
-
-                if extra_stop_break:
-                    break
-                # stop_reason = json.loads(x['chunk']['bytes'])['stop_reason']
-
-            ans_word_count = len(re.findall(r"\w+", postpend + cur_ans))
-            self.word_counts.append(
-                {
-                    "request_word_count": word_count,
-                    "answer_word_count": ans_word_count,
-                    "price_estimate": 0.001
-                    * (0.00195 * word_count + 0.00256 * ans_word_count),
-                    "exec_time_in_s": time.time() - t0,
-                }
-            )
-
-            return
-        # except Exception as e:
-        #    print(f'Error {str(e)}. Prompt length: {len(body["prompt"])}\n\nRetrying {k}...')
-        #    time.sleep(int(cur_fail_sleep))
-        #    cur_fail_sleep *= 1.2
-
-        raise
-        # return response
-
-        # except ClientError:
-        #    logger.error("Couldn't invoke Claude")
-        #    raise
+                ans_word_count = len(re.findall(r"\w+", postpend + cur_ans))
+                self.word_counts.append(
+                    {
+                        "request_word_count": word_count,
+                        "answer_word_count": ans_word_count,
+                        "price_estimate": 0.001
+                        * (0.00195 * word_count + 0.00256 * ans_word_count),
+                        "exec_time_in_s": time.time() - t0,
+                    }
+                )
+                return
+            except Exception as e:
+                yield f"Error {str(e)}. Waiting {int(cur_fail_sleep)} s. Retrying {k+1}/{max_retries}..."
+                time.sleep(int(cur_fail_sleep))
+                cur_fail_sleep *= 1.2
+        yield "Could not invoke the AI model."
 
 
 def format_messages_for_claude(messages: List[Dict[str, str]]) -> List[str]:

@@ -78,6 +78,7 @@ class LLM_Command_Cohere(LLM_Service):
         tools=None,
         tool_invoker_fn=None,
         max_retries=25,
+        cur_fail_sleep=60,
     ):
         """
         Invokes the Cohere model to run an inference
@@ -154,113 +155,112 @@ class LLM_Command_Cohere(LLM_Service):
                 tool_invoker_fn is not None
             ), "When using tools, a tool invoker must be provided"
 
-        cur_fail_sleep = 60
         for k in range(max_retries):
-            # try:
-            self.debug_body = body
-            llm_body_changed = True
-            while llm_body_changed:
-                llm_body_changed = False
-                response = self.bedrock_client.invoke_model_with_response_stream(
-                    modelId=self.model_id, body=json.dumps(body)
-                )
-                word_count = len(
-                    re.findall(r"\w+", body["message"] + str(body["chat_history"]))
-                )
-                print(f"Invoking {self.llm_description}. Word count: {word_count}")
-
-                # stream responses
-                partial_ans = self._response_gen(response["body"], postpend)
-                x = ""
-                for x in partial_ans:
-                    yield x
-                cur_ans = x
-
-                if self.cur_tool_spec is not None:
-                    # tool use has been required. Let's do it
-                    # TODO: update upstream to reflect the inclusion of a response
-                    # TODO: probably rework gradio UI to re-instantiate things every chat, or keep an instance per chat ID
-                    tool_ans = tool_invoker_fn(
-                        self.cur_tool_spec["tool_name"],
-                        return_results_only=True,
-                        **self.cur_tool_spec["input"],
+            try:
+                self.debug_body = body
+                llm_body_changed = True
+                while llm_body_changed:
+                    llm_body_changed = False
+                    response = self.bedrock_client.invoke_model_with_response_stream(
+                        modelId=self.model_id, body=json.dumps(body)
                     )
-                    """
-                        "tool_name": func_call_spec["name"],
-                        "input": func_call_spec["parameters"],
-                        "generation_id": func_call_spec["generation_id"],
-                    """
+                    word_count = len(
+                        re.findall(r"\w+", body["message"] + str(body["chat_history"]))
+                    )
+                    print(f"Invoking {self.llm_description}. Word count: {word_count}")
 
-                    print(self.cur_tool_spec)
-                    last_call = {
-                        "name": self.cur_tool_spec["tool_name"],
-                        "parameters": self.cur_tool_spec["input"],
-                        # "generation_id": self.cur_tool_spec["generation_id"],
-                    }
-                    self.tool_results.append(
-                        {
-                            "call": last_call,
-                            "outputs": [
-                                {self.cur_tool_spec["tool_name"] + "_output": tool_ans}
+                    # stream responses
+                    partial_ans = self._response_gen(response["body"], postpend)
+                    x = ""
+                    for x in partial_ans:
+                        yield x
+                    cur_ans = x
+
+                    if self.cur_tool_spec is not None:
+                        # tool use has been required. Let's do it
+                        # TODO: update upstream to reflect the inclusion of a response
+                        # TODO: probably rework gradio UI to re-instantiate things every chat, or keep an instance per chat ID
+                        tool_ans = tool_invoker_fn(
+                            self.cur_tool_spec["tool_name"],
+                            return_results_only=True,
+                            **self.cur_tool_spec["input"],
+                        )
+                        """
+                            "tool_name": func_call_spec["name"],
+                            "input": func_call_spec["parameters"],
+                            "generation_id": func_call_spec["generation_id"],
+                        """
+
+                        print(self.cur_tool_spec)
+                        last_call = {
+                            "name": self.cur_tool_spec["tool_name"],
+                            "parameters": self.cur_tool_spec["input"],
+                            # "generation_id": self.cur_tool_spec["generation_id"],
+                        }
+                        self.tool_results.append(
+                            {
+                                "call": last_call,
+                                "outputs": [
+                                    {
+                                        self.cur_tool_spec["tool_name"]
+                                        + "_output": tool_ans
+                                    }
+                                ],
+                            }
+                        )
+
+                        # append assistant responses
+                        assistant_msg = {
+                            "role": "assistant",
+                            "content": [
+                                {
+                                    "type": "text",
+                                    "text": cur_ans,
+                                },
+                                self.cur_tool_spec,
                             ],
                         }
+
+                        next_user_msg = {
+                            "role": "user",
+                            "content": [
+                                {
+                                    "type": "tool_result",
+                                    # "generation_id": self.cur_tool_spec["generation_id"],
+                                    "content": tool_ans,
+                                }
+                            ],
+                        }
+                        # body["chat_history"].append(assistant_msg)
+                        # body["chat_history"].append(next_user_msg)
+                        body["tool_results"] = self.tool_results
+                        body["chat_history"] = self.cur_tool_spec["chat_history"]
+                        body["message"] = ""
+
+                        # keep a log of messages that had to be appended due to tool use
+                        self.tool_use_added_msgs.append(assistant_msg)
+                        self.tool_use_added_msgs.append(next_user_msg)
+                        llm_body_changed = True
+
+                    # TODO: Include proper token count and pricing
+                    ans_word_count = len(
+                        re.findall(r"\w+", postpend + cur_ans + str(self.stop_reason))
                     )
-
-                    # append assistant responses
-                    assistant_msg = {
-                        "role": "assistant",
-                        "content": [
-                            {
-                                "type": "text",
-                                "text": cur_ans,
-                            },
-                            self.cur_tool_spec,
-                        ],
-                    }
-
-                    next_user_msg = {
-                        "role": "user",
-                        "content": [
-                            {
-                                "type": "tool_result",
-                                # "generation_id": self.cur_tool_spec["generation_id"],
-                                "content": tool_ans,
-                            }
-                        ],
-                    }
-                    # body["chat_history"].append(assistant_msg)
-                    # body["chat_history"].append(next_user_msg)
-                    body["tool_results"] = self.tool_results
-                    body["chat_history"] = self.cur_tool_spec["chat_history"]
-                    body["message"] = ""
-
-                    # keep a log of messages that had to be appended due to tool use
-                    self.tool_use_added_msgs.append(assistant_msg)
-                    self.tool_use_added_msgs.append(next_user_msg)
-                    llm_body_changed = True
-
-                # TODO: Include proper token count and pricing
-                ans_word_count = len(
-                    re.findall(r"\w+", postpend + cur_ans + str(self.stop_reason))
-                )
-                self.word_counts.append(
-                    {
-                        "request_word_count": word_count,
-                        "answer_word_count": ans_word_count,
-                        "price_estimate": 0.001
-                        * (0.003 * word_count + 0.015 * ans_word_count),
-                        "exec_time_in_s": time.time() - t0,
-                    }
-                )
-            return
-        # except Exception as e:
-        #    print(
-        #        f'Error {str(e)}. Prompt length: {len(str(body["chat_history"]))}\n\nRetrying {k}...'
-        #    )
-        #    time.sleep(int(cur_fail_sleep))
-        #    cur_fail_sleep *= 1.2
-
-        raise
+                    self.word_counts.append(
+                        {
+                            "request_word_count": word_count,
+                            "answer_word_count": ans_word_count,
+                            "price_estimate": 0.001
+                            * (0.003 * word_count + 0.015 * ans_word_count),
+                            "exec_time_in_s": time.time() - t0,
+                        }
+                    )
+                return
+            except Exception as e:
+                yield f"Error {str(e)}. Waiting {int(cur_fail_sleep)} s. Retrying {k+1}/{max_retries}..."
+                time.sleep(int(cur_fail_sleep))
+                cur_fail_sleep *= 1.2
+        yield "Could not invoke the AI model."
 
     def _response_gen(self, response_body, postpend=""):
         cur_ans = ""

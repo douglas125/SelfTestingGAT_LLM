@@ -81,6 +81,7 @@ class LLM_Nova_Bedrock(LLM_Service):
         tools=None,
         tool_invoker_fn=None,
         max_retries=25,
+        cur_fail_sleep=6,
     ):
         """
         Invokes the Nova model to run an inference
@@ -131,7 +132,6 @@ class LLM_Nova_Bedrock(LLM_Service):
                 tool_invoker_fn is not None
             ), "When using tools, a tool invoker must be provided"
 
-        cur_fail_sleep = 6
         for k in range(max_retries):
             try:
                 llm_body_changed = True
@@ -218,20 +218,11 @@ class LLM_Nova_Bedrock(LLM_Service):
                     )
                     # """
                 return
-
             except Exception as e:
-                print(
-                    f'Error {str(e)}. Prompt length: {len(str(body["messages"]))}\n\nRetrying {k}...'
-                )
+                yield f"Error {str(e)}. Waiting {int(cur_fail_sleep)} s. Retrying {k+1}/{max_retries}..."
                 time.sleep(int(cur_fail_sleep))
                 cur_fail_sleep *= 1.2
-
-        raise
-        # return response
-
-        # except ClientError:
-        #    logger.error("Couldn't invoke Claude")
-        #    raise
+        yield "Could not invoke the AI model."
 
     def _response_gen(self, response_body, postpend=""):
         cur_ans = ""

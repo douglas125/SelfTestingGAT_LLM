@@ -100,6 +100,7 @@ class LLM_GPT_OpenAI(LLM_Service):
         tools=None,
         tool_invoker_fn=None,
         max_retries=25,
+        cur_fail_sleep=60,
     ):
         """
         Invokes the OpenAI model to run an inference
@@ -118,7 +119,10 @@ class LLM_GPT_OpenAI(LLM_Service):
         """
         # create client if it hasn't been created already
         if self.openai_client is None:
-            self.openai_client = OpenAI()
+            try:
+                self.openai_client = OpenAI()
+            except Exception:
+                pass
 
         # Messages that had to be added because of function use
         self.tool_use_added_msgs = []
@@ -157,7 +161,6 @@ class LLM_GPT_OpenAI(LLM_Service):
                 tool_invoker_fn is not None
             ), "When using tools, a tool invoker must be provided"
 
-        cur_fail_sleep = 60
         for k in range(max_retries):
             try:
                 self.debug_body = body
@@ -236,13 +239,10 @@ class LLM_GPT_OpenAI(LLM_Service):
                     )
                 return
             except Exception as e:
-                print(
-                    f'Error {str(e)}. Prompt length: {len(str(body["messages"]))}\n\nRetrying {k}...'
-                )
+                yield f"Error {str(e)}. Waiting {int(cur_fail_sleep)} s. Retrying {k+1}/{max_retries}..."
                 time.sleep(int(cur_fail_sleep))
                 cur_fail_sleep *= 1.2
-
-        raise
+        yield "Could not invoke the AI model."
 
     def _response_gen(self, response_body, postpend=""):
         cur_ans = ""

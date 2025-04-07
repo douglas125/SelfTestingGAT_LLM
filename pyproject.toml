@@ -1,0 +1,49 @@
+[build-system]
+requires      = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["gat_llm*"]
+
+[tool.setuptools]
+license-files = []
+include-package-data = true
+
+[project]
+name = "gat_llm"
+version = "0.1.3"
+description = "Generation Augmented by Tools in LLMs - Agentic AI"
+readme = "README.md"
+authors = [{ name = "DCA" }]
+license = { file = "LICENSE" }
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+keywords = ["large language models", "LLMs", "RAG", "tool use", "AI agents"]
+dependencies = [
+    "boto3",
+    "tqdm",
+    "graphviz",
+    "pydot",
+    "sympy",
+    "ffmpeg",
+    "qrcode",
+    "matplotlib",
+    "pillow",
+    "requests",
+    "beautifulsoup4",
+    "pandas",
+    "lxml",
+    "duckdb",
+    "openai",
+    "anthropic"
+]
+requires-python = ">=3.9"
+
+[project.optional-dependencies]
+dev = ["black", "pytest", "pytest-timeout", "pre-commit", "coverage"]
+
+[project.urls]
+Homepage = "https://github.com/douglas125/SelfTestingGAT_LLM"

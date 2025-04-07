@@ -1,3 +1,4 @@
+# python -m self_tests.self_test_performer
 import os
 import json
 
@@ -16,7 +17,7 @@ class SelfTestPerformer(SelfTestBase):
     def test_tool_use(self, test_cases, source_file):
         print(f"Testing {self.ref_llm}. Native tools: {self.use_native_LLM_tools}")
         all_results = []
-        all_tools = LLMTools.get_all_tools(self.llm)
+        all_tools = LLMTools.get_all_tools()
         li = self.get_llm_interface(all_tools)
         progbar = tqdm(test_cases)
         for test_case in progbar:
@@ -29,7 +30,7 @@ class SelfTestPerformer(SelfTestBase):
                     "Plan what tool or tools are needed to answer the previous question."
                 )
                 q.append(
-                    "Do NOT use any tools yet - only mention which ones will be necessary. Do not repeat the question."
+                    "Do NOT use any tools yet - only mention which ones will be necessary. Do not repeat the question. Do not make tool calls."
                 )
                 q.append("Explain your choices before giving the final answer.")
                 q.append(
@@ -81,6 +82,7 @@ if __name__ == "__main__":
         {"model": "Llama3_1 405b instruct", "native_tools": False},
         {"model": "Llama3 70b instruct", "native_tools": False},
         {"model": "Llama3 8b instruct", "native_tools": False},
+        {"model": "Claude 3.7 Sonnet - Anthropic", "native_tools": True},
         {"model": "Claude 3.5 Sonnet - Anthropic", "native_tools": True},
         {"model": "Claude 3.5 Sonnet - Anthropic", "native_tools": False},
         {"model": "Claude 3.5 Haiku - Anthropic", "native_tools": True},
@@ -97,6 +99,8 @@ if __name__ == "__main__":
         {"model": "Command RPlus - Bedrock", "native_tools": False},
         {"model": "Sabia3 - Maritaca", "native_tools": True},
         {"model": "Sabia3 - Maritaca", "native_tools": False},
+        {"model": "DeepSeekV3 Chat - DeepSeek", "native_tools": False},
+        {"model": "Grok2Vision - Grok", "native_tools": True},
     ]
     test_files = [
         os.path.join(

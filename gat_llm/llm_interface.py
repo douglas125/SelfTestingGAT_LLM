@@ -40,7 +40,15 @@ def _adjust_msg_for_gradio_ui(x, show_scratchpad=False, show_calls=False):
 
 
 class LLMInterface:
-    def __init__(self, system_prompt, llm, llm_tools, rpg, output_mode="chat_bot"):
+    def __init__(
+        self,
+        system_prompt,
+        llm,
+        llm_tools,
+        rpg,
+        output_mode="chat_bot",
+        chat_log_folder="chat_logs",
+    ):
         """Constructor
 
         Arguments
@@ -50,11 +58,13 @@ class LLMInterface:
         rpg: Instance of RAGPromptGenerator. Needs to have post_anti_hallucination property
         output_mode: chat_bot uses Gradio customized chatbot that has to
             receive the whole history. Otherwise uses gradio chatinterface
+        chat_log_folder: folder to save chat to. If None, does not save chat
         """
         self.system_prompt = system_prompt
         self.llm = llm
         self.lt = llm_tools
         self.rpg = rpg
+        self.chat_log_folder = chat_log_folder
 
         # keep a hash of histories so we can send to the UI
         # something different than what has been generated
@@ -80,9 +90,7 @@ class LLMInterface:
             self.tool_invoker_fn = None
             self.extra_stop_sequences = ["</function_calls>"]
 
-    def _format_msg(
-        self, x, message, chat_history, include_logs=False, show_ans_only=False
-    ):
+    def _format_msg(self, x, message, chat_history, show_ans_only=False):
         # the "<path_to_" substring from native tools has to be appended to the final answer for file display
         if self.output_mode == "chat_interface":
             return _adjust_msg_for_gradio_ui(x)
@@ -166,11 +174,6 @@ class LLMInterface:
                     + func_call_info[-1].split("</function_calls>")[0]
                 )
 
-            # retrieve last log
-            if include_logs:
-                cur_log = self.log[-1]
-                scratchpad_info = scratchpad_info + "\n" + str(cur_log)
-
             # make sure to send ChatBot history last
             return "", scratchpad_info, None, cur_history
 
@@ -179,7 +182,14 @@ class LLMInterface:
         return str([x for x in history if x[0] is not None])
 
     def chat_with_function_caller(self, msg, image, ui_history=[], username=""):
-        """Performs conversation with the LLM agent"""
+        """Performs conversation with the LLM agent
+
+        Arguments:
+            msg: next user message
+            image: user input image
+            ui_history: history in the user interface. The first is used to recover the state in memory
+            username: user name of the user logged in the UI
+        """
         image_string = None
         if image is not None:
             npimg = np.array(image, dtype=np.uint8)
@@ -190,8 +200,6 @@ class LLMInterface:
 
         t0 = time.time()
 
-        cur_log = {"Function calls": []}
-
         if len(ui_history) > 0:
             chat_id = ui_history[0]["content"]
             history = self.history_log[chat_id]
@@ -201,9 +209,6 @@ class LLMInterface:
             chat_id = str(uuid.uuid4())
             ui_history = [{"role": "assistant", "content": chat_id}]
             history = []
-
-        cur_log["Prepare initial prompt"] = {"exec_time": time.time() - t0}
-        t0 = time.time()
 
         ans2 = self.llm(
             msg,
@@ -218,18 +223,13 @@ class LLMInterface:
             tool_invoker_fn=self.lt.invoke_tool if self.lt is not None else None,
         )
 
+        x = ""
         for x in ans2:
-            # pass
             yield self._format_msg(x, msg, ui_history)
         # initial_ans = self._format_msg(x, msg, ui_history)
         # yield initial_ans
 
         cur_answer = x
-        cur_log["Compute initial response"] = {
-            "exec_time": time.time() - t0,
-            "word_count": self.llm.word_counts[-1],
-        }
-        t0 = time.time()
 
         cur_answer_split = cur_answer.split("<function_calls>")
         while (
@@ -277,10 +277,6 @@ class LLMInterface:
             last_update = cur_answer.replace(cur_postpend, "")
             cur_answer_split = last_update.split("<function_calls>")
 
-            cur_log["Function calls"].append(cur_func_log)
-
-        self.log.append(cur_log)
-
         history_to_append = []
         tool_results = []
         if hasattr(self.llm, "tool_use_added_msgs"):
@@ -317,12 +313,23 @@ class LLMInterface:
         self.history_log[chat_id] = history + history_to_append
 
         try:
-            chat_log_dir = "chat_logs"
-            os.makedirs(chat_log_dir, exist_ok=True)
-            with open(f"{chat_log_dir}/{chat_id}.json", "w", encoding="utf-8") as f:
-                f.write(json.dumps(self.history_log[chat_id]))
-        except:
-            pass
+            chat_log_dir = self.chat_log_folder
+            if username is not None and username.strip() != "":
+                cur_user_to_log = username
+            else:
+                cur_user_to_log = "unknown"
+            if chat_log_dir is not None:
+                os.makedirs(chat_log_dir, exist_ok=True)
+                with open(
+                    f"{chat_log_dir}/{cur_user_to_log}-{chat_id}.json",
+                    "w",
+                    encoding="utf-8",
+                ) as f:
+                    f.write(json.dumps(self.history_log[chat_id]))
+        except Exception as ex:
+            print(
+                f"Could not log chat to folder `{self.chat_log_folder}`. Reason: {str(ex)}"
+            )
 
         final_response_ui = self._format_msg(cur_answer + tool_results, msg, ui_history)
         yield final_response_ui

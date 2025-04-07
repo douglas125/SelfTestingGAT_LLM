@@ -17,15 +17,18 @@ from .update_user_details import ToolUpdateUserDetails
 from .use_ffmpeg import ToolUseFFMPEG
 from .plot_with_graphviz import ToolPlotWithGraphviz
 from .text_to_speech import ToolTextToSpeech
-from .query_database import SampleOrder_LLM_DB
+from .speech_to_text import ToolSpeechToText
 from .summarize_past import ToolSummarizePast
 from .text_to_image import ToolTextToImage
+from .query_database import ToolQueryLLMDB
+from .query_database import SampleOrder_LLM_DB
+from .run_with_python import ToolRunWithPython
 
 rng = np.random.default_rng()
 
 
 class LLMTools:
-    def get_all_tools(query_llm):
+    def get_all_tools():
         """Returns a list of all tools available"""
         return [
             ToolDoDateMath(),
@@ -33,7 +36,7 @@ class LLMTools:
             ToolMakeCustomPlot(),
             ToolSolveSymbolic(),
             ToolSolveNumeric(),
-            ToolGetUrlContent(query_llm),
+            ToolGetUrlContent(None),
             ToolMakeQRCode(),
             ToolReadLocalFile(),
             ToolWriteLocalFile(),
@@ -42,9 +45,11 @@ class LLMTools:
             ToolSolvePythonCode(),
             ToolPlotWithGraphviz(),
             ToolTextToSpeech(),
+            ToolSpeechToText(),
             ToolTextToImage(),
             ToolSummarizePast(),
-            # tool_query_db.ToolQueryLLMDB(SampleOrder_LLM_DB()),
+            ToolQueryLLMDB(SampleOrder_LLM_DB()),
+            ToolRunWithPython(),
         ]
 
     def __init__(self, query_llm=None, desired_tools=None):
@@ -63,12 +68,14 @@ class LLMTools:
                 ToolReadLocalFolder(),
                 ToolUseFFMPEG(),
                 ToolPlotWithGraphviz(),
+                ToolRunWithPython(),
                 # Being left out for now. Just uncomment to enable
                 # ToolSummarizePast(),
                 # ToolUpdateUserDetails(),
-                # tool_query_db.ToolQueryLLMDB(tool_query_db.SampleOrder_LLM_DB()),
+                # ToolQueryLLMDB(SampleOrder_LLM_DB()),
                 # ToolSolvePythonCode(),
                 ToolTextToSpeech(),
+                ToolSpeechToText(),
                 ToolTextToImage(),
             ]
         else:
