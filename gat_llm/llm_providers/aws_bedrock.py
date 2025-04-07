@@ -7,12 +7,20 @@ from .base_service import LLM_Service
 
 
 class LLM_Claude3_Bedrock(LLM_Service):
-    def __init__(self, bedrock_client, model_size):
+    def __init__(self, bedrock_client, model_size, use_caching=True):
         """Constructor
         Arguments:
             bedrock_client - Instance of boto3.client(service_name='bedrock-runtime')
                 to use when making calls to bedrock models
+            model_size - type of model
+            use_caching - optimize pricing and speed by using caching for prompt and tools
         """
+        # Only 2 Claude models from Bedrock support caching at the moment
+        if model_size in ["Sonnet 3.7", "Haiku 3.5"]:
+            self.use_caching = use_caching
+        else:
+            self.use_caching = False
+
         if model_size == "Opus":
             self.model_id = "anthropic.claude-3-opus-20240229-v1:0"
             self.llm_description = (
@@ -124,9 +132,25 @@ class LLM_Claude3_Bedrock(LLM_Service):
         body["system"] = prompt["system"]
         body["messages"] = prompt["messages"].copy()
 
+        # apply caching to System Prompt
+        if self.use_caching:
+            if isinstance(body["system"], str):
+                body["system"] = [
+                    {
+                        "type": "text",
+                        "text": body["system"],
+                        "cache_control": {"type": "ephemeral"},
+                    }
+                ]
+            elif isinstance(body["system"], list):
+                body["system"][-1]["cache_control"] = {"type": "ephemeral"}
+
         if tools is None:
             body["messages"].append({"role": "assistant", "content": postpend})
         else:
+            if self.use_caching:
+                # if caching, append the caching structure to the last tool
+                tools[-1]["cache_control"] = {"type": "ephemeral"}
             body["tools"] = tools
             assert postpend == "", "When using tools, postpend is not supported"
             assert (
@@ -135,12 +159,12 @@ class LLM_Claude3_Bedrock(LLM_Service):
 
         for k in range(max_retries):
             try:
-                # print(body)
                 llm_body_changed = True
                 while llm_body_changed:
                     llm_body_changed = False
                     response = self.bedrock_client.invoke_model_with_response_stream(
-                        modelId=self.model_id, body=json.dumps(body)
+                        modelId=self.model_id,
+                        body=json.dumps(body),
                     )
                     word_count = len(re.findall(r"\w+", str(body["messages"])))
                     print(f"Invoking {self.llm_description}. Word count: {word_count}")
@@ -153,9 +177,6 @@ class LLM_Claude3_Bedrock(LLM_Service):
                     cur_ans = x
 
                     if self.cur_tool_spec is not None:
-                        # tool use has been required. Let's do it
-                        # TODO: update upstream to reflect the inclusion of a response
-                        # TODO: probably rework gradio UI to re-instantiate things every chat, or keep an instance per chat ID
                         tool_ans = tool_invoker_fn(
                             self.cur_tool_spec["name"],
                             return_results_only=True,
@@ -216,6 +237,9 @@ class LLM_Claude3_Bedrock(LLM_Service):
         cur_tool_spec = None
         for x in response_body:
             out_dict = json.loads(x["chunk"]["bytes"])
+            if "type" in out_dict.keys() and out_dict["type"] == "message_start":
+                print(x)
+
             txt = ""
             if "content_block" in out_dict.keys():
                 if out_dict["content_block"]["type"] == "text":
