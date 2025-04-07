@@ -182,6 +182,7 @@ In 10 days from June 4, 2024, it will be June 14, 2024 (Friday). I've also gener
      export AWS_SECRET_ACCESS_KEY=your_aws_secret_key
      export ANTHROPIC_API_KEY=your_anthropic_key
      export OPENAI_API_KEY=your_openai_key
+	 export GROK_API_KEY=your_grok_key
 	 export MARITACA_API_KEY=your_maritaca_key
      ```
    - For Windows:
@@ -190,6 +191,7 @@ In 10 days from June 4, 2024, it will be June 14, 2024 (Friday). I've also gener
      set AWS_SECRET_ACCESS_KEY=your_aws_secret_key
      set ANTHROPIC_API_KEY=your_anthropic_key
      set OPENAI_API_KEY=your_openai_key
+	 set GROK_API_KEY=your_grok_key
 	 set MARITACA_API_KEY=your_maritaca_key
      ```
 
@@ -297,3 +299,10 @@ To run self-tests:
 The results are saved in CSV format, allowing for easy analysis and comparison of different LLM models and configurations.
 
 Use the utility functions in `self_tests/self_test_utils.py` to analyze the test results, including functions to detect invented tools, check for correct tool selection, and calculate performance scores.
+
+# Changelog
+
+## v0.1.4
+
+- Added Grok as LLM
+- Added caching to Claude Bedrock models (Haiku 3.5 and Sonnet 3.7)

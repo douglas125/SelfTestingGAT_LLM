@@ -15,7 +15,12 @@ class LLM_Claude3_Bedrock(LLM_Service):
             model_size - type of model
             use_caching - optimize pricing and speed by using caching for prompt and tools
         """
-        self.use_caching = use_caching
+        # Only 2 Claude models from Bedrock support caching at the moment
+        if model_size in ["Sonnet 3.7", "Haiku 3.5"]:
+            self.use_caching = use_caching
+        else:
+            self.use_caching = False
+
         if model_size == "Opus":
             self.model_id = "anthropic.claude-3-opus-20240229-v1:0"
             self.llm_description = (
@@ -154,16 +159,12 @@ class LLM_Claude3_Bedrock(LLM_Service):
 
         for k in range(max_retries):
             try:
-                # print(body)
                 llm_body_changed = True
                 while llm_body_changed:
                     llm_body_changed = False
                     response = self.bedrock_client.invoke_model_with_response_stream(
                         modelId=self.model_id,
                         body=json.dumps(body),
-                        explicitPromptCaching="enabled"
-                        if self.use_caching
-                        else "disabled",
                     )
                     word_count = len(re.findall(r"\w+", str(body["messages"])))
                     print(f"Invoking {self.llm_description}. Word count: {word_count}")
@@ -235,8 +236,10 @@ class LLM_Claude3_Bedrock(LLM_Service):
         cur_ans = ""
         cur_tool_spec = None
         for x in response_body:
-            print(x)
             out_dict = json.loads(x["chunk"]["bytes"])
+            if "type" in out_dict.keys() and out_dict["type"] == "message_start":
+                print(x)
+
             txt = ""
             if "content_block" in out_dict.keys():
                 if out_dict["content_block"]["type"] == "text":
