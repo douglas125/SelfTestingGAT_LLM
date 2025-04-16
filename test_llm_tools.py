@@ -72,11 +72,18 @@ def msg_forward_func(
     llm_name = selected_llm
     llm = inv.LLM_Provider.get_llm(bedrock_client, llm_name)
     query_llm = inv.LLM_Provider.get_llm(bedrock_client, llm_name)
-    lt = LLMTools(query_llm=query_llm, desired_tools=allowed_tool_list)
 
-    tool_descriptions = lt.get_tool_descriptions()
     rpg = RAGPromptGenerator(use_native_tools=use_native_LLM_tools)
-    system_prompt = rpg.prompt.replace("{{TOOLS}}", tool_descriptions)
+    if len(allowed_tools) == 0:
+        lt = None
+        tool_descriptions = None
+        system_prompt = rpg.prompt
+        rpg = None
+    else:
+        lt = LLMTools(query_llm=query_llm, desired_tools=allowed_tool_list)
+        tool_descriptions = lt.get_tool_descriptions()
+        system_prompt = rpg.prompt.replace("{{TOOLS}}", tool_descriptions)
+
     li = LLMInterface(system_prompt=system_prompt, llm=llm, llm_tools=lt, rpg=rpg)
     li.history_log = history_log
 

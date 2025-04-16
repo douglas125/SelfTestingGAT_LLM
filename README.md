@@ -306,3 +306,8 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 
 - Added Grok as LLM
 - Added caching to Claude Bedrock models (Haiku 3.5 and Sonnet 3.7)
+
+## v0.1.5
+
+- Changed the UI to show thinking / tools
+- Fixed a bug in `test_llm_tools.py` when no tools were selected

@@ -48,6 +48,7 @@ class LLMInterface:
         rpg,
         output_mode="chat_bot",
         chat_log_folder="chat_logs",
+        show_extra_info=True,
     ):
         """Constructor
 
@@ -59,12 +60,14 @@ class LLMInterface:
         output_mode: chat_bot uses Gradio customized chatbot that has to
             receive the whole history. Otherwise uses gradio chatinterface
         chat_log_folder: folder to save chat to. If None, does not save chat
+        show_extra_info: show extra info like tools used and scratchpad in the UI?
         """
         self.system_prompt = system_prompt
         self.llm = llm
         self.lt = llm_tools
         self.rpg = rpg
         self.chat_log_folder = chat_log_folder
+        self.show_extra_info = show_extra_info
 
         # keep a hash of histories so we can send to the UI
         # something different than what has been generated
@@ -90,7 +93,9 @@ class LLMInterface:
             self.tool_invoker_fn = None
             self.extra_stop_sequences = ["</function_calls>"]
 
-    def _format_msg(self, x, message, chat_history, show_ans_only=False):
+    def _format_msg(
+        self, x, message, chat_history, show_ans_only=False, extra_info=None
+    ):
         # the "<path_to_" substring from native tools has to be appended to the final answer for file display
         if self.output_mode == "chat_interface":
             return _adjust_msg_for_gradio_ui(x)
@@ -103,10 +108,24 @@ class LLMInterface:
                 cur_ans = ans_only[-1]
             elif show_ans_only:
                 cur_ans = ""
-            cur_history += [
-                {"role": "user", "content": message},
-                {"role": "assistant", "content": cur_ans},
-            ]
+
+            info_msg = None
+            if extra_info is None or not self.show_extra_info:
+                cur_history += [
+                    {"role": "user", "content": message},
+                    {"role": "assistant", "content": cur_ans},
+                ]
+            else:
+                info_msg = {
+                    "role": "assistant",
+                    "content": extra_info.get("content", ""),
+                    "metadata": extra_info["metadata"],
+                }
+                cur_history += [
+                    {"role": "user", "content": message},
+                    info_msg,
+                    {"role": "assistant", "content": cur_ans},
+                ]
 
             # find out if we should be showing an image
             image_candidates = x.split("<path_to_image>")
@@ -164,6 +183,10 @@ class LLMInterface:
                 scratchpad_info = scratchpad_info[-1].split("</scratchpad>")[0]
             else:
                 scratchpad_info = ""
+            if info_msg is not None:
+                info_msg["content"] = (
+                    extra_info.get("content", "") + "\n" + scratchpad_info
+                )
 
             # also put function calls in there
             func_call_info = x.split("<function_calls>")
@@ -223,9 +246,17 @@ class LLMInterface:
             tool_invoker_fn=self.lt.invoke_tool if self.lt is not None else None,
         )
 
+        extra_info = {
+            "metadata": {"title": "🧠", "status": "pending"},
+        }
         x = ""
         for x in ans2:
-            yield self._format_msg(x, msg, ui_history)
+            if self.lt is not None and hasattr(self.llm, "cur_tool_spec"):
+                extra_info = {
+                    "metadata": {"title": "🛠️", "status": "pending"},
+                    "content": ", ".join([x["tool_name"] for x in self.lt.invoke_log]),
+                }
+            yield self._format_msg(x, msg, ui_history, extra_info=extra_info)
         # initial_ans = self._format_msg(x, msg, ui_history)
         # yield initial_ans
 
@@ -331,6 +362,11 @@ class LLMInterface:
                 f"Could not log chat to folder `{self.chat_log_folder}`. Reason: {str(ex)}"
             )
 
-        final_response_ui = self._format_msg(cur_answer + tool_results, msg, ui_history)
+        extra_info["metadata"]["status"] = "done"
+        final_response_ui = self._format_msg(
+            cur_answer + tool_results, msg, ui_history, extra_info=extra_info
+        )
+        if self.lt is not None:
+            self.lt.invoke_log = []
         yield final_response_ui
         print("Final response sent.")
