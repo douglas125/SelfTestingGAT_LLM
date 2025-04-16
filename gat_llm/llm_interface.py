@@ -48,6 +48,7 @@ class LLMInterface:
         rpg,
         output_mode="chat_bot",
         chat_log_folder="chat_logs",
+        show_extra_info=True,
     ):
         """Constructor
 
@@ -59,12 +60,14 @@ class LLMInterface:
         output_mode: chat_bot uses Gradio customized chatbot that has to
             receive the whole history. Otherwise uses gradio chatinterface
         chat_log_folder: folder to save chat to. If None, does not save chat
+        show_extra_info: show extra info like tools used and scratchpad in the UI?
         """
         self.system_prompt = system_prompt
         self.llm = llm
         self.lt = llm_tools
         self.rpg = rpg
         self.chat_log_folder = chat_log_folder
+        self.show_extra_info = show_extra_info
 
         # keep a hash of histories so we can send to the UI
         # something different than what has been generated
@@ -107,7 +110,7 @@ class LLMInterface:
                 cur_ans = ""
 
             info_msg = None
-            if extra_info is None:
+            if extra_info is None or not self.show_extra_info:
                 cur_history += [
                     {"role": "user", "content": message},
                     {"role": "assistant", "content": cur_ans},
