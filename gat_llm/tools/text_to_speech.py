@@ -56,6 +56,22 @@ Raises ValueError: if not able to generate the audio.""",
                         "description": """Must be aws_polly or openai.
 Select the neural engine that will be used to generate the audio. Defaults to OpenAI text to speech. If not available, you must manually select the other.""",
                     },
+                    "instructions": {
+                        "type": "string",
+                        "description": """Use ONLY if tts_engine = openai.
+Optional parameter to control the voice of the generated audio with additional <aspects_of_speech></aspects_of_speech>.
+<aspects_of_speech>
+Accent
+Emotional range
+Intonation
+Impressions
+Speed of speech
+Tone
+Whispering
+</aspects_of_speech>
+You can prompt the model to control any combination of the <aspects_of_speech></aspects_of_speech> by giving a proper description for each item of interest.
+""",
+                    },
                 },
                 "required": ["input_text", "language"],
             },
@@ -69,6 +85,7 @@ Select the neural engine that will be used to generate the audio. Defaults to Op
         language,
         speaker_gender="female",
         tts_engine="openai",
+        instructions="",
         **kwargs,
     ):
         os.makedirs("media", exist_ok=True)
@@ -108,9 +125,10 @@ Select the neural engine that will be used to generate the audio. Defaults to Op
                             file.write(stream.read())
             elif tts_engine == "openai":
                 response = self.openai_client.audio.speech.create(
-                    model="tts-1",
+                    model="gpt-4o-mini-tts",
                     voice="onyx" if speaker_gender == "male" else "nova",
                     input=input_text,
+                    instructions=instructions,
                 )
 
                 response.stream_to_file(target_file)
