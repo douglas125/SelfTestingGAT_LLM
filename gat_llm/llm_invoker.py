@@ -48,6 +48,7 @@ class LLM_Provider:
         # Maritaca
         "Sabia3 - Maritaca",
         # OpenAI
+        "GPT 4.1 - OpenAI",
         "GPT 4o - OpenAI",
         "GPT 3.5 - OpenAI",
         "GPT 4o mini - OpenAI",
@@ -164,6 +165,8 @@ class LLM_Provider:
             return LLM_Claude3_Anthropic(model_size="Haiku 3.5 Anthropic")
 
         # OpenAI
+        elif llm == "GPT 4.1 - OpenAI":
+            return LLM_GPT_OpenAI(model_size="GPT4_1 OpenAI")
         elif llm == "GPT 3.5 - OpenAI":
             return LLM_GPT_OpenAI(model_size="GPT3_5 OpenAI")
         elif llm == "GPT 4o - OpenAI":

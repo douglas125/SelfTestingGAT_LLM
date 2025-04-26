@@ -36,11 +36,12 @@ class ToolTextToImage:
         if self.openai_client is None:
             self.openai_client = OpenAI()
         response = self.openai_client.images.generate(
-            model="dall-e-3",
+            model="gpt-image-1",
             prompt=input_text,
             n=1,
             size="1024x1024",
-            response_format="b64_json",
+            moderation="low",
+            output_format="png",
         )
         parsed_ans = json.loads(response.json())
         revised_prompt = parsed_ans["data"][0]["revised_prompt"]
@@ -52,7 +53,7 @@ class ToolTextToImage:
     def __init__(self):
         self.name = "text_to_image"
 
-        self.valid_engines = ["openai-dalle3", "bedrock-stablediffusion"]
+        self.valid_engines = ["openai-img", "bedrock-stablediffusion"]
         self.tool_description = {
             "name": self.name,
             "description": """Uses a text-to-image tool to convert the provided text into an image. Uses neural methods such as diffusion.
@@ -92,7 +93,7 @@ Raises ValueError: if not able to generate the image.""",
 
         if engine is None:
             if os.getenv("OPENAI_API_KEY"):
-                engine = "openai-dalle3"
+                engine = "openai-img"
             else:
                 engine = "bedrock-stablediffusion"
         engine = engine.lower()
@@ -101,7 +102,7 @@ Raises ValueError: if not able to generate the image.""",
             return f"Invalid text-to-image engine: {engine}. Valid engines are: {self.valid_engines}"
 
         try:
-            if engine == "openai-dalle3":
+            if engine == "openai-img":
                 revised_prompt = self._gen_img_openai(input_text, target_file)
             elif engine == "bedrock-stablediffusion":
                 revised_prompt = self._gen_img_bedrock(input_text, target_file)

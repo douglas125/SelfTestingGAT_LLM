@@ -36,6 +36,7 @@ With the current prompts, tools, descriptions and native tool configuration use 
 | ('DeepSeekV3 Chat - DeepSeek', False)     |                             1 |                79.4 |             89.6 |                          0.27  |                            1.1  |
 | ('Claude 3.5 Sonnet - Anthropic', False)  |                             0 |                78   |             89.5 |                          3     |                           15    |
 | ('GPT 4o - OpenAI', True)                 |                             1 |                79.9 |             89.4 |                          5     |                           15    |
+| ('GPT 4.1 - OpenAI', True)                |                             1 |                78.6 |             89   |                          2     |                            8    |
 | ('GPT 4o mini - OpenAI', True)            |                             3 |                79.9 |             89   |                          0.15  |                            0.6  |
 | ('Claude 3.5 Haiku - Anthropic', True)    |                             2 |                76.6 |             89   |                          1     |                            5    |
 | ('Amazon Nova Pro 1.0 - Bedrock', True)   |                             1 |                78   |             88.7 |                          0.8   |                            3.2  |
@@ -311,3 +312,8 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 
 - Changed the UI to show thinking / tools
 - Fixed a bug in `test_llm_tools.py` when no tools were selected
+
+## TBD
+
+- Add GPT 4.1 LLM
+- Add GPT 4.1 image generator
