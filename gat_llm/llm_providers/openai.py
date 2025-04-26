@@ -14,7 +14,14 @@ class LLM_GPT_OpenAI(LLM_Service):
                 to use when making calls to bedrock models
         """
         self.openai_client = None
-        if model_size == "GPT4o OpenAI":
+        if model_size == "GPT4_1 OpenAI":
+            self.model_id = "gpt-4.1-2025-04-14"
+            self.llm_description = (
+                "OpenAI GPT4.1 (Large-size LLM) - directly from OpenAI"
+            )
+            self.price_per_M_input_tokens = 2
+            self.price_per_M_output_tokens = 8
+        elif model_size == "GPT4o OpenAI":
             self.model_id = "gpt-4o-2024-05-13"
             self.llm_description = (
                 "OpenAI GPT4o (Large-size LLM) - directly from OpenAI"
