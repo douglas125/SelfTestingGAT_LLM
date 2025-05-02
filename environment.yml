@@ -19,6 +19,7 @@ dependencies:
   - ffmpeg
   - qrcode
   - matplotlib
+  - pillow
   - ipywidgets
   - pandas
   - lxml

@@ -39,7 +39,6 @@ class ToolTextToImage:
             model="gpt-image-1",
             prompt=input_text,
             n=1,
-            size="1024x1024",
             moderation="low",
             output_format="png",
         )
