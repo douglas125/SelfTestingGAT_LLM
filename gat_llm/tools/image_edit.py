@@ -12,7 +12,7 @@ rng = np.random.default_rng()
 
 def remove_semi_transparent_pixels(image_path: str) -> bytes:
     """
-    Opens an RGBA image, sets all pixels with alpha != 255 to fully transparent black (0,0,0,0),
+    Opens an RGBA image, sets all pixels with alpha != 255 to fully transparent black (0,0,0,0)
     and returns the resulting PNG image as bytes.
 
     :param image_path: Path to the input image.
@@ -125,7 +125,9 @@ path/to/image2.jpg
                 image_files = [x.strip() for x in image_files.splitlines()]
                 for f in image_files:
                     if not os.path.isfile(f):
-                        return f"Error: image file not found: {f}. Please check the path."
+                        return (
+                            f"Error: image file not found: {f}. Please check the path."
+                        )
                 self._gen_img_openai(image_files, prompt, mask_file, target_file)
         except Exception as e:
             return f"Image was NOT generated.\nError description: {str(e)}"
