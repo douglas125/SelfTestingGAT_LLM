@@ -1,23 +1,65 @@
 import os
 import json
 import base64
+from io import BytesIO
 
 import numpy as np
+from PIL import Image
 from openai import OpenAI
 
 rng = np.random.default_rng()
 
 
+def remove_semi_transparent_pixels(image_path: str) -> bytes:
+    """
+    Opens an RGBA image, sets all pixels with alpha != 255 to fully transparent black (0,0,0,0),
+    and returns the resulting PNG image as bytes.
+
+    :param image_path: Path to the input image.
+    :return: PNG-encoded image bytes.
+    """
+    # Load the image as RGBA
+    img = Image.open(image_path).convert("RGBA")
+
+    # Convert to NumPy array
+    arr = np.array(img)
+
+    # Mask for alpha not equal to 255
+    alpha_mask = arr[:, :, 3] != 255
+    not_alpha_mask = arr[:, :, 3] == 255
+
+    # Set affected pixels to fully transparent black
+    arr[alpha_mask] = [0, 0, 0, 0]
+    arr[not_alpha_mask] = [0, 0, 0, 255]
+
+    # Convert back to PIL Image
+    result_img = Image.fromarray(arr, mode="RGBA")
+
+    # Save to bytes
+    buf = BytesIO()
+    result_img.save(buf, format="PNG")
+    mask_bytes = buf.getvalue()
+    # Save the resulting file
+    with open(image_path, "wb") as f:
+        f.write(mask_bytes)
+
+
 class ToolImageEdit:
-    def _gen_img_openai(self, image_paths, prompt, target_file):
+    def _gen_img_openai(self, image_paths, prompt, mask_file, target_file):
         if self.openai_client is None:
             self.openai_client = OpenAI()
-        response = self.openai_client.images.edit(
-            model="gpt-image-1",
-            image=[open(x, "rb") for x in image_paths],
-            prompt=prompt,
-            n=1,
-        )
+
+        args = {
+            "model": "gpt-image-1",
+            "image": [open(x, "rb") for x in image_paths],
+            "prompt": prompt,
+            "n": 1,
+        }
+        if mask_file is not None:
+            remove_semi_transparent_pixels(mask_file)
+            args["mask"] = open(mask_file, "rb")
+
+        response = self.openai_client.images.edit(**args)
         parsed_ans = json.loads(response.json())
         revised_prompt = parsed_ans["data"][0]["revised_prompt"]
         img_content = base64.b64decode(parsed_ans["data"][0]["b64_json"])
@@ -30,7 +72,8 @@ class ToolImageEdit:
 
         self.tool_description = {
             "name": self.name,
-            "description": """Creates an edited or extended image given one or more source images and a prompt. The prompt should be precise and complete. In case of doubt, ask clarification questions to the user before calling this tool.
+            "description": """Creates an edited or extended image given one or more source images and a prompt. The prompt should be precise and complete. In case of doubt, ask clarification questions to the user before calling this tool. Never mention file names in the prompt because the image generation model only receives the bytes of each image,
+In all cases, including when using a mask, the prompt has to describe the entire resulting image, not just the area that is masked. When in doubt, ask the user to generate or clarify the full description.
 
 Raises ValueError: if not able to generate the image.""",
             "input_schema": {
@@ -48,6 +91,10 @@ path/to/image2.jpg
                         "type": "string",
                         "description": "A complete, descriptive prompt providing precise instructions about how to edit the images and what to generate as output.",
                     },
+                    "mask_file": {
+                        "type": "string",
+                        "description": "Full path to the image that will be used as mask. The fully transparent areas (e.g. where alpha is zero) indicate where image should be edited. If there are multiple images provided, the mask will be applied on the first image.",
+                    },
                 },
                 "required": ["image_files", "prompt"],
             },
@@ -58,6 +105,7 @@ path/to/image2.jpg
         self,
         image_files,
         prompt,
+        mask_file=None,
         engine=None,
         **kwargs,
     ):
@@ -78,7 +126,7 @@ path/to/image2.jpg
                 for f in image_files:
                     if not os.path.isfile(f):
                         return f"Error: image file not found: {f}. Please check the path."
-                self._gen_img_openai(image_files, prompt, target_file)
+                self._gen_img_openai(image_files, prompt, mask_file, target_file)
         except Exception as e:
             return f"Image was NOT generated.\nError description: {str(e)}"
 
