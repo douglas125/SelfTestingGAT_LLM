@@ -20,6 +20,7 @@ from .text_to_speech import ToolTextToSpeech
 from .speech_to_text import ToolSpeechToText
 from .summarize_past import ToolSummarizePast
 from .text_to_image import ToolTextToImage
+from .image_edit import ToolImageEdit
 from .query_database import ToolQueryLLMDB
 from .query_database import SampleOrder_LLM_DB
 from .run_with_python import ToolRunWithPython
@@ -47,6 +48,7 @@ class LLMTools:
             ToolTextToSpeech(),
             ToolSpeechToText(),
             ToolTextToImage(),
+            ToolImageEdit(),
             ToolSummarizePast(),
             ToolQueryLLMDB(SampleOrder_LLM_DB()),
             ToolRunWithPython(),
@@ -77,6 +79,7 @@ class LLMTools:
                 ToolTextToSpeech(),
                 ToolSpeechToText(),
                 ToolTextToImage(),
+                ToolImageEdit(),
             ]
         else:
             self.tools = desired_tools

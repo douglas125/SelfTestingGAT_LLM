@@ -106,7 +106,7 @@ def msg_forward_func(
 
 
 def main():
-    with gr.Blocks() as demo:
+    with gr.Blocks(title="Self-testing GAT Tools demo") as demo:
         gr.Markdown(description)
         with gr.Column():
             with gr.Row():
