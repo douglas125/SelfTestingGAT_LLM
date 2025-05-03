@@ -6,6 +6,7 @@ import gradio as gr
 import gat_llm.llm_invoker as inv
 from gat_llm.tools.base import LLMTools
 from gat_llm.llm_interface import LLMInterface
+from gat_llm.tools.speech_to_text import ToolSpeechToText
 from gat_llm.prompts.prompt_generator import RAGPromptGenerator
 
 
@@ -42,6 +43,37 @@ Maritaca: MARITACA_API_KEY (cannot be used with OpenAI models)
 
 # Keep track of previous conversations
 history_log = {}
+
+
+def process_audio_func(
+    audio_file,
+    img_input,
+    history,
+    system_prompt_prepend,
+    selected_llm,
+    use_native_LLM_tools,
+    allowed_tools,
+    request: gr.Request,
+):
+    tstt = ToolSpeechToText()
+    transcript = tstt(audio_file, language="pt", return_path_to_file_only=False)
+    try:
+        os.remove(audio_file)
+    except:
+        pass
+    msg = f"[Voice message]<msg>{transcript}</msg><general_instruction>Answer with audio if you can. Keep your answer concise and to the point. Unless requested, answer using the same language in the message. Unless requested otherwise, use the instructions parameter to specify a fast-paced clearly articulated voice.</general_instruction>"
+    ans_gen = msg_forward_func(
+        msg,
+        img_input,
+        history,
+        system_prompt_prepend,
+        selected_llm,
+        use_native_LLM_tools,
+        allowed_tools,
+        request,
+    )
+    for x in ans_gen:
+        yield None, *x
 
 
 def msg_forward_func(
@@ -105,7 +137,7 @@ def msg_forward_func(
     yield txtbox, scratchpad_info, img_input, cur_history, {"raw_history": raw_history}
 
 
-def main():
+def main(max_audio_duration=120):
     with gr.Blocks(title="Self-testing GAT Tools demo") as demo:
         gr.Markdown(description)
         with gr.Column():
@@ -166,12 +198,23 @@ def main():
                 interactive=True,
             )
 
-            msg2 = gr.Dropdown(
-                examples,
-                label="Question",
-                info="Select or type a question",
-                allow_custom_value=True,
-            )
+            with gr.Row():
+                with gr.Column(scale=3):
+                    msg2 = gr.Dropdown(
+                        examples,
+                        label="Question",
+                        info="Select or type a question",
+                        allow_custom_value=True,
+                    )
+                with gr.Column(scale=1):
+                    audio_msg = gr.Audio(
+                        label=f"Audio (max {max_audio_duration}s)",
+                        sources="microphone",
+                        type="filepath",
+                        max_length=max_audio_duration,
+                        format="mp3",
+                        visible=True,
+                    )
 
             with gr.Row():
                 send_btn = gr.Button("Send")
@@ -187,7 +230,7 @@ def main():
                     )
                 with gr.Column(scale=1):
                     image_input = gr.Image(label="Input Image")
-            clear_btn.add([image_input, chatbot])
+            clear_btn.add([image_input, chatbot, audio_msg])
             scratchpad = gr.Textbox(label="Scratchpad")
             sys_prompt_txt = gr.Text(label="System prompt prepend", value="")
         raw_history = gr.JSON(label="Raw history", open=False)
@@ -207,7 +250,20 @@ def main():
             outputs=[msg2, scratchpad, image_input, chatbot, raw_history],
             concurrency_limit=20,
         )
-
+        gr.on(
+            triggers=audio_msg.stop_recording,
+            fn=process_audio_func,
+            inputs=[
+                audio_msg,
+                image_input,
+                chatbot,
+                sys_prompt_txt,
+                box_llm_model,
+                chk_native_tools,
+                chk_tools,
+            ],
+            outputs=[audio_msg, msg2, scratchpad, image_input, chatbot, raw_history],
+        )
     demo.queue().launch(show_api=False, share=False, inline=False)
 
 

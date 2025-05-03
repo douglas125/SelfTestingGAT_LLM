@@ -31,15 +31,24 @@ Raises ValueError: if not able to read the audio or video file.""",
                 "required": ["audio_file_path", "language"],
             },
         }
-        self.polly_client = None
         self.openai_client = None
 
     def __call__(
         self,
         audio_file_path,
         language,
+        return_path_to_file_only=True,
         **kwargs,
     ):
+        """Creates a transcription of an audio file.
+
+        Arguments:
+          - audio_file_path: Path to the file that should be transcribed
+          - language: language in ISO format (e.g. en, pt, es, it)
+          - return_path_to_file_only: if True, writes a transcription file and returns it. If false, returns the transcription itself
+        Returns:
+          - The audio srt file or the full transcription
+        """
         os.makedirs("media", exist_ok=True)
         if len(kwargs) > 0:
             return f"Error: Unexpected parameter(s): {','.join([x for x in kwargs])}"
@@ -56,10 +65,15 @@ Raises ValueError: if not able to read the audio or video file.""",
         try:
             with open(audio_file_path, "rb") as audio_file:
                 transcript = self.openai_client.audio.transcriptions.create(
-                    model="whisper-1", response_format="srt", file=audio_file
+                    model="whisper-1",
+                    response_format="srt" if return_path_to_file_only else "text",
+                    file=audio_file,
                 )
-            with open(target_file, "w", encoding="UTF-8") as f:
-                f.write(str(transcript))
+            if return_path_to_file_only:
+                with open(target_file, "w", encoding="UTF-8") as f:
+                    f.write(str(transcript))
+            else:
+                return transcript
         except Exception as e:
             return f"Transcription was NOT generated.\nError description: {str(e)}"
 
