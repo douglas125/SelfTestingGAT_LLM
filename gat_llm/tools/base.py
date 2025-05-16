@@ -24,6 +24,7 @@ from .image_edit import ToolImageEdit
 from .query_database import ToolQueryLLMDB
 from .query_database import SampleOrder_LLM_DB
 from .run_with_python import ToolRunWithPython
+from .select_video_frames import ToolSelectVideoFrames
 
 rng = np.random.default_rng()
 
@@ -43,6 +44,7 @@ class LLMTools:
             ToolWriteLocalFile(),
             ToolReadLocalFolder(),
             ToolUseFFMPEG(),
+            ToolSelectVideoFrames(),
             ToolSolvePythonCode(),
             ToolPlotWithGraphviz(),
             ToolTextToSpeech(),
@@ -69,6 +71,7 @@ class LLMTools:
                 ToolWriteLocalFile(),
                 ToolReadLocalFolder(),
                 ToolUseFFMPEG(),
+                ToolSelectVideoFrames(),
                 ToolPlotWithGraphviz(),
                 ToolRunWithPython(),
                 # Being left out for now. Just uncomment to enable
