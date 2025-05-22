@@ -6,7 +6,7 @@ import anthropic
 from .base_service import LLM_Service
 
 
-class LLM_Claude3_Anthropic(LLM_Service):
+class LLM_Claude_Anthropic(LLM_Service):
     def __init__(self, model_size, use_caching=True):
         """Constructor
         Arguments:
@@ -15,7 +15,21 @@ class LLM_Claude3_Anthropic(LLM_Service):
         """
         self.use_caching = use_caching
         self.anthropic_client = anthropic.Anthropic()
-        if model_size == "Sonnet 3.7 Anthropic":
+        if model_size == "Opus 4 Anthropic":
+            self.model_id = "claude-opus-4-20250514"
+            self.llm_description = (
+                "Anthropic Claude 4 Opus (Large-size LLM) - directly from Anthropic"
+            )
+            self.price_per_M_input_tokens = 15
+            self.price_per_M_output_tokens = 75
+        elif model_size == "Sonnet 4 Anthropic":
+            self.model_id = "claude-sonnet-4-20250514"
+            self.llm_description = (
+                "Anthropic Claude 4 Sonnet (Medium-size LLM) - directly from Anthropic"
+            )
+            self.price_per_M_input_tokens = 3
+            self.price_per_M_output_tokens = 15
+        elif model_size == "Sonnet 3.7 Anthropic":
             self.model_id = "claude-3-7-sonnet-20250219"
             self.llm_description = "Anthropic Claude 3.7 Sonnet (Medium-size LLM) - directly from Anthropic"
             self.price_per_M_input_tokens = 3
