@@ -11,8 +11,8 @@ from .llm_providers.aws_bedrock import LLM_Claude_Instant_1_2_Bedrock
 
 # current
 from .llm_providers.openai import LLM_GPT_OpenAI
-from .llm_providers.anthropic import LLM_Claude3_Anthropic
-from .llm_providers.aws_bedrock import LLM_Claude3_Bedrock
+from .llm_providers.anthropic import LLM_Claude_Anthropic
+from .llm_providers.aws_bedrock import LLM_Claude_Bedrock
 from .llm_providers.aws_bedrock import LLM_Mistral_Bedrock
 from .llm_providers.aws_bedrock_cohere import LLM_Command_Cohere
 from .llm_providers.maritaca import LLM_Maritalk
@@ -25,6 +25,8 @@ warnings.simplefilter("always", DeprecationWarning)
 
 class LLM_Provider:
     outdated_llms = [
+        "Claude 3.5 Sonnet - Anthropic",
+        "Claude 3.5 Sonnet - Bedrock",
         "Claude 3 Opus - Anthropic",
         "Claude 3 Haiku - Anthropic",
         "Claude 3 Haiku - Bedrock",
@@ -53,11 +55,13 @@ class LLM_Provider:
         "GPT 3.5 - OpenAI",
         "GPT 4o mini - OpenAI",
         # Anthropic
+        "Claude 4 Opus - Anthropic",
+        "Claude 4 Sonnet - Anthropic",
+        "Claude 4 Opus - Bedrock",
+        "Claude 4 Sonnet - Bedrock",
         "Claude 3.7 Sonnet - Anthropic",
-        "Claude 3.5 Sonnet - Anthropic",
         "Claude 3.5 Haiku - Anthropic",
         "Claude 3.7 Sonnet - Bedrock",
-        "Claude 3.5 Sonnet - Bedrock",
         "Claude 3.5 Haiku - Bedrock",
         # Misc
         "DeepSeekV3 Chat - DeepSeek",
@@ -140,29 +144,37 @@ class LLM_Provider:
 
         # Legacy Claude
         elif llm == "Claude 3 Opus - Bedrock":
-            return LLM_Claude3_Bedrock(bedrock_client, model_size="Opus")
+            return LLM_Claude_Bedrock(bedrock_client, model_size="Opus")
         elif llm == "Claude 3 Sonnet - Bedrock":
-            return LLM_Claude3_Bedrock(bedrock_client, model_size="Sonnet")
+            return LLM_Claude_Bedrock(bedrock_client, model_size="Sonnet")
         elif llm == "Claude 3 Haiku - Bedrock":
-            return LLM_Claude3_Bedrock(bedrock_client, model_size="Haiku")
+            return LLM_Claude_Bedrock(bedrock_client, model_size="Haiku")
         elif llm == "Claude 3 Opus - Anthropic":
-            return LLM_Claude3_Anthropic(model_size="Opus 3 Anthropic")
+            return LLM_Claude_Anthropic(model_size="Opus 3 Anthropic")
         elif llm == "Claude 3 Haiku - Anthropic":
-            return LLM_Claude3_Anthropic(model_size="Haiku 3 Anthropic")
+            return LLM_Claude_Anthropic(model_size="Haiku 3 Anthropic")
 
         # current Claude
+        elif llm == "Claude 4 Sonnet - Anthropic":
+            return LLM_Claude_Anthropic(model_size="Sonnet 4 Anthropic")
+        elif llm == "Claude 4 Opus - Anthropic":
+            return LLM_Claude_Anthropic(model_size="Opus 4 Anthropic")
+        elif llm == "Claude 4 Sonnet - Bedrock":
+            return LLM_Claude_Bedrock(bedrock_client, model_size="Sonnet 4")
+        elif llm == "Claude 4 Opus - Bedrock":
+            return LLM_Claude_Bedrock(bedrock_client, model_size="Opus 4")
         elif llm == "Claude 3.7 Sonnet - Bedrock":
-            return LLM_Claude3_Bedrock(bedrock_client, model_size="Sonnet 3.7")
+            return LLM_Claude_Bedrock(bedrock_client, model_size="Sonnet 3.7")
         elif llm == "Claude 3.5 Sonnet - Bedrock":
-            return LLM_Claude3_Bedrock(bedrock_client, model_size="Sonnet 3.5")
+            return LLM_Claude_Bedrock(bedrock_client, model_size="Sonnet 3.5")
         elif llm == "Claude 3.5 Haiku - Bedrock":
-            return LLM_Claude3_Bedrock(bedrock_client, model_size="Haiku 3.5")
+            return LLM_Claude_Bedrock(bedrock_client, model_size="Haiku 3.5")
         elif llm == "Claude 3.5 Sonnet - Anthropic":
-            return LLM_Claude3_Anthropic(model_size="Sonnet 3.5 Anthropic")
+            return LLM_Claude_Anthropic(model_size="Sonnet 3.5 Anthropic")
         elif llm == "Claude 3.7 Sonnet - Anthropic":
-            return LLM_Claude3_Anthropic(model_size="Sonnet 3.7 Anthropic")
+            return LLM_Claude_Anthropic(model_size="Sonnet 3.7 Anthropic")
         elif llm == "Claude 3.5 Haiku - Anthropic":
-            return LLM_Claude3_Anthropic(model_size="Haiku 3.5 Anthropic")
+            return LLM_Claude_Anthropic(model_size="Haiku 3.5 Anthropic")
 
         # OpenAI
         elif llm == "GPT 4.1 - OpenAI":

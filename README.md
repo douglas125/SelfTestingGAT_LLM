@@ -313,7 +313,12 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 - Changed the UI to show thinking / tools
 - Fixed a bug in `test_llm_tools.py` when no tools were selected
 
-## TBD
+## v0.1.6
 
 - Add GPT 4.1 LLM
 - Add GPT 4.1 image generator
+- Add Claude 4 (from Anthropic)
+
+## TBD
+
+-

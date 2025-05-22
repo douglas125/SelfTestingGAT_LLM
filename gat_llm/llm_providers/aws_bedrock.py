@@ -6,7 +6,7 @@ from typing import Dict, List
 from .base_service import LLM_Service
 
 
-class LLM_Claude3_Bedrock(LLM_Service):
+class LLM_Claude_Bedrock(LLM_Service):
     def __init__(self, bedrock_client, model_size, use_caching=True):
         """Constructor
         Arguments:
@@ -21,7 +21,21 @@ class LLM_Claude3_Bedrock(LLM_Service):
         else:
             self.use_caching = False
 
-        if model_size == "Opus":
+        if model_size == "Sonnet 4":
+            self.model_id = "us.anthropic.claude-sonnet-4-20250514-v1:0"
+            self.llm_description = (
+                "Anthropic Claude 4 Sonnet from AWS Bedrock (Medium-size LLM)"
+            )
+            self.price_per_M_input_tokens = 3
+            self.price_per_M_output_tokens = 15
+        elif model_size == "Opus 4":
+            self.model_id = "us.anthropic.claude-opus-4-20250514-v1:0"
+            self.llm_description = (
+                "Anthropic Claude 4 Opus from AWS Bedrock (Large-size LLM)"
+            )
+            self.price_per_M_input_tokens = 15
+            self.price_per_M_output_tokens = 75
+        elif model_size == "Opus":
             self.model_id = "anthropic.claude-3-opus-20240229-v1:0"
             self.llm_description = (
                 "Anthropic Claude 3.0 Opus from AWS Bedrock (Large LLM)"
