@@ -66,7 +66,7 @@ class LLM_GPT_OpenAI(LLM_Service):
         return ans
 
     def _prepare_call_list_from_history(
-        self, system_prompt, msg, b64image, chat_history
+        self, system_prompt, msg, b64images, chat_history
     ):
         """Prepares the prompt for the next interaction with the LLM"""
         history_list = [
@@ -79,23 +79,24 @@ class LLM_GPT_OpenAI(LLM_Service):
                 history_list.append({"role": "user", "content": x[0]})
                 history_list.append({"role": "assistant", "content": str(x[1])})
 
-        if b64image is None:
+        if b64images is None:
             history_list.append({"role": "user", "content": msg})
         else:
-            history_list.append(
-                {
-                    "role": "user",
-                    "content": [
+            if not isinstance(b64images, list):
+                b64images = [b64images]
+            cur_content = []
+            for b64img in b64images:
+                if b64img is not None:
+                    cur_content.append(
                         {
                             "type": "image_url",
                             "image_url": {
-                                "url": f"data:image/jpeg;base64,{b64image}",
+                                "url": f"data:image/jpeg;base64,{b64img}",
                             },
                         },
-                        {"type": "text", "text": msg},
-                    ],
-                }
-            )
+                    )
+            cur_content.append({"type": "text", "text": msg})
+            history_list.append({"role": "user", "content": cur_content})
         return history_list
 
     def invoke_streaming(

@@ -5,9 +5,10 @@ import time
 
 from openai import OpenAI
 from .base_service import LLM_Service
+from .openai import LLM_GPT_OpenAI
 
 
-class LLM_Grok(LLM_Service):
+class LLM_Grok(LLM_GPT_OpenAI):
     def __init__(self, model_size):
         """Constructor
         Arguments:

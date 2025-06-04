@@ -12,7 +12,7 @@ class LLM_Service:
     def __call__(
         self,
         msg,
-        b64image=None,
+        b64images=None,
         system_prompt="You are a helpful assistant. Do not use emojis in the answers.",
         chat_history=[],
         postpend="",
@@ -32,7 +32,7 @@ class LLM_Service:
             extra_stop_sequences, list
         ), "extra_stop_sequences should be a list of strings"
         call_list = self._prepare_call_list_from_history(
-            system_prompt, msg, b64image, chat_history
+            system_prompt, msg, b64images, chat_history
         )
         prompt = self._prepare_prompt_from_list(call_list)
         self.last_prompt = str(prompt) + postpend
@@ -59,7 +59,7 @@ class LLM_Service:
         self,
         system_prompt,
         msg,
-        b64image,
+        b64images,
         chat_history,
         context_reset_string="[|[PAST_FORGOTTEN]|]",
     ):
@@ -85,23 +85,24 @@ class LLM_Service:
                 history_list.append({"role": "user", "content": x[0]})
                 history_list.append({"role": "assistant", "content": str(x[1])})
 
-        if b64image is None:
+        if b64images is None:
             history_list.append({"role": "user", "content": msg})
         else:
-            history_list.append(
-                {
-                    "role": "user",
-                    "content": [
+            if not isinstance(b64images, list):
+                b64images = [b64images]
+            cur_content = []
+            for b64img in b64images:
+                if b64img is not None:
+                    cur_content.append(
                         {
                             "type": "image",
                             "source": {
                                 "type": "base64",
                                 "media_type": "image/jpeg",
-                                "data": b64image,
+                                "data": b64img,
                             },
                         },
-                        {"type": "text", "text": msg},
-                    ],
-                }
-            )
+                    )
+            cur_content.append({"type": "text", "text": msg})
+            history_list.append({"role": "user", "content": cur_content})
         return history_list

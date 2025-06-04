@@ -47,7 +47,9 @@ history_log = {}
 
 def process_audio_func(
     audio_file,
-    img_input,
+    img_input_1,
+    img_input_2,
+    img_input_3,
     history,
     system_prompt_prepend,
     selected_llm,
@@ -56,7 +58,7 @@ def process_audio_func(
     request: gr.Request,
 ):
     tstt = ToolSpeechToText()
-    transcript = tstt(audio_file, language="pt", return_path_to_file_only=False)
+    transcript = tstt(audio_file, language="en", return_path_to_file_only=False)
     try:
         os.remove(audio_file)
     except:
@@ -64,7 +66,9 @@ def process_audio_func(
     msg = f"[Voice message]<msg>{transcript}</msg><general_instruction>Answer with audio if you can. Keep your answer concise and to the point. Unless requested, answer using the same language in the message. Unless requested otherwise, use the instructions parameter to specify a fast-paced clearly articulated voice.</general_instruction>"
     ans_gen = msg_forward_func(
         msg,
-        img_input,
+        img_input_1,
+        img_input_2,
+        img_input_3,
         history,
         system_prompt_prepend,
         selected_llm,
@@ -78,7 +82,9 @@ def process_audio_func(
 
 def msg_forward_func(
     msg,
-    img_input,
+    img_input_1,
+    img_input_2,
+    img_input_3,
     history,
     system_prompt_prepend,
     selected_llm,
@@ -125,16 +131,31 @@ def msg_forward_func(
     if msg is None or msg.strip() == "":
         msg = "perform task"
 
-    ans_gen = li.chat_with_function_caller(
-        msg, img_input, history, username=request.username
-    )
+    if img_input_1 is None and img_input_2 is None and img_input_3 is None:
+        ans_gen = li.chat_with_function_caller(
+            msg, None, history, username=request.username
+        )
+    elif img_input_1 is not None and img_input_2 is None and img_input_3 is None:
+        ans_gen = li.chat_with_function_caller(
+            msg, [img_input_1], history, username=request.username
+        )
+    else:
+        ans_gen = li.chat_with_function_caller(
+            msg,
+            [img_input_1, img_input_2, img_input_3],
+            history,
+            username=request.username,
+        )
+
     for x in ans_gen:
-        txtbox, scratchpad_info, img_input, cur_history = x
-        yield txtbox, scratchpad_info, img_input, cur_history, []
+        txtbox, scratchpad_info, img_input_1, cur_history = x
+        yield txtbox, scratchpad_info, None, None, None, cur_history, []
 
     chat_id = cur_history[0]["content"]
     raw_history = li.history_log[chat_id]
-    yield txtbox, scratchpad_info, img_input, cur_history, {"raw_history": raw_history}
+    yield txtbox, scratchpad_info, None, None, None, cur_history, {
+        "raw_history": raw_history
+    }
 
 
 def main(max_audio_duration=120):
@@ -229,8 +250,12 @@ def main(max_audio_duration=120):
                         height=600,
                     )
                 with gr.Column(scale=1):
-                    image_input = gr.Image(label="Input Image")
-            clear_btn.add([image_input, chatbot, audio_msg])
+                    image_input_1 = gr.Image(label="Input Image 1")
+                    image_input_2 = gr.Image(label="Input Image 2")
+                    image_input_3 = gr.Image(label="Input Image 3")
+            clear_btn.add(
+                [image_input_1, image_input_2, image_input_3, chatbot, audio_msg]
+            )
             scratchpad = gr.Textbox(label="Scratchpad")
             sys_prompt_txt = gr.Text(label="System prompt prepend", value="")
         raw_history = gr.JSON(label="Raw history", open=False)
@@ -240,14 +265,24 @@ def main(max_audio_duration=120):
             fn=msg_forward_func,
             inputs=[
                 msg2,
-                image_input,
+                image_input_1,
+                image_input_2,
+                image_input_3,
                 chatbot,
                 sys_prompt_txt,
                 box_llm_model,
                 chk_native_tools,
                 chk_tools,
             ],
-            outputs=[msg2, scratchpad, image_input, chatbot, raw_history],
+            outputs=[
+                msg2,
+                scratchpad,
+                image_input_1,
+                image_input_2,
+                image_input_3,
+                chatbot,
+                raw_history,
+            ],
             concurrency_limit=20,
         )
         gr.on(
@@ -255,14 +290,25 @@ def main(max_audio_duration=120):
             fn=process_audio_func,
             inputs=[
                 audio_msg,
-                image_input,
+                image_input_1,
+                image_input_2,
+                image_input_3,
                 chatbot,
                 sys_prompt_txt,
                 box_llm_model,
                 chk_native_tools,
                 chk_tools,
             ],
-            outputs=[audio_msg, msg2, scratchpad, image_input, chatbot, raw_history],
+            outputs=[
+                audio_msg,
+                msg2,
+                scratchpad,
+                image_input_1,
+                image_input_2,
+                image_input_3,
+                chatbot,
+                raw_history,
+            ],
         )
     demo.queue().launch(show_api=False, share=False, inline=False)
 

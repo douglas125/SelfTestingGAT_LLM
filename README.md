@@ -317,7 +317,11 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 
 - Add GPT 4.1 LLM
 - Add GPT 4.1 image generator
-- Add Claude 4 (from Anthropic)
+- Add Claude 4 (Anthropic and Bedrock)
+
+## v0.1.7
+
+- Enable multiple images per user message
 
 ## TBD
 
