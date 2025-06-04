@@ -204,7 +204,7 @@ class LLMInterface:
         """Returns a copy of history but with None messages from users removed"""
         return str([x for x in history if x[0] is not None])
 
-    def chat_with_function_caller(self, msg, image, ui_history=[], username=""):
+    def chat_with_function_caller(self, msg, images, ui_history=[], username=""):
         """Performs conversation with the LLM agent
 
         Arguments:
@@ -213,13 +213,21 @@ class LLMInterface:
             ui_history: history in the user interface. The first is used to recover the state in memory
             username: user name of the user logged in the UI
         """
-        image_string = None
-        if image is not None:
-            npimg = np.array(image, dtype=np.uint8)
-            pil_img = Image.fromarray(npimg)
-            buff = BytesIO()
-            pil_img.save(buff, format="JPEG")
-            image_string = base64.b64encode(buff.getvalue()).decode("utf-8")
+        image_strings = None
+        if images is not None:
+            image_strings = []
+            if not isinstance(images, list):
+                images = [images]
+            for image in images:
+                if image is None:
+                    image_strings.append(None)
+                else:
+                    npimg = np.array(image, dtype=np.uint8)
+                    pil_img = Image.fromarray(npimg)
+                    buff = BytesIO()
+                    pil_img.save(buff, format="JPEG")
+                    image_string = base64.b64encode(buff.getvalue()).decode("utf-8")
+                    image_strings.append(image_string)
 
         t0 = time.time()
 
@@ -235,7 +243,7 @@ class LLMInterface:
 
         ans2 = self.llm(
             msg,
-            b64image=image_string,
+            b64images=image_strings,
             system_prompt=self.system_prompt,
             chat_history=history,
             postpend=self.rpg.post_anti_hallucination
