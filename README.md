@@ -325,4 +325,4 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 
 ## TBD
 
--
+- Include Ollama as a local LLM provider

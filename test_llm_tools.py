@@ -186,7 +186,7 @@ def main(max_audio_duration=120):
                     ]
                 if os.environ.get("DEEPSEEK_API_KEY") is None:
                     available_models = [
-                        "[UNAVAILABLE] " + x if "deepseek" in x.lower() else x
+                        "[UNAVAILABLE] " + x if "- deepseek" in x.lower() else x
                         for x in available_models
                     ]
                 if (

@@ -20,6 +20,10 @@ from .llm_providers.aws_bedrock_nova import LLM_Nova_Bedrock
 from .llm_providers.deepseek import LLM_Deepseek
 from .llm_providers.grok import LLM_Grok
 
+# local
+from .llm_providers.ollama import LLM_Ollama
+
+
 warnings.simplefilter("always", DeprecationWarning)
 
 
@@ -41,6 +45,12 @@ class LLM_Provider:
     ]
 
     allowed_llms = [
+        # Local
+        "Qwen 3 8b - Ollama",
+        "Qwen 3 14b - Ollama",
+        "Llama4 16x17b - Ollama",
+        "Qwen 2.5vl 7b - Ollama",
+        "DeepSeek R1 14b - Ollama",
         # AWS
         "Amazon Nova Micro 1.0 - Bedrock",
         "Amazon Nova Lite 1.0 - Bedrock",
@@ -96,6 +106,18 @@ class LLM_Provider:
             return LLM_Llama13b(bedrock_client)
         elif llm == "Llama2 70b":
             return LLM_Llama70b(bedrock_client)
+
+        # Local - Ollama
+        elif llm == "Llama4 16x17b - Ollama":
+            return LLM_Ollama(model="Llama4 16x17b Ollama")
+        elif llm == "Qwen 3 8b - Ollama":
+            return LLM_Ollama(model="Qwen 3 8b Ollama")
+        elif llm == "Qwen 3 14b - Ollama":
+            return LLM_Ollama(model="Qwen 3 14b Ollama")
+        elif llm == "Qwen 2.5vl 7b - Ollama":
+            return LLM_Ollama(model="Qwen 2.5vl 7b Ollama")
+        elif llm == "DeepSeek R1 14b - Ollama":
+            return LLM_Ollama(model="DeepSeek R1 14b Ollama")
 
         # Amazon
         elif llm == "Amazon Nova Micro 1.0 - Bedrock":
