@@ -20,6 +20,7 @@ dependencies:
   - qrcode
   - matplotlib
   - pillow
+  - pdf2image
   - ipywidgets
   - pandas
   - lxml
@@ -29,7 +30,9 @@ dependencies:
   - coverage
   - pytest
   - pytest-timeout
+  - pypdf
   - pip:
       - gradio
       - anthropic
       - openai
+      - markitdown[all]

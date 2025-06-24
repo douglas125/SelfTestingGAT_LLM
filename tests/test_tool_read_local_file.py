@@ -16,7 +16,6 @@ def test_file_read(mock_isfile, mock_open_file):
     ans = trlf("media/file.txt")
 
     mock_isfile.assert_called_with("media/file.txt")
-    mock_open_file.assert_called_with("media/file.txt", "r", encoding="utf-8")
     assert "file_data" in ans
 
 
@@ -27,13 +26,6 @@ def test_files_read(mock_isfile, mock_open_file):
     ans = trlf("media/file.txt \n media/file2.txt")
 
     mock_isfile.assert_has_calls([call("media/file.txt"), call("media/file2.txt")])
-    mock_open_file.assert_has_calls(
-        [
-            call("media/file.txt", "r", encoding="utf-8"),
-            call("media/file2.txt", "r", encoding="utf-8"),
-        ],
-        any_order=True,
-    )
     assert "file_data" in ans
 
 

@@ -30,7 +30,7 @@ rng = np.random.default_rng()
 
 
 class LLMTools:
-    def get_all_tools():
+    def get_all_tools(query_llm=None):
         """Returns a list of all tools available"""
         return [
             ToolDoDateMath(),
@@ -38,9 +38,9 @@ class LLMTools:
             ToolMakeCustomPlot(),
             ToolSolveSymbolic(),
             ToolSolveNumeric(),
-            ToolGetUrlContent(None),
+            ToolGetUrlContent(query_llm),
             ToolMakeQRCode(),
-            ToolReadLocalFile(),
+            ToolReadLocalFile(query_llm),
             ToolWriteLocalFile(),
             ToolReadLocalFolder(),
             ToolUseFFMPEG(),
@@ -67,7 +67,7 @@ class LLMTools:
                 ToolSolveNumeric(),
                 ToolGetUrlContent(self.query_llm),
                 ToolMakeQRCode(),
-                ToolReadLocalFile(),
+                ToolReadLocalFile(self.query_llm),
                 ToolWriteLocalFile(),
                 ToolReadLocalFolder(),
                 ToolUseFFMPEG(),

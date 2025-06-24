@@ -2,6 +2,9 @@ boto3
 pandas
 lxml
 duckdb
+markitdown[all]
+pypdf
+pdf2image
 requests
 beautifulsoup4
 tabulate
