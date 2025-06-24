@@ -100,16 +100,16 @@ def msg_forward_func(
     )  # us-east-1  us-west-2
     bedrock_client = boto3.client(service_name="bedrock-runtime", config=config)
 
-    # Initialize LLM
-    allowed_tool_list = [
-        x
-        for x in LLMTools.get_all_tools()
-        if x.tool_description["name"] in allowed_tools
-    ]
-
     llm_name = selected_llm
     llm = inv.LLM_Provider.get_llm(bedrock_client, llm_name)
     query_llm = inv.LLM_Provider.get_llm(bedrock_client, llm_name)
+
+    # Initialize LLM
+    allowed_tool_list = [
+        x
+        for x in LLMTools.get_all_tools(query_llm)
+        if x.tool_description["name"] in allowed_tools
+    ]
 
     rpg = RAGPromptGenerator(use_native_tools=use_native_LLM_tools)
     if len(allowed_tools) == 0:
