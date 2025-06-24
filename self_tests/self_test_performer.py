@@ -40,7 +40,7 @@ class SelfTestPerformer(SelfTestBase):
                     "Example answers: <tool_use_plan>find_ticker_name</tool_use_plan>, <tool_use_plan>find_ticker_name,retrieve_price</tool_use_plan>"
                 )
                 q = "\n".join(q)
-                ans_gen = li.chat_with_function_caller(q, image=None, ui_history=[])
+                ans_gen = li.chat_with_function_caller(q, images=None, ui_history=[])
                 for x in ans_gen:
                     pass
                 tool_plan_answer = self._extract_answer(x)
@@ -72,6 +72,9 @@ class SelfTestPerformer(SelfTestBase):
 if __name__ == "__main__":
     # configure tests
     llms_to_test = [
+        {"model": "Qwen 3 8b - Ollama", "native_tools": True},
+        {"model": "Qwen 3 14b - Ollama", "native_tools": True},
+        {"model": "DeepSeek R1 14b - Ollama", "native_tools": False},
         {"model": "Amazon Nova Micro 1.0 - Bedrock", "native_tools": True},
         {"model": "Amazon Nova Lite 1.0 - Bedrock", "native_tools": True},
         {"model": "Amazon Nova Pro 1.0 - Bedrock", "native_tools": True},
