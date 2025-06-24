@@ -22,9 +22,12 @@ def _adjust_msg_for_gradio_ui(x, show_scratchpad=False, show_calls=False):
     if show_scratchpad:
         x = x.replace("<scratchpad>", "```\n[scratchpad]")
         x = x.replace("</scratchpad>", "[/scratchpad]\n```\n")
+        x = x.replace("<think>", "```\n[think]")
+        x = x.replace("</think>", "[/think]\n```\n")
     else:
         # System.Text.RegularExpressions.Regex.Replace(test_str,"<a>[\S\s]*?</a>\s*", "")
         x = re.sub(r"<scratchpad>[\S\s]*?</scratchpad>\s*", "", x)
+        x = re.sub(r"<think>[\S\s]*?</think>\s*", "", x)
         # x = x.replace('<scratchpad>', '<!--<scratchpad>')
         # x = x.replace('</scratchpad>', '</scratchpad>-->')
 
@@ -178,11 +181,16 @@ class LLMInterface:
                     shown_files[file_candidate] = True
 
             # figure out what should go into the scratchpad
-            scratchpad_info = x.split("<scratchpad>")
-            if len(scratchpad_info) > 1:
-                scratchpad_info = scratchpad_info[-1].split("</scratchpad>")[0]
-            else:
-                scratchpad_info = ""
+            scratchpad_info = ""
+            if "<scratchpad>" in x:
+                scratchpad_info = x.split("<scratchpad>")
+                if len(scratchpad_info) > 1:
+                    scratchpad_info = scratchpad_info[-1].split("</scratchpad>")[0]
+            elif "<think>" in x:
+                scratchpad_info = x.split("<think>")
+                if len(scratchpad_info) > 1:
+                    scratchpad_info = scratchpad_info[-1].split("</think>")[0]
+
             if info_msg is not None:
                 info_msg["content"] = (
                     extra_info.get("content", "") + "\n" + scratchpad_info

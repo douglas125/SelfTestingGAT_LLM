@@ -8,8 +8,7 @@ class LLM_Grok(LLM_GPT_OpenAI):
     def __init__(self, model_size):
         """Constructor
         Arguments:
-            model_size - Instance of boto3.client(service_name='bedrock-runtime')
-                to use when making calls to bedrock models
+            model_size - Grok model to use
         """
         if model_size == "Grok2Vision xAI":
             self.model_id = "grok-2-vision-1212"
