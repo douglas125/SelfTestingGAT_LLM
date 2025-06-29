@@ -1,4 +1,6 @@
 import os
+import requests
+
 import boto3
 import botocore
 import gradio as gr
@@ -158,12 +160,27 @@ def msg_forward_func(
     }
 
 
+def is_ollama_server_active(url="http://localhost:11434/"):
+    try:
+        response = requests.get(url, timeout=2)
+        return response.status_code == 200
+    except requests.ConnectionError:
+        return False
+    except requests.Timeout:
+        return False
+
+
 def main(max_audio_duration=120):
     with gr.Blocks(title="Self-testing GAT Tools demo") as demo:
         gr.Markdown(description)
         with gr.Column():
             with gr.Row():
                 available_models = inv.LLM_Provider.allowed_llms
+                if not is_ollama_server_active():
+                    available_models = [
+                        "[UNAVAILABLE] " + x if "- ollama" in x.lower() else x
+                        for x in available_models
+                    ]
                 if os.environ.get("ANTHROPIC_API_KEY") is None:
                     available_models = [
                         "[UNAVAILABLE] " + x if "anthropic" in x.lower() else x
