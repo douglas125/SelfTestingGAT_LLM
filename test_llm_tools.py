@@ -163,7 +163,6 @@ def msg_forward_func(
 def is_ollama_server_active(url="http://localhost:11434/"):
     try:
         response = requests.get(url, timeout=2)
-        print(response)
         return response.status_code == 200
     except requests.ConnectionError:
         return False
