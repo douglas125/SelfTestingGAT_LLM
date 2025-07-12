@@ -323,7 +323,12 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 
 - Enable multiple images per user message
 
-## TBD
+## v0.1.8
 
 - Include Ollama as a local LLM provider
 - Update `read_local_file` tool to read a much wider array of files
+- Include Grok4 from xAI
+
+## TBD
+
+- Include Ollama as a local LLM provider
