@@ -15,6 +15,11 @@ class LLM_Grok(LLM_GPT_OpenAI):
             self.llm_description = "Grok 2 (medium-sized LLM) - directly from xAI"
             self.price_per_M_input_tokens = 2
             self.price_per_M_output_tokens = 10
+        elif model_size == "Grok4":
+            self.model_id = "grok-4-0709"
+            self.llm_description = "Grok 4 (medium-sized LLM) - directly from xAI"
+            self.price_per_M_input_tokens = 3
+            self.price_per_M_output_tokens = 15
 
         try:
             self.openai_client = OpenAI(

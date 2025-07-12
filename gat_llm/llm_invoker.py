@@ -42,6 +42,7 @@ class LLM_Provider:
         "Llama2 70b",
         "Llama3 8b instruct",
         "Llama3 70b instruct",
+        "Grok2Vision - Grok",
     ]
 
     allowed_llms = [
@@ -56,7 +57,7 @@ class LLM_Provider:
         "Amazon Nova Lite 1.0 - Bedrock",
         "Amazon Nova Pro 1.0 - Bedrock",
         # Grok
-        "Grok2Vision - Grok",
+        "Grok4 - Grok",
         # Maritaca
         "Sabia3 - Maritaca",
         # OpenAI
@@ -134,6 +135,8 @@ class LLM_Provider:
         # Grok
         elif llm == "Grok2Vision - Grok":
             return LLM_Grok(model_size="Grok2Vision xAI")
+        elif llm == "Grok4 - Grok":
+            return LLM_Grok(model_size="Grok4")
 
         # DeepSeek
         elif llm == "DeepSeekV3 Chat - DeepSeek":
