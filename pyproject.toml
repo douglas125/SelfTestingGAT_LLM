@@ -36,6 +36,9 @@ dependencies = [
     "beautifulsoup4",
     "pandas",
     "lxml",
+    "markitdown",
+    "pypdf",
+    "pdf2image",
     "duckdb",
     "openai",
     "anthropic"

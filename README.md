@@ -71,7 +71,9 @@ To use this code and run the implemented tools, follow these steps:
 ### With PIP
 
 1. `pip install gat_llm`
-2. Set up your API keys (depending on what tools and LLM providers you need):
+2. (Optional) Install optional dependencies for MarkItDown with `pip install markitdown[all]` (this is used to open .DOCX, .XLSX, etc)
+3. (Optional) Install `poppler` (this is used to convert PDF pages to images when PDF pages need OCR or to be handled as images). If using conda, `conda install pdf2image` should handle everything
+4. Set up your API keys (depending on what tools and LLM providers you need):
    - For Linux:
      ```
      export AWS_ACCESS_KEY_ID=your_aws_access_key
@@ -88,7 +90,7 @@ To use this code and run the implemented tools, follow these steps:
      set OPENAI_API_KEY=your_openai_key
 	 set MARITACA_API_KEY=your_maritaca_key
      ```
-3. Create a test file `test_gat.py` to check if the tools are being called correctly:
+5. Create a test file `test_gat.py` to check if the tools are being called correctly:
 ```
 # Imports
 import boto3
