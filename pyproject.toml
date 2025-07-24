@@ -11,7 +11,7 @@ include-package-data = true
 
 [project]
 name = "gat_llm"
-version = "0.1.8"
+version = "0.1.9"
 description = "Generation Augmented by Tools in LLMs - Agentic AI"
 readme = "README.md"
 authors = [{ name = "DCA" }]
