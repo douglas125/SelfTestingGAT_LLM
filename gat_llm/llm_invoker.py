@@ -47,6 +47,9 @@ class LLM_Provider:
 
     allowed_llms = [
         # Local
+        "Qwen 3 0.6b - Ollama",
+        "Qwen 3 1.7b - Ollama",
+        "Qwen 3 4b - Ollama",
         "Qwen 3 8b - Ollama",
         "Qwen 3 14b - Ollama",
         "Llama4 16x17b - Ollama",
@@ -111,6 +114,12 @@ class LLM_Provider:
         # Local - Ollama
         elif llm == "Llama4 16x17b - Ollama":
             return LLM_Ollama(model="Llama4 16x17b Ollama")
+        elif llm == "Qwen 3 0.6b - Ollama":
+            return LLM_Ollama(model="Qwen 3 0.6b Ollama")
+        elif llm == "Qwen 3 1.7b - Ollama":
+            return LLM_Ollama(model="Qwen 3 1.7b Ollama")
+        elif llm == "Qwen 3 4b - Ollama":
+            return LLM_Ollama(model="Qwen 3 4b Ollama")
         elif llm == "Qwen 3 8b - Ollama":
             return LLM_Ollama(model="Qwen 3 8b Ollama")
         elif llm == "Qwen 3 14b - Ollama":

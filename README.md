@@ -331,6 +331,10 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 - Update `read_local_file` tool to read a much wider array of files
 - Include Grok4 from xAI
 
+## v0.1.9
+
+- Include smaller qwen3 models
+
 ## TBD
 
-- Include Ollama as a local LLM provider
+-

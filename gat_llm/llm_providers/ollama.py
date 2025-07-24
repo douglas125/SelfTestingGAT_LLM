@@ -20,6 +20,15 @@ class LLM_Ollama(LLM_GPT_OpenAI):
         elif model == "Qwen 2.5vl 7b Ollama":
             self.model_id = "qwen2.5vl:7b"
             self.llm_description = "Qwen 2.5vl 7b (Tiny-size LLM) - locally from Ollama"
+        elif model == "Qwen 3 0.6b Ollama":
+            self.model_id = "qwen3:0.6b"
+            self.llm_description = "Qwen 3 0.6b (Tiny-size LLM) - locally from Ollama"
+        elif model == "Qwen 3 1.7b Ollama":
+            self.model_id = "qwen3:1.7b"
+            self.llm_description = "Qwen 3 1.7b (Tiny-size LLM) - locally from Ollama"
+        elif model == "Qwen 3 4b Ollama":
+            self.model_id = "qwen3:4b"
+            self.llm_description = "Qwen 3 4b (Small-size LLM) - locally from Ollama"
         elif model == "Qwen 3 8b Ollama":
             self.model_id = "qwen3:8b"
             self.llm_description = "Qwen 3 8b (Small-size LLM) - locally from Ollama"
