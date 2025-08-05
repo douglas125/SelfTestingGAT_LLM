@@ -337,4 +337,4 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 
 ## TBD
 
--
+- Include qwen3-coder:30b
