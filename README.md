@@ -55,6 +55,7 @@ With the current prompts, tools, descriptions and native tool configuration use 
 | ('Llama3_1 70b instruct', False)          |                            11 |                70   |             79.6 |                          2.65  |                            3.5  |
 | ('GPT 3.5 - OpenAI', False)               |                             2 |                65.4 |             78.6 |                          0.5   |                            1.5  |
 | ('GPT 3.5 - OpenAI', True)                |                            18 |                66.4 |             76.9 |                          0.5   |                            1.5  |
+| ('OpenAI GPT OSS 20b - Ollama', True)     |                            17 |                60.7 |             76.7 |                          0     |                            0    |
 | ('Sabia3 - Maritaca', False)              |                            14 |                61.8 |             75.7 |                          0.95  |                            1.9  |
 | ('Mistral Mixtral 8x7B', False)           |                           156 |                50.1 |             67.5 |                          0.45  |                            0.7  |
 | ('Amazon Nova Micro 1.0 - Bedrock', True) |                           145 |                52.5 |             66.5 |                          0.035 |                            0.14 |

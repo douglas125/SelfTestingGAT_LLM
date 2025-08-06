@@ -72,6 +72,7 @@ class SelfTestPerformer(SelfTestBase):
 if __name__ == "__main__":
     # configure tests
     llms_to_test = [
+        {"model": "OpenAI GPT OSS 20b - Ollama", "native_tools": True},
         {"model": "Qwen 3 8b - Ollama", "native_tools": True},
         {"model": "Qwen 3 14b - Ollama", "native_tools": True},
         {"model": "DeepSeek R1 14b - Ollama", "native_tools": False},
