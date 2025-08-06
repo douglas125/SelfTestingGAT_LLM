@@ -188,7 +188,9 @@ def main(max_audio_duration=120):
                     ]
                 if os.environ.get("OPENAI_API_KEY") is None:
                     available_models = [
-                        "[UNAVAILABLE] " + x if "openai" in x.lower() else x
+                        "[UNAVAILABLE] " + x
+                        if "openai" in x.lower() and "- ollama" not in x.lower()
+                        else x
                         for x in available_models
                     ]
                 if os.environ.get("MARITACA_API_KEY") is None:

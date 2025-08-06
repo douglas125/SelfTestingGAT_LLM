@@ -43,10 +43,13 @@ class LLM_Provider:
         "Llama3 8b instruct",
         "Llama3 70b instruct",
         "Grok2Vision - Grok",
+        "GPT 4o - OpenAI",
     ]
 
     allowed_llms = [
         # Local
+        "OpenAI GPT OSS 20b - Ollama",
+        "OpenAI GPT OSS 120b - Ollama",
         "Qwen 3 0.6b - Ollama",
         "Qwen 3 1.7b - Ollama",
         "Qwen 3 4b - Ollama",
@@ -66,7 +69,6 @@ class LLM_Provider:
         "Sabia3 - Maritaca",
         # OpenAI
         "GPT 4.1 - OpenAI",
-        "GPT 4o - OpenAI",
         "GPT 3.5 - OpenAI",
         "GPT 4o mini - OpenAI",
         # Anthropic
@@ -113,6 +115,10 @@ class LLM_Provider:
             return LLM_Llama70b(bedrock_client)
 
         # Local - Ollama
+        elif llm == "OpenAI GPT OSS 20b - Ollama":
+            return LLM_Ollama(model="GPT OSS 20b Ollama")
+        elif llm == "OpenAI GPT OSS 120b - Ollama":
+            return LLM_Ollama(model="GPT OSS 120b Ollama")
         elif llm == "Llama4 16x17b - Ollama":
             return LLM_Ollama(model="Llama4 16x17b Ollama")
         elif llm == "Qwen 3 0.6b - Ollama":

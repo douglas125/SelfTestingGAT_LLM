@@ -17,6 +17,16 @@ class LLM_Ollama(LLM_GPT_OpenAI):
             self.llm_description = (
                 "DeepSeek R1 14b (Tiny-size LLM) - locally from Ollama"
             )
+        elif model == "GPT OSS 20b Ollama":
+            self.model_id = "gpt-oss:20b"
+            self.llm_description = (
+                "GPT OSS 20b OpenAI (Small-size LLM) - locally from Ollama"
+            )
+        elif model == "GPT OSS 120b Ollama":
+            self.model_id = "gpt-oss:120b"
+            self.llm_description = (
+                "GPT OSS 120b OpenAI (Small-size LLM) - locally from Ollama"
+            )
         elif model == "Qwen 3 Coder 30b Ollama":
             self.model_id = "qwen3-coder:30b"
             self.llm_description = "Qwen 3 Coder (Small-size LLM) - locally from Ollama"
