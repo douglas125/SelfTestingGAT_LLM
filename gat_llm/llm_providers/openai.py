@@ -70,7 +70,7 @@ class LLM_GPT_OpenAI(LLM_Service):
             "stream": True,
             # "top_k": 250,
             # "top_p": 1,
-            "stop": None,  # the regular is already implemented
+            # "stop": None,  # the regular is already implemented
             "model": self.model_id,
         }
         # requests and answer word count
