@@ -14,7 +14,26 @@ class LLM_GPT_OpenAI(LLM_Service):
                 to use when making calls to bedrock models
         """
         self.openai_client = None
-        if model_size == "GPT4_1 OpenAI":
+        if model_size == "GPT5 OpenAI":
+            self.model_id = "gpt-5"
+            self.llm_description = "OpenAI GPT5 (Large-size LLM) - directly from OpenAI"
+            self.price_per_M_input_tokens = 1.25
+            self.price_per_M_output_tokens = 10
+        elif model_size == "GPT5 mini OpenAI":
+            self.model_id = "gpt-5-mini"
+            self.llm_description = (
+                "OpenAI GPT5 mini (Medium-size LLM) - directly from OpenAI"
+            )
+            self.price_per_M_input_tokens = 0.25
+            self.price_per_M_output_tokens = 2
+        elif model_size == "GPT5 nano OpenAI":
+            self.model_id = "gpt-5-nano"
+            self.llm_description = (
+                "OpenAI GPT5 nano (Small-size LLM) - directly from OpenAI"
+            )
+            self.price_per_M_input_tokens = 0.25
+            self.price_per_M_output_tokens = 2
+        elif model_size == "GPT4_1 OpenAI":
             self.model_id = "gpt-4.1-2025-04-14"
             self.llm_description = (
                 "OpenAI GPT4.1 (Large-size LLM) - directly from OpenAI"
@@ -46,8 +65,8 @@ class LLM_GPT_OpenAI(LLM_Service):
         self.config = {
             # "messages": prompt,
             # "system": sysprompt,
-            "max_tokens": 4000,
-            "temperature": 0.5,  # 0.5 is default,
+            "max_completion_tokens": 4000,
+            # "temperature": 0.5,  # 0.5 is default,
             "stream": True,
             # "top_k": 250,
             # "top_p": 1,
