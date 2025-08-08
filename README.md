@@ -36,8 +36,8 @@ With the current prompts, tools, descriptions and native tool configuration use 
 | ('DeepSeekV3 Chat - DeepSeek', False)     |                             1 |                79.4 |             89.6 |                          0.27  |                            1.1  |
 | ('Claude 3.5 Sonnet - Anthropic', False)  |                             0 |                78   |             89.5 |                          3     |                           15    |
 | ('GPT 4o - OpenAI', True)                 |                             1 |                79.9 |             89.4 |                          5     |                           15    |
-| ('GPT 4.1 - OpenAI', True)                |                             1 |                78.6 |             89   |                          2     |                            8    |
 | ('GPT 4o mini - OpenAI', True)            |                             3 |                79.9 |             89   |                          0.15  |                            0.6  |
+| ('GPT 4.1 - OpenAI', True)                |                             1 |                78.6 |             89   |                          2     |                            8    |
 | ('Claude 3.5 Haiku - Anthropic', True)    |                             2 |                76.6 |             89   |                          1     |                            5    |
 | ('Amazon Nova Pro 1.0 - Bedrock', True)   |                             1 |                78   |             88.7 |                          0.8   |                            3.2  |
 | ('Claude 3.5 Sonnet - Anthropic', True)   |                             0 |                76.6 |             88.7 |                          3     |                           15    |
@@ -48,11 +48,14 @@ With the current prompts, tools, descriptions and native tool configuration use 
 | ('Claude 3.7 Sonnet - Anthropic', True)   |                             2 |                74.7 |             86.9 |                          3     |                           15    |
 | ('Mistral Large v1', False)               |                             1 |                74.7 |             86.8 |                          4     |                           12    |
 | ('GPT 4o mini - OpenAI', False)           |                             3 |                73.1 |             85.1 |                          0.15  |                            0.6  |
+| ('GPT 5 - OpenAI', True)                  |                             3 |                69.5 |             84.3 |                          1.25  |                           10    |
 | ('Command RPlus - Bedrock', False)        |                             4 |                72.8 |             83.8 |                          3     |                           15    |
 | ('Claude 3 Haiku - Bedrock', False)       |                             3 |                70.6 |             83.3 |                          0.25  |                            1.25 |
 | ('Sabia3 - Maritaca', True)               |                             6 |                70.6 |             83.2 |                          0.95  |                            1.9  |
+| ('GPT 5 mini - OpenAI', True)             |                            16 |                69   |             82.1 |                          0.25  |                            2    |
 | ('Amazon Nova Lite 1.0 - Bedrock', True)  |                             2 |                66.2 |             80.2 |                          0.06  |                            0.24 |
 | ('Llama3_1 70b instruct', False)          |                            11 |                70   |             79.6 |                          2.65  |                            3.5  |
+| ('GPT 5 nano - OpenAI', True)             |                            21 |                63.5 |             78.9 |                          0.25  |                            2    |
 | ('GPT 3.5 - OpenAI', False)               |                             2 |                65.4 |             78.6 |                          0.5   |                            1.5  |
 | ('GPT 3.5 - OpenAI', True)                |                            18 |                66.4 |             76.9 |                          0.5   |                            1.5  |
 | ('OpenAI GPT OSS 20b - Ollama', True)     |                            17 |                60.7 |             76.7 |                          0     |                            0    |
