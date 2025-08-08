@@ -44,7 +44,7 @@ def belongs_to_col(tool_list, col_tool_names):
     return n_matches == required_matches
 
 
-def is_tool_selection_correct(expected_answer, selected_tools, all_tools):
+def is_tool_selection_correct(expected_answer, selected_tools, all_tools, cur_model=""):
     """Checks if the selected tools are correct.
     Attempts to unfold ':' into multiple tools.
     Returns:
@@ -54,7 +54,7 @@ def is_tool_selection_correct(expected_answer, selected_tools, all_tools):
     try:
         y_pred = json.loads(selected_tools.replace("'", '"'))
     except:
-        print(selected_tools.replace("'", '"'))
+        # print(selected_tools.replace("'", '"'))
         y_pred = ["Invalid JSON"] + selected_tools.replace("'", '"').split(",")
         # raise
     y_pred = [remove_function_strings(x) for x in y_pred]
@@ -72,4 +72,6 @@ def is_tool_selection_correct(expected_answer, selected_tools, all_tools):
     score = len(set(y_true).intersection(set(y_pred))) / len(
         set(y_true).union(set(y_pred))
     )
+    # if cur_model == "GPT 5 - OpenAI":
+    #    print(y_true, y_pred, score)
     return set(y_true) == set(y_pred), score, invented_tools, len(y_pred) == 0

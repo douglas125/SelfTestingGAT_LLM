@@ -43,7 +43,11 @@ class LLM_Provider:
         "Llama3 8b instruct",
         "Llama3 70b instruct",
         "Grok2Vision - Grok",
+        # OpenAI
         "GPT 4o - OpenAI",
+        "GPT 4.1 - OpenAI",
+        "GPT 3.5 - OpenAI",
+        "GPT 4o mini - OpenAI",
     ]
 
     allowed_llms = [
@@ -68,9 +72,9 @@ class LLM_Provider:
         # Maritaca
         "Sabia3 - Maritaca",
         # OpenAI
-        "GPT 4.1 - OpenAI",
-        "GPT 3.5 - OpenAI",
-        "GPT 4o mini - OpenAI",
+        "GPT 5 - OpenAI",
+        "GPT 5 mini - OpenAI",
+        "GPT 5 nano - OpenAI",
         # Anthropic
         "Claude 4 Opus - Anthropic",
         "Claude 4 Sonnet - Anthropic",
@@ -220,6 +224,12 @@ class LLM_Provider:
             return LLM_Claude_Anthropic(model_size="Haiku 3.5 Anthropic")
 
         # OpenAI
+        elif llm == "GPT 5 - OpenAI":
+            return LLM_GPT_OpenAI(model_size="GPT5 OpenAI")
+        elif llm == "GPT 5 mini - OpenAI":
+            return LLM_GPT_OpenAI(model_size="GPT5 mini OpenAI")
+        elif llm == "GPT 5 nano - OpenAI":
+            return LLM_GPT_OpenAI(model_size="GPT5 nano OpenAI")
         elif llm == "GPT 4.1 - OpenAI":
             return LLM_GPT_OpenAI(model_size="GPT4_1 OpenAI")
         elif llm == "GPT 3.5 - OpenAI":

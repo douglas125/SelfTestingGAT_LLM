@@ -72,10 +72,13 @@ class SelfTestPerformer(SelfTestBase):
 if __name__ == "__main__":
     # configure tests
     llms_to_test = [
+        {"model": "GPT 5 nano - OpenAI", "native_tools": True},
+        {"model": "GPT 5 mini - OpenAI", "native_tools": True},
+        {"model": "GPT 5 - OpenAI", "native_tools": True},
         {"model": "OpenAI GPT OSS 20b - Ollama", "native_tools": True},
         {"model": "Qwen 3 8b - Ollama", "native_tools": True},
         {"model": "Qwen 3 14b - Ollama", "native_tools": True},
-        {"model": "DeepSeek R1 14b - Ollama", "native_tools": False},
+        # {"model": "DeepSeek R1 14b - Ollama", "native_tools": False},
         {"model": "Amazon Nova Micro 1.0 - Bedrock", "native_tools": True},
         {"model": "Amazon Nova Lite 1.0 - Bedrock", "native_tools": True},
         {"model": "Amazon Nova Pro 1.0 - Bedrock", "native_tools": True},

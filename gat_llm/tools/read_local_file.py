@@ -2,7 +2,6 @@ import os
 import re
 import pypdf
 import base64
-import requests
 from pathlib import Path
 from io import BytesIO
 
@@ -214,34 +213,18 @@ subfolder/file2.pdf
             if not os.path.isfile(path_to_file):
                 ans = f"Error: Did not find file `{path_to_file}`"
                 ans = f"<error>\n{ans}\n</error>"
-
-            if path_to_file.startswith("http://") or path_to_file.startswith(
-                "https://"
-            ):
-                try:
-                    response = requests.get(path_to_file)
-                    response.raise_for_status()
-                    with open("/tmp/temp_downloaded_file.txt", "wb") as f:
-                        f.write(response.content)
-                    ans = extract_text("/tmp/temp_downloaded_file.txt")
-                    if path_to_file in pdfs_to_read_as_images:
-                        b64_images = pdf_pages_to_base64_images(path_to_file)
-                    os.remove("/tmp/temp_downloaded_file.txt")
-                except Exception as e:
-                    ans = f"Error: Failed to fetch or process URL `{path_to_file}`: {str(e)}"
-                    ans = f"<error>\n{ans}\n</error>"
             else:
-                if not os.path.isfile(path_to_file):
-                    ans = f"Error: Did not find file `{path_to_file}`"
+                try:
+                    ans = extract_text(path_to_file)
+                    if path_to_file in pdfs_to_read_as_images:
+                        if b64_images is None:
+                            b64_images = []
+                        b64_images += pdf_pages_to_base64_images(path_to_file)
+                except Exception as e:
+                    ans = (
+                        f"Error: Failed to process the file `{path_to_file}`: {str(e)}"
+                    )
                     ans = f"<error>\n{ans}\n</error>"
-                else:
-                    try:
-                        ans = extract_text(path_to_file)
-                        if path_to_file in pdfs_to_read_as_images:
-                            b64_images = pdf_pages_to_base64_images(path_to_file)
-                    except Exception as e:
-                        ans = f"Error: Failed to process the file `{path_to_file}`: {str(e)}"
-                        ans = f"<error>\n{ans}\n</error>"
 
             final_ans.append("<file>")
             final_ans.append(f"<file_name>{path_to_file}</file_name>")
