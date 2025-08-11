@@ -99,6 +99,7 @@ def test_if_llm_responds(llm_name, ret_val):
     )
 
     llm.cur_tool_specs = []
+    llm.cur_tool_spec = None
     llm.stop_reason = None
     llm._response_gen = dummy_response_gen(ret_val)
     ans = llm("Dummy message")
