@@ -346,3 +346,5 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 - Include GPT 5, 5mini, 5nani
 
 ## TBD
+
+- Handle parallel tool calls in the OpenAI API
