@@ -70,7 +70,7 @@ class LLM_GPT_OpenAI(LLM_Service):
             "stream": True,
             # "top_k": 250,
             # "top_p": 1,
-            # "stop": None,  # the regular is already implemented
+            # "stop": None,  # the regular stop is already implemented
             "model": self.model_id,
         }
         # requests and answer word count
@@ -123,6 +123,7 @@ class LLM_GPT_OpenAI(LLM_Service):
         prompt,
         b64image=None,
         postpend="",
+        # not supported well by OpenAI at the moment
         extra_stop_sequences=[],
         tools=None,
         tool_invoker_fn=None,
@@ -162,10 +163,6 @@ class LLM_GPT_OpenAI(LLM_Service):
         # start time
         t0 = time.time()
         body = self.config.copy()
-        if len(extra_stop_sequences) > 0:
-            body["stop"] = extra_stop_sequences
-        else:
-            body.pop("stop", None)
         body["messages"] = prompt
 
         if tools is None:
@@ -205,50 +202,54 @@ class LLM_GPT_OpenAI(LLM_Service):
                         yield x
                     cur_ans = x
 
-                    if self.cur_tool_spec is not None:
-                        # tool use has been required. Let's do it
-                        # TODO: update upstream to reflect the inclusion of a response
-                        # TODO: probably rework gradio UI to re-instantiate things every chat, or keep an instance per chat ID
-                        tool_ans = tool_invoker_fn(
-                            self.cur_tool_spec["tool_name"],
-                            return_results_only=True,
-                            **self.cur_tool_spec["input"],
-                        )
+                    if len(self.cur_tool_specs) > 0:
+                        ans_to_append = cur_ans
+                        for cur_tool_spec in self.cur_tool_specs:
+                            # tool use has been required. Let's do it
+                            # TODO: update upstream to reflect the inclusion of a response
+                            # TODO: probably rework gradio UI to re-instantiate things every chat, or keep an instance per chat ID
+                            tool_ans = tool_invoker_fn(
+                                cur_tool_spec["tool_name"],
+                                return_results_only=True,
+                                **cur_tool_spec["input"],
+                            )
 
-                        # append assistant responses
-                        assistant_msg = {
-                            "role": "assistant",
-                            "content": [
-                                {
-                                    "type": "text",
-                                    "text": cur_ans,
-                                },
-                            ],
-                            "tool_calls": [
-                                {
-                                    "id": self.cur_tool_spec["id"],
-                                    "type": "function",
-                                    "function": {
-                                        "name": self.cur_tool_spec["tool_name"],
-                                        "arguments": json.dumps(
-                                            self.cur_tool_spec["input"]
-                                        ),
+                            # append assistant responses
+                            assistant_msg = {
+                                "role": "assistant",
+                                "content": [
+                                    {
+                                        "type": "text",
+                                        "text": ans_to_append,
                                     },
-                                }
-                            ],
-                        }
+                                ],
+                                "tool_calls": [
+                                    {
+                                        "id": cur_tool_spec["id"],
+                                        "type": "function",
+                                        "function": {
+                                            "name": cur_tool_spec["tool_name"],
+                                            "arguments": json.dumps(
+                                                cur_tool_spec["input"]
+                                            ),
+                                        },
+                                    }
+                                ],
+                            }
+                            # only include original message once
+                            ans_to_append = ""
 
-                        next_user_msg = {
-                            "role": "tool",
-                            "content": tool_ans,
-                            "tool_call_id": self.cur_tool_spec["id"],
-                        }
-                        body["messages"].append(assistant_msg)
-                        body["messages"].append(next_user_msg)
+                            next_user_msg = {
+                                "role": "tool",
+                                "content": tool_ans,
+                                "tool_call_id": cur_tool_spec["id"],
+                            }
+                            body["messages"].append(assistant_msg)
+                            body["messages"].append(next_user_msg)
 
-                        # keep a log of messages that had to be appended due to tool use
-                        self.tool_use_added_msgs.append(assistant_msg)
-                        self.tool_use_added_msgs.append(next_user_msg)
+                            # keep a log of messages that had to be appended due to tool use
+                            self.tool_use_added_msgs.append(assistant_msg)
+                            self.tool_use_added_msgs.append(next_user_msg)
                         llm_body_changed = True
 
                     # TODO: Include proper token count and pricing
@@ -273,12 +274,18 @@ class LLM_GPT_OpenAI(LLM_Service):
 
     def _response_gen(self, response_body, postpend=""):
         cur_ans = ""
+        cur_tool_specs = []
         cur_tool_spec = None
         for x in response_body:
             txt = ""
-            if x.choices[0].delta.tool_calls is not None and cur_tool_spec is None:
+
+            if (
+                x.choices[0].delta.tool_calls is not None
+                and x.choices[0].delta.tool_calls[0].id is not None
+            ):
                 cur_tool_spec = x.choices[0].delta.tool_calls[0].__dict__.copy()
                 cur_tool_spec["arguments"] = ""
+                cur_tool_specs.append(cur_tool_spec)
 
             txt = (
                 x.choices[0].delta.content
@@ -299,21 +306,22 @@ class LLM_GPT_OpenAI(LLM_Service):
                 stop_txt = x.delta.stop_sequence
                 yield postpend + cur_ans + stop_txt
                 break
-        if cur_tool_spec is not None:
-            cur_tool_spec["arguments"] = cur_tool_spec["arguments"].split("{")[1:]
-            cur_tool_spec["arguments"] = "{" + "{".join(cur_tool_spec["arguments"])
+        if len(cur_tool_specs) > 0:
+            for cur_tool_spec in cur_tool_specs:
+                cur_tool_spec["arguments"] = cur_tool_spec["arguments"].split("{")[1:]
+                cur_tool_spec["arguments"] = "{" + "{".join(cur_tool_spec["arguments"])
 
-            # print(f'*{cur_tool_spec["arguments"]}*')
-            cur_tool_spec["input"] = (
-                cur_tool_spec["arguments"]
-                if isinstance(cur_tool_spec["arguments"], dict)
-                else json.loads(cur_tool_spec["arguments"])
-            )
-            cur_tool_spec["tool_name"] = cur_tool_spec["function"].name
-            cur_tool_spec.pop("index", None)
-            cur_tool_spec.pop("type", None)
-            cur_tool_spec.pop("function", None)
-            cur_tool_spec.pop("arguments", None)
+                # print(f'*{cur_tool_spec["arguments"]}*')
+                cur_tool_spec["input"] = (
+                    cur_tool_spec["arguments"]
+                    if isinstance(cur_tool_spec["arguments"], dict)
+                    else json.loads(cur_tool_spec["arguments"])
+                )
+                cur_tool_spec["tool_name"] = cur_tool_spec["function"].name
+                cur_tool_spec.pop("index", None)
+                cur_tool_spec.pop("type", None)
+                cur_tool_spec.pop("function", None)
+                cur_tool_spec.pop("arguments", None)
 
-        self.cur_tool_spec = cur_tool_spec
+        self.cur_tool_specs = cur_tool_specs
         self.stop_reason = stop_reason

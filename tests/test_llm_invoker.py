@@ -22,6 +22,11 @@ from gat_llm.llm_invoker import LLM_Provider
         ("Llama2 70b"),
         ("Llama3 8b instruct"),
         ("Llama3 70b instruct"),
+        # OpenAI
+        ("GPT 4o - OpenAI"),
+        ("GPT 4.1 - OpenAI"),
+        ("GPT 3.5 - OpenAI"),
+        ("GPT 4o mini - OpenAI"),
     ],
 )
 def test_outdated_llm_warning(outdated_llm):
@@ -93,6 +98,7 @@ def test_if_llm_responds(llm_name, ret_val):
         }
     )
 
+    llm.cur_tool_specs = []
     llm.cur_tool_spec = None
     llm.stop_reason = None
     llm._response_gen = dummy_response_gen(ret_val)
