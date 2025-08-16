@@ -22,6 +22,7 @@ from .llm_providers.grok import LLM_Grok
 
 # local
 from .llm_providers.ollama import LLM_Ollama
+from .llm_providers.vllm import LLM_VLLM
 
 
 warnings.simplefilter("always", DeprecationWarning)
@@ -63,6 +64,7 @@ class LLM_Provider:
         "Llama4 16x17b - Ollama",
         "Qwen 2.5vl 7b - Ollama",
         "DeepSeek R1 14b - Ollama",
+        "Qwen 3 1.7b - VLLM",
         # AWS
         "Amazon Nova Micro 1.0 - Bedrock",
         "Amazon Nova Lite 1.0 - Bedrock",
@@ -141,6 +143,10 @@ class LLM_Provider:
             return LLM_Ollama(model="Qwen 2.5vl 7b Ollama")
         elif llm == "DeepSeek R1 14b - Ollama":
             return LLM_Ollama(model="DeepSeek R1 14b Ollama")
+
+        # Local - vllm
+        elif llm == "Qwen 3 1.7b - VLLM":
+            return LLM_VLLM(model="Qwen 3 1.7b VLLM")
 
         # Amazon
         elif llm == "Amazon Nova Micro 1.0 - Bedrock":
