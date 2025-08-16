@@ -348,3 +348,4 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 ## TBD
 
 - Handle parallel tool calls in the OpenAI API
+- Add vLLM as a local provider

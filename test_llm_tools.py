@@ -160,7 +160,7 @@ def msg_forward_func(
     }
 
 
-def is_ollama_server_active(url="http://localhost:11434/"):
+def is_server_active(url="http://localhost:11434/"):
     try:
         response = requests.get(url, timeout=2)
         return response.status_code == 200
@@ -176,9 +176,16 @@ def main(max_audio_duration=120):
         with gr.Column():
             with gr.Row():
                 available_models = inv.LLM_Provider.allowed_llms
-                if not is_ollama_server_active():
+                if not is_server_active():
+                    # Check for Ollama server
                     available_models = [
                         "[UNAVAILABLE] " + x if "- ollama" in x.lower() else x
+                        for x in available_models
+                    ]
+                if not is_server_active("http://localhost:8000/metrics"):
+                    # Check for vLLM server
+                    available_models = [
+                        "[UNAVAILABLE] " + x if "- vllm" in x.lower() else x
                         for x in available_models
                     ]
                 if os.environ.get("ANTHROPIC_API_KEY") is None:

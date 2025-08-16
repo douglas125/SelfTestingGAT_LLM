@@ -12,7 +12,7 @@ class ToolPlotWithGraphviz:
 
         self.tool_description = {
             "name": self.name,
-            "description": f"""Generates a graph visualization using the provided custom Python code graph_code, whose only dependencies should be pydot. This tool is useful when the user requests graph visualizations to be generated. Prefer to use a horizontal layout and the `ortho` mode.
+            "description": f"""Generates a graph visualization using the provided custom Python code graph_code, whose only dependencies should be pydot. This tool is useful when the user requests graph visualizations to be generated. Prefer to use a horizontal layout and the `ortho` mode. In most cases, the first line of code will be `import pydot`.
 
 If the user didn't specifically ask for a graph visualization, confirm if the user wants to generate a graph visualization before calling this tool.
 

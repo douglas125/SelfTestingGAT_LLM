@@ -292,7 +292,10 @@ class LLM_GPT_OpenAI(LLM_Service):
                 if x.choices[0].delta.content is not None
                 else ""
             )
-            if x.choices[0].delta.tool_calls is not None:
+            if (
+                x.choices[0].delta.tool_calls is not None
+                and x.choices[0].delta.tool_calls[0].function.arguments is not None
+            ):
                 cur_tool_spec["arguments"] += (
                     x.choices[0].delta.tool_calls[0].function.arguments
                 )
