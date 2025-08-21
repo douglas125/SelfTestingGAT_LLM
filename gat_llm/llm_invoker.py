@@ -63,6 +63,7 @@ class LLM_Provider:
         "Qwen 3 Coder 30b - Ollama",
         "Llama4 16x17b - Ollama",
         "Qwen 2.5vl 7b - Ollama",
+        "Qwen 2.5vl 3b - Ollama",
         "DeepSeek R1 14b - Ollama",
         "Qwen 3 1.7b - VLLM",
         # AWS
@@ -141,6 +142,8 @@ class LLM_Provider:
             return LLM_Ollama(model="Qwen 3 14b Ollama")
         elif llm == "Qwen 2.5vl 7b - Ollama":
             return LLM_Ollama(model="Qwen 2.5vl 7b Ollama")
+        elif llm == "Qwen 2.5vl 3b - Ollama":
+            return LLM_Ollama(model="Qwen 2.5vl 3b Ollama")
         elif llm == "DeepSeek R1 14b - Ollama":
             return LLM_Ollama(model="DeepSeek R1 14b Ollama")
 
