@@ -36,8 +36,9 @@ Bedrock: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
 Anthropic: ANTHROPIC_API_KEY
 OpenAI: OPENAI_API_KEY
 DeepSeek: DEEPSEEK_API_KEY (cannot be used with OpenAI models)
+Gemini: GEMINI_API_KEY (cannot be used with OpenAI models)
 Maritaca: MARITACA_API_KEY (cannot be used with OpenAI models)
-- Select the LLM of your choice. You can't use Maritaca or Deepseek with OpenAI or tools that require OpenAI
+- Select the LLM of your choice. You can't use Gemini, Maritaca or Deepseek with OpenAI or tools that require OpenAI
 - Note that some tools require non-LLM OpenAI models: text_to_image, text_to_speech, speech_to_text
 - Select the tools allowed for the LLM
 - If a model is unavailable, you need to set the proper API key in the environment before running this interface
@@ -198,6 +199,11 @@ def main(max_audio_duration=120):
                         "[UNAVAILABLE] " + x
                         if "openai" in x.lower() and "- ollama" not in x.lower()
                         else x
+                        for x in available_models
+                    ]
+                if os.environ.get("GEMINI_API_KEY") is None:
+                    available_models = [
+                        "[UNAVAILABLE] " + x if "- google" in x.lower() else x
                         for x in available_models
                     ]
                 if os.environ.get("MARITACA_API_KEY") is None:

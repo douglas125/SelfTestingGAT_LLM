@@ -15,6 +15,7 @@ from .llm_providers.anthropic import LLM_Claude_Anthropic
 from .llm_providers.aws_bedrock import LLM_Claude_Bedrock
 from .llm_providers.aws_bedrock import LLM_Mistral_Bedrock
 from .llm_providers.aws_bedrock_cohere import LLM_Command_Cohere
+from .llm_providers.gemini import LLM_Gemini
 from .llm_providers.maritaca import LLM_Maritalk
 from .llm_providers.aws_bedrock_nova import LLM_Nova_Bedrock
 from .llm_providers.deepseek import LLM_Deepseek
@@ -77,6 +78,10 @@ class LLM_Provider:
         "GPT 5 - OpenAI",
         "GPT 5 mini - OpenAI",
         "GPT 5 nano - OpenAI",
+        # Google
+        "Gemini 2.5 Pro - Google",
+        "Gemini 2.5 Flash - Google",
+        "Gemini 2.5 Flash Lite - Google",
         # Anthropic
         "Claude 4 Opus - Anthropic",
         "Claude 4 Sonnet - Anthropic",
@@ -155,6 +160,14 @@ class LLM_Provider:
             return LLM_Nova_Bedrock(bedrock_client, model_size="Nova_Lite")
         elif llm == "Amazon Nova Pro 1.0 - Bedrock":
             return LLM_Nova_Bedrock(bedrock_client, model_size="Nova_Pro")
+
+        # Google
+        elif llm == "Gemini 2.5 Pro - Google":
+            return LLM_Gemini(model_size="Gemini 2.5 Pro Google")
+        elif llm == "Gemini 2.5 Flash - Google":
+            return LLM_Gemini(model_size="Gemini 2.5 Flash Google")
+        elif llm == "Gemini 2.5 Flash Lite - Google":
+            return LLM_Gemini(model_size="Gemini 2.5 Flash Lite Google")
 
         # Maritaca
         elif llm == "Sabia3 - Maritaca":

@@ -84,6 +84,7 @@ To use this code and run the implemented tools, follow these steps:
      export AWS_SECRET_ACCESS_KEY=your_aws_secret_key
      export ANTHROPIC_API_KEY=your_anthropic_key
      export OPENAI_API_KEY=your_openai_key
+     export GEMINI_API_KEY=your_gemini_key
 	 export MARITACA_API_KEY=your_maritaca_key
      ```
    - For Windows:
@@ -92,6 +93,7 @@ To use this code and run the implemented tools, follow these steps:
      set AWS_SECRET_ACCESS_KEY=your_aws_secret_key
      set ANTHROPIC_API_KEY=your_anthropic_key
      set OPENAI_API_KEY=your_openai_key
+     set GEMINI_API_KEY=your_gemini_key
 	 set MARITACA_API_KEY=your_maritaca_key
      ```
 5. Create a test file `test_gat.py` to check if the tools are being called correctly:
@@ -345,7 +347,11 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 - Include GPT OSS 20b and 120b from Ollama
 - Include GPT 5, 5mini, 5nani
 
-## TBD
+## v0.1.11
 
 - Handle parallel tool calls in the OpenAI API
 - Add vLLM as a local provider
+- Add Qwen 2.5 VL 3B
+- Add Gemini support (via OpenAI API)
+
+## TBD

@@ -166,7 +166,8 @@ class LLM_GPT_OpenAI(LLM_Service):
         body["messages"] = prompt
 
         if tools is None:
-            body["messages"].append({"role": "assistant", "content": postpend})
+            if postpend != "":
+                body["messages"].append({"role": "assistant", "content": postpend})
         else:
             adj_tools = []
             for x in tools:
