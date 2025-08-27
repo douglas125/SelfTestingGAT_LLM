@@ -45,7 +45,9 @@ def remove_semi_transparent_pixels(image_path: str) -> bytes:
 
 
 class ToolImageEdit:
-    def _gen_img_openai(self, image_paths, prompt, mask_file, target_file):
+    def _gen_img_openai(
+        self, image_paths, prompt, mask_file, target_file, input_fidelity
+    ):
         if self.openai_client is None:
             self.openai_client = OpenAI()
 
@@ -53,6 +55,7 @@ class ToolImageEdit:
             "model": "gpt-image-1",
             "image": [open(x, "rb") for x in image_paths],
             "prompt": prompt,
+            "input_fidelity": input_fidelity,
             "n": 1,
         }
         if mask_file is not None:
@@ -91,6 +94,10 @@ path/to/image2.jpg
                         "type": "string",
                         "description": "A complete, descriptive prompt providing precise instructions about how to edit the images and what to generate as output.",
                     },
+                    "input_fidelity": {
+                        "type": "string",
+                        "description": "Control how much effort the model will exert to match the style and features, especially facial features, of input images. Defaults to low.",
+                    },
                     "mask_file": {
                         "type": "string",
                         "description": "Full path to the image that will be used as mask. The fully transparent areas (e.g. where alpha is zero) indicate where image should be edited. If there are multiple images provided, the mask will be applied on the first image.",
@@ -107,6 +114,7 @@ path/to/image2.jpg
         prompt,
         mask_file=None,
         engine=None,
+        input_fidelity="low",
         **kwargs,
     ):
         os.makedirs("media", exist_ok=True)
@@ -128,7 +136,9 @@ path/to/image2.jpg
                         return (
                             f"Error: image file not found: {f}. Please check the path."
                         )
-                self._gen_img_openai(image_files, prompt, mask_file, target_file)
+                self._gen_img_openai(
+                    image_files, prompt, mask_file, target_file, input_fidelity
+                )
         except Exception as e:
             return f"Image was NOT generated.\nError description: {str(e)}"
 
