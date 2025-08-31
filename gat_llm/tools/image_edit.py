@@ -76,6 +76,7 @@ class ToolImageEdit:
         self.tool_description = {
             "name": self.name,
             "description": """Creates an edited or extended image given one or more source images and a prompt. The prompt should be precise and complete. In case of doubt, ask clarification questions to the user before calling this tool. Never mention file names in the prompt because the image generation model only receives the bytes of each image,
+When dealing with humans and/or faces, make sure to set input_fidelity to high.
 In all cases, including when using a mask, the prompt has to describe the entire resulting image, not just the area that is masked. When in doubt, ask the user to generate or clarify the full description.
 
 Raises ValueError: if not able to generate the image.""",
@@ -96,7 +97,7 @@ path/to/image2.jpg
                     },
                     "input_fidelity": {
                         "type": "string",
-                        "description": "Control how much effort the model will exert to match the style and features, especially facial features, of input images. Defaults to low.",
+                        "description": "Control how much effort the model will exert to match the style and features, especially facial features, of input images. Can be high or low. Defaults to low.",
                     },
                     "mask_file": {
                         "type": "string",
