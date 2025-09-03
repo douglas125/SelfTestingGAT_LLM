@@ -220,6 +220,23 @@ The Jupyter Notebook (`GAT-demo.ipynb`) provides a convenient interface for insp
 
 Refer to the comments in the notebook for detailed explanations of each section.
 
+## Using MCPs
+
+To connect MCPs to the LLMs, use the `MCPConnector` class:
+
+```
+from gat_llm.connector_mcp import MCPConnector
+
+# load the MCP JSON Configuration Transport
+cur_mcp_config = json.loads(mcp_servers)
+
+# load the tools
+mcpc = asyncio.run(MCPConnector.create_from_cfg(cur_mcp_config))
+
+# add the tools to the tool list
+allowed_tool_list = allowed_tool_list + mcpc.tools
+```
+
 ## Changing the Code
 
 ### Implementing a New Tool
