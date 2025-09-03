@@ -272,6 +272,7 @@ class LLMInterface:
                     "metadata": {"title": "🛠️", "status": "pending"},
                     "content": ", ".join([x["tool_name"] for x in self.lt.invoke_log]),
                 }
+            self.history_log[chat_id] = history + [msg, x]
             yield self._format_msg(x, msg, ui_history, extra_info=extra_info)
         # initial_ans = self._format_msg(x, msg, ui_history)
         # yield initial_ans
@@ -311,6 +312,7 @@ class LLMInterface:
 
             for x in ans2:
                 # pass
+                self.history_log[chat_id] = history + [msg, x]
                 yield self._format_msg(x, msg, ui_history)
             # yield self._format_msg(x, msg, ui_history)
 
