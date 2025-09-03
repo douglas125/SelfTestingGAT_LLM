@@ -53,9 +53,9 @@ class LLM_Provider:
 
     allowed_llms = [
         # Local
+        "Qwen 3 0.6b - Ollama",
         "OpenAI GPT OSS 20b - Ollama",
         "OpenAI GPT OSS 120b - Ollama",
-        "Qwen 3 0.6b - Ollama",
         "Qwen 3 1.7b - Ollama",
         "Qwen 3 4b - Ollama",
         "Qwen 3 8b - Ollama",

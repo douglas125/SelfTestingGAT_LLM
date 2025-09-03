@@ -1,7 +1,9 @@
 """ Handles the connection with MCP servers
 
+More details about the config parameters:
+https://gofastmcp.com/clients/transports#mcp-json-configuration-transport
+
 ## TODO:
-[ ] Filter allowed tools
 [ ] Call resources
 [ ] Call prompts
 
@@ -40,7 +42,7 @@ class MCPTool:
         self.tool_summary = description
         self.call_fn = call_fn
 
-    def __call__(self, args):
+    def __call__(self, **args):
         return asyncio.run(self.call_fn(args))
 
 
@@ -53,17 +55,29 @@ class MCPConnector:
             await client.ping()
 
             # List available operations
-            tools = await client.list_tools()
-            resources = await client.list_resources()
-            prompts = await client.list_prompts()
+            try:
+                tools = await client.list_tools()
+            except:
+                tools = None
 
-        mcpc = cls(client, tools, resources, prompts)
+            try:
+                resources = await client.list_resources()
+            except:
+                resources = None
+
+            try:
+                prompts = await client.list_prompts()
+            except:
+                prompts = None
+
+        mcpc = cls(config, client, tools, resources, prompts)
         return mcpc
 
-    def __init__(self, client, mcp_tools, resources, prompts):
+    def __init__(self, config, client, mcp_tools, resources, prompts):
         """Constructor.
         Test connections, list available tools and instantiates their call process
         """
+        self.config = config
         self.client = client
         self.mcp_tools = mcp_tools
         self.resources = resources
@@ -91,7 +105,7 @@ class MCPConnector:
         async with self.client:
             # Simple tool call
             result = await self.client.call_tool(name, args)
-        return str(result.data)
+        return str(result.content)
 
     def _convert_mcp_tool_to_std(self, mcp_tool_description):
         """Converts a MCP tool description to Claude's standard format"""
@@ -104,6 +118,9 @@ class MCPConnector:
             # handle more gracefully
             tool_desc["description"] = "(no description provided)"
         tool_desc["input_schema"]["type"] = "object"
+        tool_desc["input_schema"]["required"] = tool_desc["input_schema"].get(
+            "required", []
+        )
         return tool_desc
 
 
@@ -123,10 +140,24 @@ def main():
             # }
         }
     }
+    config = {
+        "mcpServers": {
+            "huggingface": {
+                "url": "https://huggingface.co/mcp",
+                # "headers": {"Authorization": "Bearer TOKEN"}
+            }
+        }
+    }
     mcpc = asyncio.run(MCPConnector.create_from_cfg(config))
-    args = {"a": 5, "b": 4}
-    tool_ans = mcpc.tools[0](args)
-    print(mcpc.tools[0].name, tool_ans)
+    for t in mcpc.tools:
+        print(t.name, t.tool_description)
+        if t.name == "hf_doc_search":
+            break
+    # print(mcpc.tools[3].name, mcpc.tools[3].tool_description)
+    # args = {"a": 5, "b": 4}
+    args = {"query": "text to speech"}
+    tool_ans = t(**args)
+    print(t.name, tool_ans)
 
 
 if __name__ == "__main__":

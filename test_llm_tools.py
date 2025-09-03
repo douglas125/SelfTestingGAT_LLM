@@ -1,12 +1,16 @@
 import os
+import json
+import asyncio
 import requests
 
 import boto3
 import botocore
 import gradio as gr
 
+
 import gat_llm.llm_invoker as inv
 from gat_llm.tools.base import LLMTools
+from gat_llm.connector_mcp import MCPConnector
 from gat_llm.llm_interface import LLMInterface
 from gat_llm.tools.speech_to_text import ToolSpeechToText
 from gat_llm.prompts.prompt_generator import RAGPromptGenerator
@@ -43,6 +47,19 @@ Maritaca: MARITACA_API_KEY (cannot be used with OpenAI models)
 - If a model is unavailable, you need to set the proper API key in the environment before running this interface
 """
 
+default_mcps = """{
+    "mcpServers": {
+        "local_simple_mcp_calculator": {
+            "transport": "http",
+            "url": "http://127.0.0.1:8000/mcp"
+        },
+        "huggingface": {
+            "transport": "http",
+            "url": "https://huggingface.co/mcp"
+        }
+    }
+}"""
+
 # Keep track of previous conversations
 history_log = {}
 
@@ -57,6 +74,7 @@ def process_audio_func(
     selected_llm,
     use_native_LLM_tools,
     allowed_tools,
+    mcp_servers,
     request: gr.Request,
 ):
     tstt = ToolSpeechToText()
@@ -76,6 +94,7 @@ def process_audio_func(
         selected_llm,
         use_native_LLM_tools,
         allowed_tools,
+        mcp_servers,
         request,
     )
     for x in ans_gen:
@@ -92,6 +111,7 @@ def msg_forward_func(
     selected_llm,
     use_native_LLM_tools,
     allowed_tools,
+    mcp_servers,
     request: gr.Request,
 ):
     if "unavailable" in selected_llm.lower():
@@ -113,8 +133,21 @@ def msg_forward_func(
         if x.tool_description["name"] in allowed_tools
     ]
 
+    # Handle MCP Servers
+    try:
+        cur_mcp_config = json.loads(mcp_servers)
+        mcpc = asyncio.run(MCPConnector.create_from_cfg(cur_mcp_config))
+        allowed_tool_list = allowed_tool_list + mcpc.tools
+    except Exception as e:  # works on python 3.x
+        warning_msg = f"Problem connecting to MCP servers: {str(e)}"
+        msg = (
+            msg
+            + f"<warning_to_user><note>Problem loading MCP</note><msg>{warning_msg}</msg><mcp_json>{mcp_servers}</mcp_json></warning_to_user>"
+        )
+        print(warning_msg)
+
     rpg = RAGPromptGenerator(use_native_tools=use_native_LLM_tools)
-    if len(allowed_tools) == 0:
+    if len(allowed_tool_list) == 0:
         lt = None
         tool_descriptions = None
         system_prompt = rpg.prompt
@@ -237,13 +270,17 @@ def main(max_audio_duration=120):
                     interactive=True,
                 )
             all_tools = [x.tool_description["name"] for x in LLMTools.get_all_tools()]
-            chk_tools = gr.CheckboxGroup(
-                all_tools,
-                value=all_tools[0:1],
-                label="Allowed tools",
-                info="Select the external tools that the LLM will have access to",
-                interactive=True,
-            )
+            with gr.Row():
+                with gr.Column(scale=3):
+                    chk_tools = gr.CheckboxGroup(
+                        all_tools,
+                        value=all_tools[0:1],
+                        label="Allowed tools",
+                        info="Select the external tools that the LLM will have access to",
+                        interactive=True,
+                    )
+                with gr.Column(scale=1):
+                    mcp_servers = gr.Textbox(label="MCP Servers", value=default_mcps)
 
             with gr.Row():
                 with gr.Column(scale=3):
@@ -282,7 +319,7 @@ def main(max_audio_duration=120):
             clear_btn.add(
                 [image_input_1, image_input_2, image_input_3, chatbot, audio_msg]
             )
-            scratchpad = gr.Textbox(label="Scratchpad")
+            scratchpad = gr.Textbox(label="Scratchpad", visible=False)
             sys_prompt_txt = gr.Text(label="System prompt prepend", value="")
         raw_history = gr.JSON(label="Raw history", open=False)
 
@@ -299,6 +336,7 @@ def main(max_audio_duration=120):
                 box_llm_model,
                 chk_native_tools,
                 chk_tools,
+                mcp_servers,
             ],
             outputs=[
                 msg2,
