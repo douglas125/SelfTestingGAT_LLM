@@ -351,4 +351,8 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 - Add vLLM as a local provider
 - Add input_fidelity control to edit image tool
 
+## v0.1.12
+
+- Enable MCPs
+
 ## TBD

@@ -36,3 +36,4 @@ dependencies:
       - anthropic
       - openai
       - markitdown[all]
+      - fastmcp
