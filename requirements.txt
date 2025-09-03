@@ -9,6 +9,7 @@ requests
 beautifulsoup4
 tabulate
 gradio
+fastmcp
 sympy
 qrcode
 ffmpeg

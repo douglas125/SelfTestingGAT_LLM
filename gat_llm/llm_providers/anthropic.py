@@ -269,6 +269,9 @@ class LLM_Claude_Anthropic(LLM_Service):
                 yield postpend + cur_ans + stop_txt
                 break
         if cur_tool_spec is not None:
-            cur_tool_spec["input"] = json.loads(cur_tool_spec["input"])
+            if cur_tool_spec["input"].strip() == "":
+                cur_tool_spec["input"] = {}
+            else:
+                cur_tool_spec["input"] = json.loads(cur_tool_spec["input"])
         self.cur_tool_spec = cur_tool_spec
         self.stop_reason = stop_reason
