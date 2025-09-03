@@ -302,6 +302,7 @@ def main(max_audio_duration=120):
 
             with gr.Row():
                 send_btn = gr.Button("Send")
+                cancel_btn = gr.Button("Cancel")
                 clear_btn = gr.ClearButton([msg2])
 
             with gr.Row():
@@ -323,7 +324,7 @@ def main(max_audio_duration=120):
             sys_prompt_txt = gr.Text(label="System prompt prepend", value="")
         raw_history = gr.JSON(label="Raw history", open=False)
 
-        gr.on(
+        send_txt_event = gr.on(
             triggers=[send_btn.click],
             fn=msg_forward_func,
             inputs=[
@@ -349,7 +350,7 @@ def main(max_audio_duration=120):
             ],
             concurrency_limit=20,
         )
-        gr.on(
+        send_audio_event = gr.on(
             triggers=audio_msg.stop_recording,
             fn=process_audio_func,
             inputs=[
@@ -373,6 +374,12 @@ def main(max_audio_duration=120):
                 chatbot,
                 raw_history,
             ],
+        )
+        cancel_btn.click(
+            fn=None,
+            inputs=None,
+            outputs=None,
+            cancels=[send_audio_event, send_txt_event],
         )
     demo.queue().launch(show_api=False, share=False, inline=False)
 
