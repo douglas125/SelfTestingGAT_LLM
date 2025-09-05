@@ -134,17 +134,18 @@ def msg_forward_func(
     ]
 
     # Handle MCP Servers
-    try:
-        cur_mcp_config = json.loads(mcp_servers)
-        mcpc = asyncio.run(MCPConnector.create_from_cfg(cur_mcp_config))
-        allowed_tool_list = allowed_tool_list + mcpc.tools
-    except Exception as e:  # works on python 3.x
-        warning_msg = f"Problem connecting to MCP servers: {str(e)}"
-        msg = (
-            msg
-            + f"<warning_to_user><note>Problem loading MCP</note><msg>{warning_msg}</msg><mcp_json>{mcp_servers}</mcp_json></warning_to_user>"
-        )
-        print(warning_msg)
+    if mcp_servers.strip() != "":
+        try:
+            cur_mcp_config = json.loads(mcp_servers)
+            mcpc = asyncio.run(MCPConnector.create_from_cfg(cur_mcp_config))
+            allowed_tool_list = allowed_tool_list + mcpc.tools
+        except Exception as e:  # works on python 3.x
+            warning_msg = f"Problem connecting to MCP servers: {str(e)}"
+            msg = (
+                msg
+                + f"<warning_to_user><note>Problem loading MCP</note><msg>{warning_msg}</msg><mcp_json>{mcp_servers}</mcp_json></warning_to_user>"
+            )
+            print(warning_msg)
 
     rpg = RAGPromptGenerator(use_native_tools=use_native_LLM_tools)
     if len(allowed_tool_list) == 0:
