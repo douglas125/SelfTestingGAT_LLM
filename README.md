@@ -373,3 +373,5 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 - Enable MCPs
 
 ## TBD
+
+- Adjust MCPs to collect only the TextResult from the response
