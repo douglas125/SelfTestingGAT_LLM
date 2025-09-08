@@ -33,6 +33,7 @@ config = {
 
 import asyncio
 from fastmcp import Client
+from fastmcp.prompts.prompt import TextContent
 
 
 class MCPTool:
@@ -73,15 +74,26 @@ class MCPConnector:
         mcpc = cls(config, client, tools, resources, prompts)
         return mcpc
 
-    def __init__(self, config, client, mcp_tools, resources, prompts):
+    def __init__(
+        self,
+        config,
+        client,
+        mcp_tools,
+        resources,
+        prompts,
+        return_only_text_content=True,
+    ):
         """Constructor.
         Test connections, list available tools and instantiates their call process
+
+        If return_only_text_content = True, only returns the textual part of the tool calls
         """
         self.config = config
         self.client = client
         self.mcp_tools = mcp_tools
         self.resources = resources
         self.prompts = prompts
+        self.return_only_text_content = return_only_text_content
         self.tools = []
         for mcp_tool in self.mcp_tools:
             cur_tool_desc = self._convert_mcp_tool_to_std(mcp_tool)
@@ -105,7 +117,16 @@ class MCPConnector:
         async with self.client:
             # Simple tool call
             result = await self.client.call_tool(name, args)
-        return str(result.content)
+        if self.return_only_text_content:
+            ans = [str(x.text) for x in result.content if isinstance(x, TextContent)]
+            if len(ans) == 1:
+                return str(ans[0])
+            elif len(ans) == 0:
+                return ""
+            else:
+                return str(ans)
+        else:
+            return str(result.content)
 
     def _convert_mcp_tool_to_std(self, mcp_tool_description):
         """Converts a MCP tool description to Claude's standard format"""
