@@ -191,16 +191,39 @@ class LLM_GPT_OpenAI(LLM_Service):
                 llm_body_changed = True
                 while llm_body_changed:
                     llm_body_changed = False
-                    response = self.openai_client.chat.completions.create(**body)
                     word_count = len(re.findall(r"\w+", str(body["messages"])))
                     print(f"Invoking {self.llm_description}. Word count: {word_count}")
+                    response = self.openai_client.chat.completions.create(**body)
 
                     # stream responses
-                    partial_ans = self._response_gen(response, postpend)
-                    x = ""
-                    for x in partial_ans:
-                        yield x
-                    cur_ans = x
+                    if body["stream"]:
+                        partial_ans = self._response_gen(response, postpend)
+                        x = ""
+                        for x in partial_ans:
+                            yield x
+                        cur_ans = x
+                    else:
+                        self.cur_tool_specs = []
+                        cur_ans = response.choices[0].message.content
+                        cur_ans = cur_ans if cur_ans is not None else ""
+                        yield cur_ans
+                        self.stop_reason = response.choices[0].finish_reason
+                        if (
+                            hasattr(response.choices[0].message, "tool_calls")
+                            and response.choices[0].message.tool_calls
+                        ):
+                            for tool in response.choices[0].message.tool_calls:
+                                cur_tool_spec = {
+                                    "id": tool.id,
+                                    "tool_name": tool.function.name,
+                                    "input": tool.function.arguments,
+                                }
+                                cur_tool_spec["input"] = (
+                                    cur_tool_spec["input"]
+                                    if isinstance(cur_tool_spec["input"], dict)
+                                    else json.loads(cur_tool_spec["input"])
+                                )
+                                self.cur_tool_specs.append(cur_tool_spec)
 
                     if len(self.cur_tool_specs) > 0:
                         ans_to_append = cur_ans
