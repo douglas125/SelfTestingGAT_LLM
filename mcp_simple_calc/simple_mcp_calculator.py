@@ -17,7 +17,6 @@ Use this server by placing this JSON into the MCP Servers textbox:
 from fastmcp import FastMCP
 from typing import Annotated
 from pydantic import Field
-import math
 
 # instantiate an MCP server client
 mcp = FastMCP("Hello World")
@@ -28,7 +27,13 @@ mcp = FastMCP("Hello World")
 @mcp.tool()
 def add(
     a: Annotated[float, "First number"],
-    b: float = Field(description="Second number. Must be 1, 4 or 5", enum=[1, 4, 5]),
+    b: Annotated[
+        float,
+        Field(
+            description="Second number. Must be 1, 4 or 5",
+            json_schema_extra={"enum": [1, 4, 5]},
+        ),
+    ],
 ) -> float:
     return float(a + b)
 
@@ -61,11 +66,22 @@ def get_greeting(name: str) -> str:
     return f"Hello, {name}!"
 
 
+# Export ASGI app for Lambda Web Adapter
+app = mcp.http_app()
+
+
 # execute and return the stdio output
 if __name__ == "__main__":
     print("Starting...")
+
+    # Local serving
     # mcp.run(transport="stdio")
-    mcp.run(transport="http", host="127.0.0.1", port=8000)
+
+    # Local server
+    # mcp.run(transport="http", host="127.0.0.1", port=8000)
+
+    # Docker server
+    mcp.run(transport="http", host="0.0.0.0", port=8000)
 
     """
     # Create a proxy to a remote server

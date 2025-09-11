@@ -1,0 +1,14 @@
+FROM public.ecr.aws/lambda/python:3.11
+
+# Install Lambda Web Adapter
+COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.8.4 /lambda-adapter /opt/extensions/lambda-adapter
+
+# Install dependencies
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+# Copy app code
+COPY simple_mcp_calculator.py .
+
+# Set the FastMCP app as entrypoint
+CMD ["simple_mcp_calculator.app"]
