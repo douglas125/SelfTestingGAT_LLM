@@ -49,6 +49,15 @@ class LLM_Provider:
         "GPT 4.1 - OpenAI",
         "GPT 3.5 - OpenAI",
         "GPT 4o mini - OpenAI",
+        # Misc
+        "DeepSeekV3 Chat - DeepSeek",
+        "Command R - Bedrock",
+        "Command RPlus - Bedrock",
+        "Mistral Mixtral 8x7B",
+        "Mistral Large v1",
+        "Llama3_1 8b instruct",
+        "Llama3_1 70b instruct",
+        "Llama3_1 405b instruct",
     ]
 
     allowed_llms = [
@@ -72,6 +81,8 @@ class LLM_Provider:
         "Amazon Nova Pro 1.0 - Bedrock",
         # Grok
         "Grok4 - Grok",
+        "Grok4 Fast reasoning - Grok",
+        "Grok4 Fast nonreasoning - Grok",
         # Maritaca
         "Sabia3 - Maritaca",
         # OpenAI
@@ -87,15 +98,6 @@ class LLM_Provider:
         "Claude 3.5 Haiku - Anthropic",
         "Claude 3.7 Sonnet - Bedrock",
         "Claude 3.5 Haiku - Bedrock",
-        # Misc
-        "DeepSeekV3 Chat - DeepSeek",
-        "Command R - Bedrock",
-        "Command RPlus - Bedrock",
-        "Mistral Mixtral 8x7B",
-        "Mistral Large v1",
-        "Llama3_1 8b instruct",
-        "Llama3_1 70b instruct",
-        "Llama3_1 405b instruct",
     ]
 
     def get_llm(bedrock_client, llm):
@@ -168,6 +170,10 @@ class LLM_Provider:
             return LLM_Grok(model_size="Grok2Vision xAI")
         elif llm == "Grok4 - Grok":
             return LLM_Grok(model_size="Grok4")
+        elif llm == "Grok4 Fast reasoning - Grok":
+            return LLM_Grok(model_size="Grok4-fast-reasoning")
+        elif llm == "Grok4 Fast nonreasoning - Grok":
+            return LLM_Grok(model_size="Grok4-fast-non-reasoning")
 
         # DeepSeek
         elif llm == "DeepSeekV3 Chat - DeepSeek":

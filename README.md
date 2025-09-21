@@ -378,3 +378,5 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 - Enable OpenAI API without streaming (set `llm.body["stream"] = False`)
 
 ## TBD
+
+- Add Grok4 Fast and deprecate some older models

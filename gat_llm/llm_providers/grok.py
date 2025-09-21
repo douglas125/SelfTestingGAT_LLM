@@ -17,9 +17,23 @@ class LLM_Grok(LLM_GPT_OpenAI):
             self.price_per_M_output_tokens = 10
         elif model_size == "Grok4":
             self.model_id = "grok-4-0709"
-            self.llm_description = "Grok 4 (medium-sized LLM) - directly from xAI"
+            self.llm_description = "Grok 4 (large-sized LLM) - directly from xAI"
             self.price_per_M_input_tokens = 3
             self.price_per_M_output_tokens = 15
+        elif model_size == "Grok4-fast-reasoning":
+            self.model_id = "grok-4-fast-reasoning"
+            self.llm_description = (
+                "Grok 4 Fast reasoning (small-sized LLM) - directly from xAI"
+            )
+            self.price_per_M_input_tokens = 0.2
+            self.price_per_M_output_tokens = 0.5
+        elif model_size == "Grok4-fast-non-reasoning":
+            self.model_id = "grok-4-fast-non-reasoning"
+            self.llm_description = (
+                "Grok 4 Fast reasoning (small-sized LLM) - directly from xAI"
+            )
+            self.price_per_M_input_tokens = 0.2
+            self.price_per_M_output_tokens = 0.5
 
         try:
             self.openai_client = OpenAI(
