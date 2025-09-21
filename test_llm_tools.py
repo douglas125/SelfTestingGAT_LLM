@@ -364,6 +364,7 @@ def main(max_audio_duration=120):
                 box_llm_model,
                 chk_native_tools,
                 chk_tools,
+                mcp_servers,
             ],
             outputs=[
                 audio_msg,
