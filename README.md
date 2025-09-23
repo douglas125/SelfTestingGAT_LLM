@@ -82,6 +82,7 @@ To use this code and run the implemented tools, follow these steps:
      ```
      export AWS_ACCESS_KEY_ID=your_aws_access_key
      export AWS_SECRET_ACCESS_KEY=your_aws_secret_key
+     export AWS_BEDROCK_API_KEY=your_bedrock_key (if using a model from Bedrock via the OpenAI API)
      export ANTHROPIC_API_KEY=your_anthropic_key
      export OPENAI_API_KEY=your_openai_key
 	 export MARITACA_API_KEY=your_maritaca_key
@@ -90,6 +91,7 @@ To use this code and run the implemented tools, follow these steps:
      ```
      set AWS_ACCESS_KEY_ID=your_aws_access_key
      set AWS_SECRET_ACCESS_KEY=your_aws_secret_key
+     set AWS_BEDROCK_API_KEY=your_bedrock_key (if using a model from Bedrock via the OpenAI API)
      set ANTHROPIC_API_KEY=your_anthropic_key
      set OPENAI_API_KEY=your_openai_key
 	 set MARITACA_API_KEY=your_maritaca_key
