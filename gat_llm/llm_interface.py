@@ -267,7 +267,10 @@ class LLMInterface:
         }
         x = ""
         for x in ans2:
-            if self.lt is not None and hasattr(self.llm, "cur_tool_spec"):
+            if self.lt is not None and (
+                hasattr(self.llm, "cur_tool_spec")
+                or hasattr(self.llm, "cur_tool_specs")
+            ):
                 extra_info = {
                     "metadata": {"title": "🛠️", "status": "pending"},
                     "content": ", ".join([x["tool_name"] for x in self.lt.invoke_log]),

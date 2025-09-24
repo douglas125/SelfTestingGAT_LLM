@@ -19,6 +19,7 @@ from .llm_providers.maritaca import LLM_Maritalk
 from .llm_providers.aws_bedrock_nova import LLM_Nova_Bedrock
 from .llm_providers.deepseek import LLM_Deepseek
 from .llm_providers.grok import LLM_Grok
+from .llm_providers.aws_bedrock_via_openai import LLM_Bedrock_OpenAI
 
 # local
 from .llm_providers.ollama import LLM_Ollama
@@ -49,6 +50,10 @@ class LLM_Provider:
         "GPT 4.1 - OpenAI",
         "GPT 3.5 - OpenAI",
         "GPT 4o mini - OpenAI",
+        # AWS
+        "Amazon Nova Micro 1.0 - Bedrock",
+        "Amazon Nova Lite 1.0 - Bedrock",
+        "Amazon Nova Pro 1.0 - Bedrock",
         # Misc
         "DeepSeekV3 Chat - DeepSeek",
         "Command R - Bedrock",
@@ -75,10 +80,9 @@ class LLM_Provider:
         "Qwen 2.5vl 3b - Ollama",
         "DeepSeek R1 14b - Ollama",
         "Qwen 3 1.7b - VLLM",
-        # AWS
-        "Amazon Nova Micro 1.0 - Bedrock",
-        "Amazon Nova Lite 1.0 - Bedrock",
-        "Amazon Nova Pro 1.0 - Bedrock",
+        # AWS Bedrock via OpenAI API
+        "OpenAI GPT OSS 20b - AWSBedrock_OpenAI",
+        "OpenAI GPT OSS 120b - AWSBedrock_OpenAI",
         # Grok
         "Grok4 - Grok",
         "Grok4 Fast reasoning - Grok",
@@ -152,6 +156,12 @@ class LLM_Provider:
         # Local - vllm
         elif llm == "Qwen 3 1.7b - VLLM":
             return LLM_VLLM(model="Qwen 3 1.7b VLLM")
+
+        # AWS Bedrock via OpenAI API
+        elif llm == "OpenAI GPT OSS 20b - AWSBedrock_OpenAI":
+            return LLM_Bedrock_OpenAI(model_size="GPT OSS 20b Bedrock")
+        elif llm == "OpenAI GPT OSS 120b - AWSBedrock_OpenAI":
+            return LLM_Bedrock_OpenAI(model_size="GPT OSS 120b Bedrock")
 
         # Amazon
         elif llm == "Amazon Nova Micro 1.0 - Bedrock":

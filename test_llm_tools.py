@@ -36,11 +36,12 @@ examples = [
 description = """# Retrieval Augmented by Tools
 
 - Before running this demo, set the API key of the LLM you want to use in your environment
-Bedrock: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
-Anthropic: ANTHROPIC_API_KEY
-OpenAI: OPENAI_API_KEY
-DeepSeek: DEEPSEEK_API_KEY (cannot be used with OpenAI models)
-Maritaca: MARITACA_API_KEY (cannot be used with OpenAI models)
+    - Bedrock: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
+    - Bedrock via OpenAI API: AWS_BEDROCK_API_KEY
+    - Anthropic: ANTHROPIC_API_KEY
+    - OpenAI: OPENAI_API_KEY
+    - DeepSeek: DEEPSEEK_API_KEY
+    - Maritaca: MARITACA_API_KEY
 - Select the LLM of your choice. You can't use Maritaca or Deepseek with OpenAI or tools that require OpenAI
 - Note that some tools require non-LLM OpenAI models: text_to_image, text_to_speech, speech_to_text
 - Select the tools allowed for the LLM
@@ -229,8 +230,13 @@ def main(max_audio_duration=120):
                     ]
                 if os.environ.get("OPENAI_API_KEY") is None:
                     available_models = [
+                        "[UNAVAILABLE] " + x if "- openai" in x.lower() else x
+                        for x in available_models
+                    ]
+                if os.environ.get("AWS_BEDROCK_API_KEY") is None:
+                    available_models = [
                         "[UNAVAILABLE] " + x
-                        if "openai" in x.lower() and "- ollama" not in x.lower()
+                        if "- awsbedrock_openai" in x.lower()
                         else x
                         for x in available_models
                     ]
@@ -254,7 +260,7 @@ def main(max_audio_duration=120):
                     or os.environ.get("AWS_SECRET_ACCESS_KEY") is None
                 ):
                     available_models = [
-                        "[UNAVAILABLE] " + x if "bedrock" in x.lower() else x
+                        "[UNAVAILABLE] " + x if "- bedrock" in x.lower() else x
                         for x in available_models
                     ]
 
