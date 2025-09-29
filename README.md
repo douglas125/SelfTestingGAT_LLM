@@ -47,6 +47,7 @@ With the current prompts, tools, descriptions and native tool configuration use 
 | ('Llama3_1 405b instruct', False)         |                             3 |                75.5 |             87   |                          5.32  |                           16    |
 | ('Claude 3.7 Sonnet - Anthropic', True)   |                             2 |                74.7 |             86.9 |                          3     |                           15    |
 | ('Mistral Large v1', False)               |                             1 |                74.7 |             86.8 |                          4     |                           12    |
+| ('Claude 4.5 Sonnet - Anthropic', True)   |                             5 |                74.2 |             86.5 |                          3     |                           15    |
 | ('GPT 4o mini - OpenAI', False)           |                             3 |                73.1 |             85.1 |                          0.15  |                            0.6  |
 | ('GPT 5 - OpenAI', True)                  |                             3 |                69.5 |             84.3 |                          1.25  |                           10    |
 | ('Command RPlus - Bedrock', False)        |                             4 |                72.8 |             83.8 |                          3     |                           15    |
@@ -67,6 +68,8 @@ With the current prompts, tools, descriptions and native tool configuration use 
 | ('Llama3 70b instruct', False)            |                            29 |                29.1 |             36.1 |                          2.65  |                            3.5  |
 | ('Llama3_1 8b instruct', False)           |                            34 |                23.9 |             33.7 |                          0.3   |                            0.6  |
 | ('Grok2Vision - Grok', True)              |                             1 |                25   |             29   |                          2     |                           10    |
+| ('Qwen 3 8b - Ollama', True)              |                           458 |                 0   |              0   |                          0     |                            0    |
+| ('Qwen 3 14b - Ollama', True)             |                           433 |                 0   |              0   |                          0     |                            0    |
 
 ## Using this Code
 
