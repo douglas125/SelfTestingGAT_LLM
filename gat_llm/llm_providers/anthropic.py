@@ -22,6 +22,11 @@ class LLM_Claude_Anthropic(LLM_Service):
             )
             self.price_per_M_input_tokens = 15
             self.price_per_M_output_tokens = 75
+        elif model_size == "Sonnet 4.5 Anthropic":
+            self.model_id = "claude-sonnet-4-5-20250929"
+            self.llm_description = "Anthropic Claude 4.5 Sonnet (Medium-size LLM) - directly from Anthropic"
+            self.price_per_M_input_tokens = 3
+            self.price_per_M_output_tokens = 15
         elif model_size == "Sonnet 4 Anthropic":
             self.model_id = "claude-sonnet-4-20250514"
             self.llm_description = (

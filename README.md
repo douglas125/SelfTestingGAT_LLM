@@ -379,8 +379,11 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 - Adjust MCPs to collect only the TextResult from the response
 - Enable OpenAI API without streaming (set `llm.body["stream"] = False`)
 
-## TBD
+## 0.1.14
 
 - Add Grok4 Fast and deprecate some older models
 - Add GPT OSS 20b and 120b in Bedrock via the OpenAI API
 - Fix missing tool use UI feedback when using models via OpenAI API
+- Add Claude 4.5 Sonnet (Anthropic, Bedrock)
+
+## TBD
