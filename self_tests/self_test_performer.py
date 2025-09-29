@@ -72,6 +72,7 @@ class SelfTestPerformer(SelfTestBase):
 if __name__ == "__main__":
     # configure tests
     llms_to_test = [
+        {"model": "Claude 4.5 Sonnet - Anthropic", "native_tools": True},
         {"model": "GPT 5 nano - OpenAI", "native_tools": True},
         {"model": "GPT 5 mini - OpenAI", "native_tools": True},
         {"model": "GPT 5 - OpenAI", "native_tools": True},
