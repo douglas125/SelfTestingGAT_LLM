@@ -38,6 +38,10 @@ class LLM_Provider:
         "Claude 3 Haiku - Bedrock",
         "Claude 3 Sonnet - Bedrock",
         "Claude 3 Opus - Bedrock",
+        "Claude 4 Sonnet - Anthropic",
+        "Claude 4 Sonnet - Bedrock",
+        "Claude 4 Opus - Anthropic",
+        "Claude 4 Opus - Bedrock",
         "Claude 2.1",
         "Claude Instant 1.2",
         "Llama2 13b",
@@ -94,10 +98,8 @@ class LLM_Provider:
         "GPT 5 mini - OpenAI",
         "GPT 5 nano - OpenAI",
         # Anthropic
-        "Claude 4 Opus - Anthropic",
-        "Claude 4 Sonnet - Anthropic",
-        "Claude 4 Opus - Bedrock",
-        "Claude 4 Sonnet - Bedrock",
+        "Claude 4.5 Sonnet - Anthropic",
+        "Claude 4.5 Sonnet - Bedrock",
         "Claude 3.7 Sonnet - Anthropic",
         "Claude 3.5 Haiku - Anthropic",
         "Claude 3.7 Sonnet - Bedrock",
@@ -229,10 +231,14 @@ class LLM_Provider:
         # current Claude
         elif llm == "Claude 4 Sonnet - Anthropic":
             return LLM_Claude_Anthropic(model_size="Sonnet 4 Anthropic")
+        elif llm == "Claude 4.5 Sonnet - Anthropic":
+            return LLM_Claude_Anthropic(model_size="Sonnet 4.5 Anthropic")
         elif llm == "Claude 4 Opus - Anthropic":
             return LLM_Claude_Anthropic(model_size="Opus 4 Anthropic")
         elif llm == "Claude 4 Sonnet - Bedrock":
             return LLM_Claude_Bedrock(bedrock_client, model_size="Sonnet 4")
+        elif llm == "Claude 4.5 Sonnet - Bedrock":
+            return LLM_Claude_Bedrock(bedrock_client, model_size="Sonnet 4.5")
         elif llm == "Claude 4 Opus - Bedrock":
             return LLM_Claude_Bedrock(bedrock_client, model_size="Opus 4")
         elif llm == "Claude 3.7 Sonnet - Bedrock":

@@ -28,6 +28,13 @@ class LLM_Claude_Bedrock(LLM_Service):
             )
             self.price_per_M_input_tokens = 3
             self.price_per_M_output_tokens = 15
+        elif model_size == "Sonnet 4.5":
+            self.model_id = "us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+            self.llm_description = (
+                "Anthropic Claude 4.5 Sonnet from AWS Bedrock (Medium-size LLM)"
+            )
+            self.price_per_M_input_tokens = 3
+            self.price_per_M_output_tokens = 15
         elif model_size == "Opus 4":
             self.model_id = "us.anthropic.claude-opus-4-20250514-v1:0"
             self.llm_description = (
