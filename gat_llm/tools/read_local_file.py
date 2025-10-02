@@ -15,7 +15,17 @@ def extract_text(file) -> str:
     extension = file.suffix.lower()
 
     # Check the file type and read
-    if extension in [".txt", ".py", ".md", ".srt", ".js", ".jsx", ".html", ".css"]:
+    if extension in [
+        ".txt",
+        ".py",
+        ".md",
+        ".srt",
+        ".js",
+        ".jsx",
+        ".html",
+        ".css",
+        ".xml",
+    ]:
         with open(file, "r", encoding="utf-8") as f:
             ans = f.read()
         ans = f"<contents>\n{ans}\n</contents>"

@@ -25,6 +25,7 @@ from .query_database import ToolQueryLLMDB
 from .query_database import SampleOrder_LLM_DB
 from .run_with_python import ToolRunWithPython
 from .select_video_frames import ToolSelectVideoFrames
+from .speech_transcribe_analyze import ToolSpeechAnalysis
 
 rng = np.random.default_rng()
 
@@ -49,6 +50,7 @@ class LLMTools:
             ToolPlotWithGraphviz(),
             ToolTextToSpeech(),
             ToolSpeechToText(),
+            ToolSpeechAnalysis(),
             ToolTextToImage(),
             ToolImageEdit(),
             ToolSummarizePast(),
@@ -79,6 +81,7 @@ class LLMTools:
                 # ToolUpdateUserDetails(),
                 # ToolQueryLLMDB(SampleOrder_LLM_DB()),
                 # ToolSolvePythonCode(),
+                # ToolSpeechAnalysis(),
                 ToolTextToSpeech(),
                 ToolSpeechToText(),
                 ToolTextToImage(),

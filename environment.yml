@@ -37,3 +37,4 @@ dependencies:
       - openai
       - markitdown[all]
       - fastmcp
+      - praat-parselmouth
