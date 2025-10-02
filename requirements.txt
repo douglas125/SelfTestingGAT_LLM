@@ -11,6 +11,7 @@ tabulate
 gradio
 fastmcp
 sympy
+praat-parselmouth
 qrcode
 ffmpeg
 matplotlib

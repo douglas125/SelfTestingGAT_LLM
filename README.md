@@ -390,3 +390,5 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 - Add Claude 4.5 Sonnet (Anthropic, Bedrock)
 
 ## TBD
+
+- Added tool speech_transcribe_analyze.ToolSpeechAnalysis for advanced speech recognition and analysis
