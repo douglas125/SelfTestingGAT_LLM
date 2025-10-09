@@ -33,9 +33,9 @@ examples = [
     "List all your tools. Summarize what each tool does and generate 3 sample questions that it could answer. Answer with a table.",
 ]
 
-description = """# Retrieval Augmented by Tools
+demo_title = "Retrieval Augmented by Tools"
 
-- Before running this demo, set the API key of the LLM you want to use in your environment
+description = """- Before running this demo, set the API key of the LLM you want to use in your environment
     - Bedrock: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
     - Bedrock via OpenAI API: AWS_BEDROCK_API_KEY
     - Anthropic: ANTHROPIC_API_KEY
@@ -76,6 +76,7 @@ def process_audio_func(
     use_native_LLM_tools,
     allowed_tools,
     mcp_servers,
+    mcp_enable,
     request: gr.Request,
 ):
     tstt = ToolSpeechToText()
@@ -96,6 +97,7 @@ def process_audio_func(
         use_native_LLM_tools,
         allowed_tools,
         mcp_servers,
+        mcp_enable,
         request,
     )
     for x in ans_gen:
@@ -113,6 +115,7 @@ def msg_forward_func(
     use_native_LLM_tools,
     allowed_tools,
     mcp_servers,
+    mcp_enable,
     request: gr.Request,
 ):
     if "unavailable" in selected_llm.lower():
@@ -135,7 +138,7 @@ def msg_forward_func(
     ]
 
     # Handle MCP Servers
-    if mcp_servers.strip() != "":
+    if mcp_servers.strip() != "" and mcp_enable:
         try:
             cur_mcp_config = json.loads(mcp_servers)
             mcpc = asyncio.run(MCPConnector.create_from_cfg(cur_mcp_config))
@@ -206,64 +209,77 @@ def is_server_active(url="http://localhost:11434/"):
 
 
 def main(max_audio_duration=120):
+    available_models = inv.LLM_Provider.allowed_llms
+    if not is_server_active():
+        # Check for Ollama server
+        available_models = [
+            "[UNAVAILABLE] " + x if "- ollama" in x.lower() else x
+            for x in available_models
+        ]
+    if not is_server_active("http://localhost:8000/metrics"):
+        # Check for vLLM server
+        available_models = [
+            "[UNAVAILABLE] " + x if "- vllm" in x.lower() else x
+            for x in available_models
+        ]
+    if os.environ.get("ANTHROPIC_API_KEY") is None:
+        available_models = [
+            "[UNAVAILABLE] " + x if "anthropic" in x.lower() else x
+            for x in available_models
+        ]
+    if os.environ.get("OPENAI_API_KEY") is None:
+        available_models = [
+            "[UNAVAILABLE] " + x if "- openai" in x.lower() else x
+            for x in available_models
+        ]
+    if os.environ.get("AWS_BEDROCK_API_KEY") is None:
+        available_models = [
+            "[UNAVAILABLE] " + x if "- awsbedrock_openai" in x.lower() else x
+            for x in available_models
+        ]
+    if os.environ.get("MARITACA_API_KEY") is None:
+        available_models = [
+            "[UNAVAILABLE] " + x if "maritaca" in x.lower() else x
+            for x in available_models
+        ]
+    if os.environ.get("GROK_API_KEY") is None:
+        available_models = [
+            "[UNAVAILABLE] " + x if "grok" in x.lower() else x for x in available_models
+        ]
+    if os.environ.get("DEEPSEEK_API_KEY") is None:
+        available_models = [
+            "[UNAVAILABLE] " + x if "- deepseek" in x.lower() else x
+            for x in available_models
+        ]
+    if (
+        os.environ.get("AWS_ACCESS_KEY_ID") is None
+        or os.environ.get("AWS_SECRET_ACCESS_KEY") is None
+    ):
+        available_models = [
+            "[UNAVAILABLE] " + x if "- bedrock" in x.lower() else x
+            for x in available_models
+        ]
+
     with gr.Blocks(title="Self-testing GAT Tools demo") as demo:
-        gr.Markdown(description)
+        gr.Markdown(f"# {demo_title}")
+        all_tools = [x.tool_description["name"] for x in LLMTools.get_all_tools()]
+        with gr.Sidebar(width=500):
+            gr.Markdown("# Tools")
+            chk_tools = gr.CheckboxGroup(
+                all_tools,
+                value=all_tools[0:1],
+                label="Allowed tools",
+                info="Select the external tools that the LLM will have access to",
+                interactive=True,
+            )
+            mcp_enable = gr.Checkbox(
+                label="Enable MCP", info="Allow connection to MCP servers?"
+            )
+            mcp_servers = gr.Textbox(label="MCP Servers", value=default_mcps)
         with gr.Column():
             with gr.Row():
-                available_models = inv.LLM_Provider.allowed_llms
-                if not is_server_active():
-                    # Check for Ollama server
-                    available_models = [
-                        "[UNAVAILABLE] " + x if "- ollama" in x.lower() else x
-                        for x in available_models
-                    ]
-                if not is_server_active("http://localhost:8000/metrics"):
-                    # Check for vLLM server
-                    available_models = [
-                        "[UNAVAILABLE] " + x if "- vllm" in x.lower() else x
-                        for x in available_models
-                    ]
-                if os.environ.get("ANTHROPIC_API_KEY") is None:
-                    available_models = [
-                        "[UNAVAILABLE] " + x if "anthropic" in x.lower() else x
-                        for x in available_models
-                    ]
-                if os.environ.get("OPENAI_API_KEY") is None:
-                    available_models = [
-                        "[UNAVAILABLE] " + x if "- openai" in x.lower() else x
-                        for x in available_models
-                    ]
-                if os.environ.get("AWS_BEDROCK_API_KEY") is None:
-                    available_models = [
-                        "[UNAVAILABLE] " + x
-                        if "- awsbedrock_openai" in x.lower()
-                        else x
-                        for x in available_models
-                    ]
-                if os.environ.get("MARITACA_API_KEY") is None:
-                    available_models = [
-                        "[UNAVAILABLE] " + x if "maritaca" in x.lower() else x
-                        for x in available_models
-                    ]
-                if os.environ.get("GROK_API_KEY") is None:
-                    available_models = [
-                        "[UNAVAILABLE] " + x if "grok" in x.lower() else x
-                        for x in available_models
-                    ]
-                if os.environ.get("DEEPSEEK_API_KEY") is None:
-                    available_models = [
-                        "[UNAVAILABLE] " + x if "- deepseek" in x.lower() else x
-                        for x in available_models
-                    ]
-                if (
-                    os.environ.get("AWS_ACCESS_KEY_ID") is None
-                    or os.environ.get("AWS_SECRET_ACCESS_KEY") is None
-                ):
-                    available_models = [
-                        "[UNAVAILABLE] " + x if "- bedrock" in x.lower() else x
-                        for x in available_models
-                    ]
-
+                with gr.Accordion("Instructions", open=False):
+                    gr.Markdown(description)
                 box_llm_model = gr.Dropdown(
                     available_models,
                     label="Select LLM",
@@ -276,18 +292,6 @@ def main(max_audio_duration=120):
                     info="Use LLM native tool calling (uncheck to use universal implementation and when a LLM does not support native tool calling)",
                     interactive=True,
                 )
-            all_tools = [x.tool_description["name"] for x in LLMTools.get_all_tools()]
-            with gr.Row():
-                with gr.Column(scale=3):
-                    chk_tools = gr.CheckboxGroup(
-                        all_tools,
-                        value=all_tools[0:1],
-                        label="Allowed tools",
-                        info="Select the external tools that the LLM will have access to",
-                        interactive=True,
-                    )
-                with gr.Column(scale=1):
-                    mcp_servers = gr.Textbox(label="MCP Servers", value=default_mcps)
 
             with gr.Row():
                 with gr.Column(scale=3):
@@ -345,6 +349,7 @@ def main(max_audio_duration=120):
                 chk_native_tools,
                 chk_tools,
                 mcp_servers,
+                mcp_enable,
             ],
             outputs=[
                 msg2,
@@ -371,6 +376,7 @@ def main(max_audio_duration=120):
                 chk_native_tools,
                 chk_tools,
                 mcp_servers,
+                mcp_enable,
             ],
             outputs=[
                 audio_msg,
