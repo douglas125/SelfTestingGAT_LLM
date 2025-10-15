@@ -35,6 +35,13 @@ class LLM_Claude_Bedrock(LLM_Service):
             )
             self.price_per_M_input_tokens = 3
             self.price_per_M_output_tokens = 15
+        elif model_size == "Haiku 4.5":
+            self.model_id = "us.anthropic.claude-haiku-4-5-20251001-v1:0"
+            self.llm_description = (
+                "Anthropic Claude 4.5 Haiku from AWS Bedrock (Small-size LLM)"
+            )
+            self.price_per_M_input_tokens = 1
+            self.price_per_M_output_tokens = 5
         elif model_size == "Opus 4":
             self.model_id = "us.anthropic.claude-opus-4-20250514-v1:0"
             self.llm_description = (
