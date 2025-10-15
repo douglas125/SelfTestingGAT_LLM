@@ -389,6 +389,9 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 - Fix missing tool use UI feedback when using models via OpenAI API
 - Add Claude 4.5 Sonnet (Anthropic, Bedrock)
 
-## TBD
+## 0.1.15
 
 - Added tool speech_transcribe_analyze.ToolSpeechAnalysis for advanced speech recognition and analysis
+- Added Claude Haiku 4.5
+
+## TBD
