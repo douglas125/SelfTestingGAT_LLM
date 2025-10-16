@@ -48,6 +48,7 @@ With the current prompts, tools, descriptions and native tool configuration use 
 | ('Claude 3.7 Sonnet - Anthropic', True)   |                             2 |                74.7 |             86.9 |                          3     |                           15    |
 | ('Mistral Large v1', False)               |                             1 |                74.7 |             86.8 |                          4     |                           12    |
 | ('Claude 4.5 Sonnet - Anthropic', True)   |                             5 |                74.2 |             86.5 |                          3     |                           15    |
+| ('Claude 4.5 Haiku - Anthropic', True)    |                            10 |                73.1 |             85.2 |                          1     |                            5    |
 | ('GPT 4o mini - OpenAI', False)           |                             3 |                73.1 |             85.1 |                          0.15  |                            0.6  |
 | ('GPT 5 - OpenAI', True)                  |                             3 |                69.5 |             84.3 |                          1.25  |                           10    |
 | ('Command RPlus - Bedrock', False)        |                             4 |                72.8 |             83.8 |                          3     |                           15    |
@@ -393,5 +394,9 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 
 - Added tool speech_transcribe_analyze.ToolSpeechAnalysis for advanced speech recognition and analysis
 - Added Claude Haiku 4.5
+
+## 0.1.16
+
+- Add `praat-parselmouth` to pip package dependencies
 
 ## TBD
