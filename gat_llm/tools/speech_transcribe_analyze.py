@@ -2,8 +2,13 @@ import os
 
 import numpy as np
 import pandas as pd
-import parselmouth
 from openai import OpenAI
+
+try:
+    import parselmouth
+except ImportError:
+    parselmouth = None
+
 
 rng = np.random.default_rng()
 
@@ -188,6 +193,8 @@ Raises ValueError: if not able to read the audio or video file.""",
         Returns:
           - The audio srt file or the full transcription
         """
+        if parselmouth is None:
+            return "Praat is not installed. Please install with `pip install praat-parselmouth`"
         os.makedirs("media", exist_ok=True)
         if len(kwargs) > 0:
             return f"Error: Unexpected parameter(s): {','.join([x for x in kwargs])}"
