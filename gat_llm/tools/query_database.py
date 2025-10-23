@@ -192,7 +192,8 @@ If an error happens, the error description will be returned.""",
 
     def __call__(self, sql_code, **kwargs):
         if len(kwargs) > 0:
-            return f"Error: Unexpected parameter(s): {','.join([x for x in kwargs])}"
+            yield f"Error: Unexpected parameter(s): {','.join([x for x in kwargs])}"
+            return
 
         try:
             yield f"<scratchpad>Executing: {sql_code}</scratchpad>"
