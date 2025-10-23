@@ -195,6 +195,7 @@ If an error happens, the error description will be returned.""",
             return f"Error: Unexpected parameter(s): {','.join([x for x in kwargs])}"
 
         try:
+            yield f"<scratchpad>Executing: {sql_code}</scratchpad>"
             ans = self.db.sql_query(sql_code, max_desired_results=self.max_records)
             if len(ans) > self.max_records:
                 final_ans = [
@@ -211,4 +212,4 @@ If an error happens, the error description will be returned.""",
         except Exception as ex:
             final_ans = ["SQL code NOT executed. Error description:", str(ex)]
 
-        return "\n".join(final_ans)
+        yield "\n".join(final_ans)

@@ -399,4 +399,12 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 
 - Add `praat-parselmouth` to pip package dependencies
 
+## 0.1.17
+
+- Removed `praat-parselmouth` dependency
+
+## 0.1.18
+
+- Enabled streaming responses from tools
+
 ## TBD

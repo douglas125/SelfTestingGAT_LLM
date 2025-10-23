@@ -192,7 +192,8 @@ Note that the webpage URL will be checked using python's regex re package using:
         **kwargs,
     ):
         if len(kwargs) > 0:
-            return f"Error: Unexpected parameter(s): {','.join([x for x in kwargs])}"
+            yield f"Error: Unexpected parameter(s): {','.join([x for x in kwargs])}"
+            return
 
         return_all_visible_html = str(return_all_visible_html).lower().strip() == "true"
         recursion_level = int(recursion_level)
@@ -200,6 +201,8 @@ Note that the webpage URL will be checked using python's regex re package using:
         internet_urls = [x.strip() for x in internet_urls]
         ans = []
         for u in internet_urls:
+            yield f"<scratchpad>Reading: {u}</scratchpad>"
+
             ans.append("<url_content>")
             ans.append(f"<url>{u}</url>")
             content = self._get_url_content(
@@ -224,12 +227,12 @@ Note that the webpage URL will be checked using python's regex re package using:
                         system_prompt=sys_prompt,
                     )
                     for x in llm_ans:
-                        pass
+                        yield f"<scratchpad>{x}</scratchpad>"
                     content = x
 
             ans.append(f"<content>{content}</content>")
             ans.append("</url_content>")
-        return "\n".join(ans)
+        yield "\n".join(ans)
 
     def _get_url_content(
         self,

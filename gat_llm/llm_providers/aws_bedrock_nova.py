@@ -3,6 +3,7 @@
 import re
 import json
 import time
+import types
 
 from .base_service import LLM_Service
 
@@ -159,6 +160,10 @@ class LLM_Nova_Bedrock(LLM_Service):
                             return_results_only=True,
                             **self.cur_tool_spec["toolUse"]["input"],
                         )
+                        if isinstance(tool_ans, types.GeneratorType):
+                            for partial_ans in tool_ans:
+                                yield partial_ans
+                            tool_ans = partial_ans
 
                         # append assistant responses
                         assistant_msg = {

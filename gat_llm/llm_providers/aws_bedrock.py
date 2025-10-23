@@ -1,6 +1,7 @@
 import re
 import json
 import time
+import types
 
 from typing import Dict, List
 from .base_service import LLM_Service
@@ -210,6 +211,10 @@ class LLM_Claude_Bedrock(LLM_Service):
                             return_results_only=True,
                             **self.cur_tool_spec["input"],
                         )
+                        if isinstance(tool_ans, types.GeneratorType):
+                            for partial_ans in tool_ans:
+                                yield partial_ans
+                            tool_ans = partial_ans
 
                         # append assistant responses
                         assistant_msg = {"role": "assistant", "content": []}

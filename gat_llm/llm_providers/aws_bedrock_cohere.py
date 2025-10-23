@@ -2,6 +2,7 @@ import re
 import copy
 import json
 import time
+import types
 
 from .base_service import LLM_Service
 
@@ -185,11 +186,10 @@ class LLM_Command_Cohere(LLM_Service):
                             return_results_only=True,
                             **self.cur_tool_spec["input"],
                         )
-                        """
-                            "tool_name": func_call_spec["name"],
-                            "input": func_call_spec["parameters"],
-                            "generation_id": func_call_spec["generation_id"],
-                        """
+                        if isinstance(tool_ans, types.GeneratorType):
+                            for partial_ans in tool_ans:
+                                yield partial_ans
+                            tool_ans = partial_ans
 
                         print(self.cur_tool_spec)
                         last_call = {
