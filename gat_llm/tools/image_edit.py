@@ -57,18 +57,25 @@ class ToolImageEdit:
             "prompt": prompt,
             "input_fidelity": input_fidelity,
             "n": 1,
+            "stream": True,
+            "partial_images": 3,
         }
         if mask_file is not None:
             remove_semi_transparent_pixels(mask_file)
             args["mask"] = open(mask_file, "rb")
 
-        response = self.openai_client.images.edit(**args)
-        parsed_ans = json.loads(response.json())
-        revised_prompt = parsed_ans["data"][0]["revised_prompt"]
-        img_content = base64.b64decode(parsed_ans["data"][0]["b64_json"])
-        with open(target_file, "wb") as f:
-            f.write(img_content)
-        return revised_prompt
+        response_gen = self.openai_client.images.edit(**args)
+        for response in response_gen:
+            # parsed_ans = json.loads(response.json())
+            # parsed_ans["b64_json"] = ""
+            # print(parsed_ans)
+
+            image_base64 = response.b64_json
+            img_content = base64.b64decode(image_base64)
+            # revised_prompt = parsed_ans["data"][0]["revised_prompt"]
+            with open(target_file, "wb") as f:
+                f.write(img_content)
+            yield f"Generating ..."
 
     def __init__(self):
         self.name = "edit_image"
@@ -124,6 +131,7 @@ path/to/image2.jpg
 
         rng_num = rng.integers(low=0, high=900000)
         target_file = f"media/edt_image_{rng_num}.png"
+        generation_ans = f"<used_engine>{engine}</used_engine><path_to_image>{target_file}</path_to_image>"
 
         if engine is None:
             engine = "openai-img"
@@ -134,21 +142,25 @@ path/to/image2.jpg
                 image_files = [x.strip() for x in image_files.splitlines()]
                 for f in image_files:
                     if not os.path.isfile(f):
-                        return (
+                        yield (
                             f"Error: image file not found: {f}. Please check the path."
                         )
-                self._gen_img_openai(
+                        return
+                yield f"Creating image: {prompt}"
+                img_gen = self._gen_img_openai(
                     image_files, prompt, mask_file, target_file, input_fidelity
                 )
+                for img in img_gen:
+                    yield generation_ans
         except Exception as e:
-            return f"Image was NOT generated.\nError description: {str(e)}"
+            yield f"Image was NOT generated.\nError description: {str(e)}"
+            return
 
         if not os.path.isfile(target_file):
-            return "Error: Image was not saved correctly."
+            yield "Error: Image was not saved correctly."
+            return
 
         ans = ["<image>"]
-        ans.append(
-            f"<used_engine>{engine}</used_engine><path_to_image>{target_file}</path_to_image>"
-        )
+        ans.append(generation_ans)
         ans.append("</image>")
-        return "\n".join(ans)
+        yield "\n".join(ans)

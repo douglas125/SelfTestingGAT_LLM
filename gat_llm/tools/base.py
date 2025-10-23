@@ -1,4 +1,5 @@
 import time
+import types
 import xml.etree.ElementTree as ET
 
 import numpy as np
@@ -58,9 +59,21 @@ class LLMTools:
             ToolRunWithPython(),
         ]
 
-    def __init__(self, query_llm=None, desired_tools=None):
-        """Constructor."""
+    def __init__(
+        self, query_llm=None, desired_tools=None, yield_partial_tool_results=True
+    ):
+        """Constructor.
+
+        Args:
+
+            query_llm: LLM to use when a tool requires LLM for further processing
+            desired_tools: tools to enable for the LLM
+            yield_partial_tool_results: if True, returns a generator for function calls
+                if False, and the tool returns a generator, exhausts the generator and returns only
+                the final answer
+        """
         self.query_llm = query_llm
+        self.yield_partial_tool_results = yield_partial_tool_results
         if desired_tools is None:
             self.tools = [
                 ToolDoDateMath(),
@@ -195,11 +208,19 @@ class LLMTools:
                     kwargs.pop("username", None)
 
                 ans = cur_tool(**kwargs)
+                if isinstance(ans, types.GeneratorType) and (
+                    not self.yield_partial_tool_results or not return_results_only
+                ):
+                    # extract the results if dealing with a generator
+                    for partial_ans in ans:
+                        pass
+                    ans = partial_ans
+
                 self.invoke_log.append(
                     {
                         "tool_name": tool_name,
                         "execution_time": time.time() - t0,
-                        "result_length": len(ans),
+                        # "result_length": len(ans),
                     }
                 )
                 if return_results_only:

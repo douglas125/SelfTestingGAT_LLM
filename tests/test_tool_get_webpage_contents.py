@@ -19,13 +19,17 @@ def mock_requests_get():
 
 def test_unexpected_arg(unexpected_param_msg):
     tguc = ToolGetUrlContent(None)
-    ans = tguc("http://example.com", True, unexpected_argument=None)
+    result_gen = tguc("http://example.com", True, unexpected_argument=None)
+    for ans in result_gen:
+        pass
     assert ans == f"{unexpected_param_msg}unexpected_argument"
 
 
 def test_get_url_content_all_visible_html(mock_requests_get):
     tguc = ToolGetUrlContent(None)
-    result = tguc("http://example.com", return_all_visible_html="True")
+    result_gen = tguc("http://example.com", return_all_visible_html="True")
+    for result in result_gen:
+        pass
     assert "Test content" in result
     assert "<source_url>http://example.com</source_url>" in result
     assert "<status_code>200</status_code>" in result
@@ -33,7 +37,9 @@ def test_get_url_content_all_visible_html(mock_requests_get):
 
 def test_get_url_content_text_and_urls(mock_requests_get):
     tguc = ToolGetUrlContent(None)
-    result = tguc("http://example.com", return_all_visible_html="False")
+    result_gen = tguc("http://example.com", return_all_visible_html="False")
+    for result in result_gen:
+        pass
     assert "Test content" in result
     assert "<source_url>http://example.com</source_url>" in result
     assert "<status_code>200</status_code>" in result
@@ -43,7 +49,9 @@ def test_get_url_content_text_and_urls(mock_requests_get):
 @patch("requests.get", side_effect=Exception("Connection error"))
 def test_get_url_content_error(mock_requests_get):
     tguc = ToolGetUrlContent(None)
-    result = tguc("http://example.com")
+    result_gen = tguc("http://example.com")
+    for result in result_gen:
+        pass
     assert "Could not retrieve page from URL" in result
     assert "Connection error" in result
 
