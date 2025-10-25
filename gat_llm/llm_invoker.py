@@ -262,11 +262,11 @@ class LLM_Provider:
 
         # OpenAI
         elif llm == "GPT 5 - OpenAI":
-            return LLM_GPT_OpenAI(model_size="GPT5 OpenAI")
+            return LLM_GPT_OpenAI(model_size="GPT5 OpenAI", reasoning_effort="low")
         elif llm == "GPT 5 mini - OpenAI":
-            return LLM_GPT_OpenAI(model_size="GPT5 mini OpenAI")
+            return LLM_GPT_OpenAI(model_size="GPT5 mini OpenAI", reasoning_effort="low")
         elif llm == "GPT 5 nano - OpenAI":
-            return LLM_GPT_OpenAI(model_size="GPT5 nano OpenAI")
+            return LLM_GPT_OpenAI(model_size="GPT5 nano OpenAI", reasoning_effort="low")
         elif llm == "GPT 4.1 - OpenAI":
             return LLM_GPT_OpenAI(model_size="GPT4_1 OpenAI")
         elif llm == "GPT 3.5 - OpenAI":

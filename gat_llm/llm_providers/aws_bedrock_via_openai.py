@@ -35,7 +35,7 @@ class LLM_Bedrock_OpenAI(LLM_GPT_OpenAI):
         self.config = {
             # "messages": prompt,
             # "system": sysprompt,
-            "max_tokens": 4000,
+            "max_tokens": 8192,
             "temperature": 0.5,  # 0.5 is default,
             "stream": True,
             # "top_k": 250,

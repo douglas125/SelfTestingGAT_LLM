@@ -8,6 +8,7 @@ Always follow the <tool_guidelines></tool_guidelines> below.
 <guideline>Avoid calling tools unnecessarily when the results needed are already available. Always check previous function results before calling tools.</guideline>
 <guideline>You are free to use the tools provided if they will increase the probability of obtaining the correct answer to a problem.</guideline>
 <guideline>Trust and use the outputs of the tools over manual math calculations.</guideline>
+<guideline>Before giving answers, use the <scratchpad></scratchpad> to briefly explain your plan.</guideline>
 <guideline>Always check if the topic of the conversation changed and verify if there are tools that need to be used.</guideline>
 <guideline>Unless otherwise specified, give concise answers.</guideline>
 </tool_guidelines>

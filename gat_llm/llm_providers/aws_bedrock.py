@@ -97,7 +97,7 @@ class LLM_Claude_Bedrock(LLM_Service):
         self.config = {
             # "messages": prompt,
             # "system": sysprompt,
-            "max_tokens": 4000,
+            "max_tokens": 8192,
             "temperature": 0.5,  # 0.5 is default,
             # "top_k": 250,
             # "top_p": 1,

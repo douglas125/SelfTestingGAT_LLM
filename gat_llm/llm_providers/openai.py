@@ -8,11 +8,11 @@ from .base_service import LLM_Service
 
 
 class LLM_GPT_OpenAI(LLM_Service):
-    def __init__(self, model_size):
+    def __init__(self, model_size, reasoning_effort=None):
         """Constructor
         Arguments:
-            bedrock_client - Instance of boto3.client(service_name='bedrock-runtime')
-                to use when making calls to bedrock models
+            model_size - What model to use?
+            reasoning_effort - one of [minimal, low, medium, and high].
         """
         self.openai_client = None
         if model_size == "GPT5 OpenAI":
@@ -66,7 +66,7 @@ class LLM_GPT_OpenAI(LLM_Service):
         self.config = {
             # "messages": prompt,
             # "system": sysprompt,
-            "max_completion_tokens": 4000,
+            "max_completion_tokens": 8192,
             # "temperature": 0.5,  # 0.5 is default,
             "stream": True,
             # "top_k": 250,
@@ -74,6 +74,10 @@ class LLM_GPT_OpenAI(LLM_Service):
             # "stop": None,  # the regular stop is already implemented
             "model": self.model_id,
         }
+
+        if reasoning_effort is not None:
+            self.config["reasoning_effort"] = reasoning_effort
+
         # requests and answer word count
         self.word_counts = []
 
