@@ -36,7 +36,7 @@ class LLM_Nova_Bedrock(LLM_Service):
             # "messages": prompt,
             # "system": sysprompt,
             "inferenceConfig": {
-                "max_new_tokens": 4000,
+                "max_new_tokens": 8096,
                 "temperature": 0.65,
                 "stopSequences": [],
             },

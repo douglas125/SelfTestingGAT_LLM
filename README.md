@@ -408,3 +408,6 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 - Enabled streaming responses from tools
 
 ## TBD
+
+- Changed default OpenAI model reasoning to `low`
+- Increased max tokens to 8192 on most cloud models to accomodate reasoning
