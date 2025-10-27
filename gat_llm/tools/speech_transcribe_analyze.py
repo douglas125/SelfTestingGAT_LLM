@@ -228,7 +228,7 @@ Raises ValueError: if not able to read the audio or video file.""",
                 with open(target_file, "w", encoding="UTF-8") as f:
                     f.write(xml_content)
             else:
-                return transcript
+                return xml_content
         except Exception as e:
             return f"Transcription was NOT generated.\nError description: {str(e)}"
 
