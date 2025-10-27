@@ -411,3 +411,4 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 
 - Changed default OpenAI model reasoning to `low`
 - Increased max tokens to 8192 on most cloud models to accomodate reasoning
+- Fix speech_transcribe_analyze.ToolSpeechAnalysis to return the correct string when not saving to a file
