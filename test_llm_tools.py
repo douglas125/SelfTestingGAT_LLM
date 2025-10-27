@@ -13,6 +13,7 @@ from gat_llm.tools.base import LLMTools
 from gat_llm.connector_mcp import MCPConnector
 from gat_llm.llm_interface import LLMInterface
 from gat_llm.tools.speech_to_text import ToolSpeechToText
+from gat_llm.tools.speech_transcribe_analyze import ToolSpeechAnalysis
 from gat_llm.prompts.prompt_generator import RAGPromptGenerator
 
 
@@ -77,15 +78,21 @@ def process_audio_func(
     allowed_tools,
     mcp_servers,
     mcp_enable,
+    use_speech_parameters,
     request: gr.Request,
 ):
-    tstt = ToolSpeechToText()
-    transcript = tstt(audio_file, language="en", return_path_to_file_only=False)
+    if use_speech_parameters:
+        tsa = ToolSpeechAnalysis()
+        transcript = tsa(audio_file, language="en", return_path_to_file_only=False)
+    else:
+        tstt = ToolSpeechToText()
+        transcript = tstt(audio_file, language="en", return_path_to_file_only=False)
+
     try:
         os.remove(audio_file)
     except:
         pass
-    msg = f"[Voice message]<msg>{transcript}</msg><general_instruction>Answer with audio if you can. Keep your answer concise and to the point. Unless requested, answer using the same language in the message. Unless requested otherwise, use the instructions parameter to specify a fast-paced clearly articulated voice.</general_instruction>"
+    msg = f"[Voice message]<msg>{transcript}</msg><general_instruction>Answer with audio if you can. Keep your answer concise and to the point. Unless requested, answer using the same language in the message. Unless requested otherwise, use the instructions parameter to specify a fast-paced clearly articulated voice. If possible, use the <scratchpad></scratchpad> to analyze the speaker mood and other speech qualities from the acoustic parameters.</general_instruction>"
     ans_gen = msg_forward_func(
         msg,
         img_input_1,
@@ -310,6 +317,9 @@ def main(max_audio_duration=120):
                         format="mp3",
                         visible=True,
                     )
+                chk_speechparams = gr.Checkbox(
+                    value=False, label="Use speech parameters"
+                )
 
             with gr.Row():
                 send_btn = gr.Button("Send")
@@ -377,6 +387,7 @@ def main(max_audio_duration=120):
                 chk_tools,
                 mcp_servers,
                 mcp_enable,
+                chk_speechparams,
             ],
             outputs=[
                 audio_msg,
