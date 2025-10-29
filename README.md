@@ -407,8 +407,14 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 
 - Enabled streaming responses from tools
 
-## TBD
+## 0.1.19
 
 - Changed default OpenAI model reasoning to `low`
 - Increased max tokens to 8192 on most cloud models to accomodate reasoning
 - Fix speech_transcribe_analyze.ToolSpeechAnalysis to return the correct string when not saving to a file
+
+## 0.1.20
+
+- Add Qwen3 VL to the LLM pool
+
+## TBD
