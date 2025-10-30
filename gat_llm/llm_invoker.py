@@ -69,6 +69,9 @@ class LLM_Provider:
         "Llama3_1 8b instruct",
         "Llama3_1 70b instruct",
         "Llama3_1 405b instruct",
+        # Qwen
+        "Qwen 2.5vl 7b - Ollama",
+        "Qwen 2.5vl 3b - Ollama",
     ]
 
     allowed_llms = [
@@ -82,8 +85,9 @@ class LLM_Provider:
         "Qwen 3 14b - Ollama",
         "Qwen 3 Coder 30b - Ollama",
         "Llama4 16x17b - Ollama",
-        "Qwen 2.5vl 7b - Ollama",
-        "Qwen 2.5vl 3b - Ollama",
+        "Qwen 3vl 8b - Ollama",
+        "Qwen 3vl 4b - Ollama",
+        "Qwen 3vl 2b - Ollama",
         "DeepSeek R1 14b - Ollama",
         "Qwen 3 1.7b - VLLM",
         # AWS Bedrock via OpenAI API
@@ -150,6 +154,12 @@ class LLM_Provider:
             return LLM_Ollama(model="Qwen 3 8b Ollama")
         elif llm == "Qwen 3 14b - Ollama":
             return LLM_Ollama(model="Qwen 3 14b Ollama")
+        elif llm == "Qwen 3vl 8b - Ollama":
+            return LLM_Ollama(model="Qwen 3vl 8b Ollama")
+        elif llm == "Qwen 3vl 4b - Ollama":
+            return LLM_Ollama(model="Qwen 3vl 4b Ollama")
+        elif llm == "Qwen 3vl 2b - Ollama":
+            return LLM_Ollama(model="Qwen 3vl 2b Ollama")
         elif llm == "Qwen 2.5vl 7b - Ollama":
             return LLM_Ollama(model="Qwen 2.5vl 7b Ollama")
         elif llm == "Qwen 2.5vl 3b - Ollama":
