@@ -415,3 +415,5 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 - Add Qwen3 VL to the LLM pool
 
 ## TBD
+
+- Changed read_local_file tool to yield results

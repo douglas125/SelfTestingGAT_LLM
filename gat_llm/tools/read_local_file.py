@@ -204,7 +204,8 @@ subfolder/file2.pdf
 
     def __call__(self, path_to_files, prompt="", pdfs_to_read_as_images="", **kwargs):
         if len(kwargs) > 0:
-            return f"Error: Unexpected parameter(s): {','.join([x for x in kwargs])}"
+            yield f"Error: Unexpected parameter(s): {','.join([x for x in kwargs])}"
+            return
 
         # make sure all pdfs to read as images are in the file list
         for x in pdfs_to_read_as_images:
@@ -222,9 +223,11 @@ subfolder/file2.pdf
             ans = ""
             if not os.path.isfile(path_to_file):
                 ans = f"Error: Did not find file `{path_to_file}`"
+                yield f"<scratchpad>{ans}</scratchpad>"
                 ans = f"<error>\n{ans}\n</error>"
             else:
                 try:
+                    yield f"<scratchpad>Reading {path_to_file}</scratchpad>"
                     ans = extract_text(path_to_file)
                     if path_to_file in pdfs_to_read_as_images:
                         if b64_images is None:
@@ -234,6 +237,7 @@ subfolder/file2.pdf
                     ans = (
                         f"Error: Failed to process the file `{path_to_file}`: {str(e)}"
                     )
+                    yield f"<scratchpad>{ans}</scratchpad>"
                     ans = f"<error>\n{ans}\n</error>"
 
             final_ans.append("<file>")
@@ -247,7 +251,8 @@ subfolder/file2.pdf
         # if a subquery has been asked
         if prompt is not None and prompt != "":
             if self.query_llm is None:
-                return "Error: Cannot retrieve data from the document because a LLM has not been provided. Please set prompt to '' to return the full document."
+                yield "Error: Cannot retrieve data from the document because a LLM has not been provided. Please set prompt to '' to return the full document."
+                return
             sys_prompt = "Read the contents of the following <files></files> to answer questions:\n"
             sys_prompt += final_ans
             llm_ans = self.query_llm(
@@ -256,9 +261,9 @@ subfolder/file2.pdf
                 system_prompt=sys_prompt,
             )
             for x in llm_ans:
-                pass
+                yield f"<scratchpad>{x}</scratchpad>"
             final_ans = x
 
         final_ans = normalize_xml_content(final_ans)
 
-        return final_ans
+        yield final_ans
