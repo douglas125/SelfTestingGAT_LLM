@@ -127,7 +127,8 @@ path/to/image2.jpg
     ):
         os.makedirs("media", exist_ok=True)
         if len(kwargs) > 0:
-            return f"Error: Unexpected parameter(s): {','.join([x for x in kwargs])}"
+            yield f"Error: Unexpected parameter(s): {','.join([x for x in kwargs])}"
+            return
 
         rng_num = rng.integers(low=0, high=900000)
         target_file = f"media/edt_image_{rng_num}.png"
@@ -143,21 +144,21 @@ path/to/image2.jpg
                 for f in image_files:
                     if not os.path.isfile(f):
                         yield (
-                            f"Error: image file not found: {f}. Please check the path."
+                            f"</scratchpad>Error: image file not found: {f}. Please check the path.</scratchpad>"
                         )
                         return
-                yield f"Creating image: {prompt}"
+                yield f"<scratchpad>Creating image: {prompt}</scratchpad>"
                 img_gen = self._gen_img_openai(
                     image_files, prompt, mask_file, target_file, input_fidelity
                 )
                 for img in img_gen:
-                    yield generation_ans
+                    yield f"<scratchpad>{generation_ans}</scratchpad>"
         except Exception as e:
-            yield f"Image was NOT generated.\nError description: {str(e)}"
+            yield f"<scratchpad>Image was NOT generated.\nError description: {str(e)}</scratchpad>"
             return
 
         if not os.path.isfile(target_file):
-            yield "Error: Image was not saved correctly."
+            yield "<scratchpad>Error: Image was not saved correctly.</scratchpad>"
             return
 
         ans = ["<image>"]
