@@ -5,7 +5,9 @@ from gat_llm.tools.read_local_file import ToolReadLocalFile
 
 def test_unexpected_arg(unexpected_param_msg):
     trlf = ToolReadLocalFile()
-    ans = trlf("media/file.txt", unexpected_argument=None)
+    result_gen = trlf("media/file.txt", unexpected_argument=None)
+    for ans in result_gen:
+        pass
     assert ans == f"{unexpected_param_msg}unexpected_argument"
 
 
@@ -13,8 +15,9 @@ def test_unexpected_arg(unexpected_param_msg):
 @patch("os.path.isfile", return_value=True)
 def test_file_read(mock_isfile, mock_open_file):
     trlf = ToolReadLocalFile()
-    ans = trlf("media/file.txt")
-
+    result_gen = trlf("media/file.txt")
+    for ans in result_gen:
+        pass
     mock_isfile.assert_called_with("media/file.txt")
     assert "file_data" in ans
 
@@ -23,8 +26,9 @@ def test_file_read(mock_isfile, mock_open_file):
 @patch("os.path.isfile", return_value=True)
 def test_files_read(mock_isfile, mock_open_file):
     trlf = ToolReadLocalFile()
-    ans = trlf("media/file.txt \n media/file2.txt")
-
+    result_gen = trlf("media/file.txt \n media/file2.txt")
+    for ans in result_gen:
+        pass
     mock_isfile.assert_has_calls([call("media/file.txt"), call("media/file2.txt")])
     assert "file_data" in ans
 
@@ -33,8 +37,9 @@ def test_files_read(mock_isfile, mock_open_file):
 @patch("os.path.isfile", return_value=False)
 def test_file_not_read(mock_isfile, mock_open_file):
     trlf = ToolReadLocalFile()
-    ans = trlf("media/file.txt")
-
+    result_gen = trlf("media/file.txt")
+    for ans in result_gen:
+        pass
     mock_isfile.assert_called_with("media/file.txt")
     mock_open_file.assert_not_called()
     assert "Error: Did not find file" in ans
