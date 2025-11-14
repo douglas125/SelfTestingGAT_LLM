@@ -20,6 +20,13 @@ class LLM_GPT_OpenAI(LLM_Service):
             self.llm_description = "OpenAI GPT5 (Large-size LLM) - directly from OpenAI"
             self.price_per_M_input_tokens = 1.25
             self.price_per_M_output_tokens = 10
+        elif model_size == "GPT5_1 OpenAI":
+            self.model_id = "gpt-5.1"
+            self.llm_description = (
+                "OpenAI GPT5.1 (Large-size LLM) - directly from OpenAI"
+            )
+            self.price_per_M_input_tokens = 1.25
+            self.price_per_M_output_tokens = 10
         elif model_size == "GPT5 mini OpenAI":
             self.model_id = "gpt-5-mini"
             self.llm_description = (
