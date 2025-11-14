@@ -44,6 +44,7 @@ class LLM_Provider:
         "Claude 4 Sonnet - Bedrock",
         "Claude 4 Opus - Anthropic",
         "Claude 4 Opus - Bedrock",
+        "Claude 3.7 Sonnet - Anthropic",
         "Claude 2.1",
         "Claude Instant 1.2",
         "Llama2 13b",
@@ -52,6 +53,7 @@ class LLM_Provider:
         "Llama3 70b instruct",
         "Grok2Vision - Grok",
         # OpenAI
+        "GPT 5 - OpenAI",
         "GPT 4o - OpenAI",
         "GPT 4.1 - OpenAI",
         "GPT 3.5 - OpenAI",
@@ -100,7 +102,7 @@ class LLM_Provider:
         # Maritaca
         "Sabia3 - Maritaca",
         # OpenAI
-        "GPT 5 - OpenAI",
+        "GPT 5_1 - OpenAI",
         "GPT 5 mini - OpenAI",
         "GPT 5 nano - OpenAI",
         # Anthropic
@@ -108,7 +110,6 @@ class LLM_Provider:
         "Claude 4.5 Sonnet - Bedrock",
         "Claude 4.5 Haiku - Anthropic",
         "Claude 4.5 Haiku - Bedrock",
-        "Claude 3.7 Sonnet - Anthropic",
         "Claude 3.7 Sonnet - Bedrock",
     ]
 
@@ -273,6 +274,8 @@ class LLM_Provider:
         # OpenAI
         elif llm == "GPT 5 - OpenAI":
             return LLM_GPT_OpenAI(model_size="GPT5 OpenAI", reasoning_effort="low")
+        elif llm == "GPT 5_1 - OpenAI":
+            return LLM_GPT_OpenAI(model_size="GPT5_1 OpenAI", reasoning_effort="low")
         elif llm == "GPT 5 mini - OpenAI":
             return LLM_GPT_OpenAI(model_size="GPT5 mini OpenAI", reasoning_effort="low")
         elif llm == "GPT 5 nano - OpenAI":

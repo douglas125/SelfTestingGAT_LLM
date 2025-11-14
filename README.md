@@ -414,6 +414,9 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 - Fix speech_transcribe_analyze.ToolSpeechAnalysis to return the correct string when not saving to a file
 - Add Qwen3 VL to the LLM pool
 
-## TBD
+## 0.1.20
 
 - Changed read_local_file tool to yield results
+- Added OpenAI GPT 5.1
+
+## TBD
