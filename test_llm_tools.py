@@ -198,7 +198,7 @@ def msg_forward_func(
         txtbox, scratchpad_info, img_input_1, cur_history = x
         yield txtbox, scratchpad_info, None, None, None, cur_history, []
 
-    chat_id = cur_history[0]["content"]
+    chat_id = cur_history[0]["content"][0]["text"]
     raw_history = li.history_log[chat_id]
     yield txtbox, scratchpad_info, None, None, None, cur_history, {
         "raw_history": raw_history
@@ -313,7 +313,7 @@ def main(max_audio_duration=120):
                         label=f"Audio (max {max_audio_duration}s)",
                         sources="microphone",
                         type="filepath",
-                        max_length=max_audio_duration,
+                        # validator=lambda audio: gr.validators.is_audio_correct_length(audio, min_length=1, max_length=max_audio_duration),
                         format="mp3",
                         visible=True,
                     )
@@ -331,8 +331,8 @@ def main(max_audio_duration=120):
                     chatbot = gr.Chatbot(
                         label="Assistant",
                         elem_id="chatbot",
-                        type="messages",
                         height=600,
+                        allow_tags=False,
                     )
                 with gr.Column(scale=1):
                     image_input_1 = gr.Image(label="Input Image 1")
@@ -406,7 +406,7 @@ def main(max_audio_duration=120):
             outputs=None,
             cancels=[send_audio_event, send_txt_event],
         )
-    demo.queue().launch(show_api=False, share=False, inline=False)
+    demo.queue().launch(footer_links=["gradio"], share=False, inline=False)
 
 
 if __name__ == "__main__":
