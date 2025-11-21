@@ -240,13 +240,15 @@ class LLMInterface:
         t0 = time.time()
 
         if len(ui_history) > 0:
-            chat_id = ui_history[0]["content"]
+            chat_id = ui_history[0]["content"][0]["text"]
             history = self.history_log[chat_id]
             # with open('ui_debug.txt', 'w') as f:
             #    f.write(str([msg, history]))
         else:
             chat_id = str(uuid.uuid4())
-            ui_history = [{"role": "assistant", "content": chat_id}]
+            ui_history = [
+                {"role": "assistant", "content": [{"type": "text", "text": chat_id}]}
+            ]
             history = []
 
         ans2 = self.llm(
