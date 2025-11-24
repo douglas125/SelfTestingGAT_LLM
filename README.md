@@ -332,6 +332,16 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 
 # Changelog
 
+## 0.1.21
+
+- Adapt for Gradio 6.0. Typical actions needed to upgrade chatbots:
+  - From `chatbot`: remove `type="messages"`
+  - From `chatbot`: add `allow_tags=False` or `allow_tags=["think"]` (or other tags to allow)
+  - From launch: replace `show_api=False` with `footer_links=["gradio"]`
+  - If accessing history: replace `history[-1]["content"]` with `history[-1]["content"][0]["text"]`
+
+(older changes below)
+
 ## v0.1.4
 
 - Added Grok as LLM
@@ -418,5 +428,3 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 
 - Changed read_local_file tool to yield results
 - Added OpenAI GPT 5.1
-
-## TBD
