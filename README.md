@@ -332,6 +332,10 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 
 # Changelog
 
+## TBD
+
+- Add GPT 5.2
+
 ## 0.1.21
 
 - Adapt for Gradio 6.0. Typical actions needed to upgrade chatbots:
