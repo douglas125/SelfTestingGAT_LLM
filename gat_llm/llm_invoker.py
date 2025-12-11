@@ -54,6 +54,7 @@ class LLM_Provider:
         "Grok2Vision - Grok",
         # OpenAI
         "GPT 5 - OpenAI",
+        "GPT 5_1 - OpenAI",
         "GPT 4o - OpenAI",
         "GPT 4.1 - OpenAI",
         "GPT 3.5 - OpenAI",
@@ -102,7 +103,7 @@ class LLM_Provider:
         # Maritaca
         "Sabia3 - Maritaca",
         # OpenAI
-        "GPT 5_1 - OpenAI",
+        "GPT 5_2 - OpenAI",
         "GPT 5 mini - OpenAI",
         "GPT 5 nano - OpenAI",
         # Anthropic
@@ -274,6 +275,8 @@ class LLM_Provider:
         # OpenAI
         elif llm == "GPT 5 - OpenAI":
             return LLM_GPT_OpenAI(model_size="GPT5 OpenAI", reasoning_effort="low")
+        elif llm == "GPT 5_2 - OpenAI":
+            return LLM_GPT_OpenAI(model_size="GPT5_2 OpenAI", reasoning_effort="low")
         elif llm == "GPT 5_1 - OpenAI":
             return LLM_GPT_OpenAI(model_size="GPT5_1 OpenAI", reasoning_effort="low")
         elif llm == "GPT 5 mini - OpenAI":
