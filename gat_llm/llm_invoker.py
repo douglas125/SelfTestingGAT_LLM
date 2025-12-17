@@ -80,6 +80,7 @@ class LLM_Provider:
     allowed_llms = [
         # Local
         "Qwen 3 0.6b - Ollama",
+        "Nemotron 3 Nano 30b - Ollama",
         "OpenAI GPT OSS 20b - Ollama",
         "OpenAI GPT OSS 120b - Ollama",
         "Qwen 3 1.7b - Ollama",
@@ -138,6 +139,8 @@ class LLM_Provider:
             return LLM_Llama70b(bedrock_client)
 
         # Local - Ollama
+        elif llm == "Nemotron 3 Nano 30b - Ollama":
+            return LLM_Ollama(model="Nemotron 3 Nano 30b Ollama")
         elif llm == "OpenAI GPT OSS 20b - Ollama":
             return LLM_Ollama(model="GPT OSS 20b Ollama")
         elif llm == "OpenAI GPT OSS 120b - Ollama":

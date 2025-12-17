@@ -320,6 +320,7 @@ class LLM_GPT_OpenAI(LLM_Service):
 
     def _response_gen(self, response_body, postpend=""):
         cur_ans = ""
+        cur_reasoning = ""
         cur_tool_specs = []
         cur_tool_spec = None
         for x in response_body:
@@ -332,6 +333,12 @@ class LLM_GPT_OpenAI(LLM_Service):
                 cur_tool_spec = x.choices[0].delta.tool_calls[0].__dict__.copy()
                 cur_tool_spec["arguments"] = ""
                 cur_tool_specs.append(cur_tool_spec)
+
+            if (
+                hasattr(x.choices[0].delta, "reasoning")
+                and x.choices[0].delta.reasoning is not None
+            ):
+                cur_reasoning += x.choices[0].delta.reasoning
 
             txt = (
                 x.choices[0].delta.content
@@ -346,14 +353,20 @@ class LLM_GPT_OpenAI(LLM_Service):
                     x.choices[0].delta.tool_calls[0].function.arguments
                 )
 
-            if txt != "":
+            if txt != "" or cur_reasoning != "":
                 cur_ans += txt
-                yield postpend + cur_ans
+                reasoning_string = (
+                    f"<think>{cur_reasoning}</think>" if cur_reasoning != "" else ""
+                )
+                yield postpend + reasoning_string + cur_ans
 
             stop_reason = x.choices[0].finish_reason
             if stop_reason is not None and stop_reason == "stop_sequence":
                 stop_txt = x.delta.stop_sequence
-                yield postpend + cur_ans + stop_txt
+                reasoning_string = (
+                    f"<think>{cur_reasoning}</think>" if cur_reasoning != "" else ""
+                )
+                yield postpend + reasoning_string + cur_ans + stop_txt
                 break
         if len(cur_tool_specs) > 0:
             for cur_tool_spec in cur_tool_specs:

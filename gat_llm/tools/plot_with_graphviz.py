@@ -16,7 +16,25 @@ class ToolPlotWithGraphviz:
 
 If the user didn't specifically ask for a graph visualization, confirm if the user wants to generate a graph visualization before calling this tool.
 
-The last line of the graph code must save the figure to 'media/graph.png'. The last line of the code should be: {self.save_code}
+The last line of the graph code must save the figure to 'media/graph.png'. The last line of the code should be: {self.save_code}. The <example_code></example_code> illustrates a simple case:
+
+<example_code>
+# Creates a simple A -> B chart
+
+import pydot
+
+graph = pydot.Dot('flow', graph_type='digraph', rankdir='LR')
+graph.set_splines('ortho')
+
+a = pydot.Node('A', shape='box')
+b = pydot.Node('B', shape='box')
+
+graph.add_node(a)
+graph.add_node(b)
+graph.add_edge(pydot.Edge(a, b))
+
+graph.write_png('media/graph.png')
+</example_code>
 
 The user can view the images without exposing the auto-generated file names. Do NOT include actual file names in the answer. Do NOT include the <path_to_image></path_to_image> tag in the answer. Only mention that the graph image has been generated successfully.
 
