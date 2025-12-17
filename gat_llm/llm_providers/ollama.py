@@ -17,6 +17,11 @@ class LLM_Ollama(LLM_GPT_OpenAI):
             self.llm_description = (
                 "DeepSeek R1 14b (Tiny-size LLM) - locally from Ollama"
             )
+        elif model == "Nemotron 3 Nano 30b Ollama":
+            self.model_id = "nemotron-3-nano:30b"
+            self.llm_description = (
+                "Nemotron 3 Nano 30b NVidia (Small-size LLM) - locally from Ollama"
+            )
         elif model == "GPT OSS 20b Ollama":
             self.model_id = "gpt-oss:20b"
             self.llm_description = (
