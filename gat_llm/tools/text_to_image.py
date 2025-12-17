@@ -35,19 +35,21 @@ class ToolTextToImage:
     def _gen_img_openai(self, input_text, target_file):
         if self.openai_client is None:
             self.openai_client = OpenAI()
-        response = self.openai_client.images.generate(
+        response_gen = self.openai_client.images.generate(
             model="gpt-image-1.5",
             prompt=input_text,
             n=1,
             moderation="low",
             output_format="png",
+            stream=True,
+            partial_images=3,
         )
-        parsed_ans = json.loads(response.json())
-        revised_prompt = parsed_ans["data"][0]["revised_prompt"]
-        img_content = base64.b64decode(parsed_ans["data"][0]["b64_json"])
-        with open(target_file, "wb") as f:
-            f.write(img_content)
-        return revised_prompt
+        for response in response_gen:
+            image_base64 = response.b64_json
+            img_content = base64.b64decode(image_base64)
+            with open(target_file, "wb") as f:
+                f.write(img_content)
+            yield f"Generating ..."
 
     def __init__(self):
         self.name = "text_to_image"
@@ -85,10 +87,12 @@ Raises ValueError: if not able to generate the image.""",
     ):
         os.makedirs("media", exist_ok=True)
         if len(kwargs) > 0:
-            return f"Error: Unexpected parameter(s): {','.join([x for x in kwargs])}"
+            yield f"Error: Unexpected parameter(s): {','.join([x for x in kwargs])}"
+            return
 
         rng_num = rng.integers(low=0, high=900000)
         target_file = f"media/gen_image_{rng_num}.png"
+        generation_ans = f"<used_engine>{engine}</used_engine><path_to_image>{target_file}</path_to_image>"
 
         if engine is None:
             if os.getenv("OPENAI_API_KEY"):
@@ -98,22 +102,26 @@ Raises ValueError: if not able to generate the image.""",
         engine = engine.lower()
 
         if engine not in self.valid_engines:
-            return f"Invalid text-to-image engine: {engine}. Valid engines are: {self.valid_engines}"
+            yield f"Invalid text-to-image engine: {engine}. Valid engines are: {self.valid_engines}"
+            return
 
         try:
             if engine == "openai-img":
-                revised_prompt = self._gen_img_openai(input_text, target_file)
+                yield f"<scratchpad>Creating image: {input_text}</scratchpad>"
+                img_gen = self._gen_img_openai(input_text, target_file)
+                for img in img_gen:
+                    yield f"<scratchpad>{generation_ans}</scratchpad>"
             elif engine == "bedrock-stablediffusion":
-                revised_prompt = self._gen_img_bedrock(input_text, target_file)
+                self._gen_img_bedrock(input_text, target_file)
         except Exception as e:
-            return f"Image was NOT generated.\nError description: {str(e)}"
+            yield f"Image was NOT generated.\nError description: {str(e)}"
+            return
 
         if not os.path.isfile(target_file):
-            return "Error: Image was not saved correctly."
+            yield "Error: Image was not saved correctly."
+            return
 
         ans = ["<image>"]
-        ans.append(
-            f"<revised_prompt>{revised_prompt}</revised_prompt><used_engine>{engine}</used_engine><path_to_image>{target_file}</path_to_image>"
-        )
+        ans.append(generation_ans)
         ans.append("</image>")
-        return "\n".join(ans)
+        yield "\n".join(ans)
