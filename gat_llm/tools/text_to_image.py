@@ -36,7 +36,7 @@ class ToolTextToImage:
         if self.openai_client is None:
             self.openai_client = OpenAI()
         response = self.openai_client.images.generate(
-            model="gpt-image-1",
+            model="gpt-image-1.5",
             prompt=input_text,
             n=1,
             moderation="low",
