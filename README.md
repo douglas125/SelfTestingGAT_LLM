@@ -335,6 +335,7 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 ## TBD
 
 - Add GPT 5.2
+- Upgrade to gpt-image-1.5 for image generation (from gpt-image-1)
 
 ## 0.1.21
 

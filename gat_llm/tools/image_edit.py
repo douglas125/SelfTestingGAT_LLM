@@ -52,7 +52,7 @@ class ToolImageEdit:
             self.openai_client = OpenAI()
 
         args = {
-            "model": "gpt-image-1",
+            "model": "gpt-image-1.5",
             "image": [open(x, "rb") for x in image_paths],
             "prompt": prompt,
             "input_fidelity": input_fidelity,
