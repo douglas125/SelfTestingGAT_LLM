@@ -337,6 +337,8 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 - Add GPT 5.2
 - Upgrade to gpt-image-1.5 for image generation (from gpt-image-1)
 - Make `text_to_image` return streaming responses
+- Incorporate new tool `ToolImageAnalyzer`
+- Include LLM: NVidia Nemotron 3 Nano
 
 ## 0.1.21
 

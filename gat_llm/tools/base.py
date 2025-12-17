@@ -27,6 +27,7 @@ from .query_database import SampleOrder_LLM_DB
 from .run_with_python import ToolRunWithPython
 from .select_video_frames import ToolSelectVideoFrames
 from .speech_transcribe_analyze import ToolSpeechAnalysis
+from .image_analyzer import ToolImageAnalyzer
 
 rng = np.random.default_rng()
 
@@ -43,6 +44,7 @@ class LLMTools:
             ToolGetUrlContent(query_llm),
             ToolMakeQRCode(),
             ToolReadLocalFile(query_llm),
+            ToolImageAnalyzer(query_llm),
             ToolWriteLocalFile(),
             ToolReadLocalFolder(),
             ToolUseFFMPEG(),
@@ -83,6 +85,7 @@ class LLMTools:
                 ToolGetUrlContent(self.query_llm),
                 ToolMakeQRCode(),
                 ToolReadLocalFile(self.query_llm),
+                ToolImageAnalyzer(self.query_llm),
                 ToolWriteLocalFile(),
                 ToolReadLocalFolder(),
                 ToolUseFFMPEG(),
