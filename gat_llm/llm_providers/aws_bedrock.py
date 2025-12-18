@@ -16,11 +16,7 @@ class LLM_Claude_Bedrock(LLM_Service):
             model_size - type of model
             use_caching - optimize pricing and speed by using caching for prompt and tools
         """
-        # Only 2 Claude models from Bedrock support caching at the moment
-        if model_size in ["Sonnet 3.7", "Haiku 3.5"]:
-            self.use_caching = use_caching
-        else:
-            self.use_caching = False
+        self.use_caching = use_caching
 
         if model_size == "Sonnet 4":
             self.model_id = "us.anthropic.claude-sonnet-4-20250514-v1:0"
