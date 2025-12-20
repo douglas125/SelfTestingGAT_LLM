@@ -72,6 +72,7 @@ class SelfTestPerformer(SelfTestBase):
 if __name__ == "__main__":
     # configure tests
     llms_to_test = [
+        {"model": "Nemotron 3 Nano 30b - Ollama", "native_tools": True},
         {"model": "Claude 4.5 Haiku - Anthropic", "native_tools": True},
         {"model": "Claude 4.5 Sonnet - Anthropic", "native_tools": True},
         {"model": "GPT 5 nano - OpenAI", "native_tools": True},
