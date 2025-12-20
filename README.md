@@ -69,6 +69,7 @@ With the current prompts, tools, descriptions and native tool configuration use 
 | ('Llama3 70b instruct', False)            |                            29 |                29.1 |             36.1 |                          2.65  |                            3.5  |
 | ('Llama3_1 8b instruct', False)           |                            34 |                23.9 |             33.7 |                          0.3   |                            0.6  |
 | ('Grok2Vision - Grok', True)              |                             1 |                25   |             29   |                          2     |                           10    |
+| ('Nemotron 3 Nano 30b - Ollama', True)    |                           474 |                 0   |              0.4 |                          0     |                            0    |
 | ('Qwen 3 8b - Ollama', True)              |                           458 |                 0   |              0   |                          0     |                            0    |
 | ('Qwen 3 14b - Ollama', True)             |                           433 |                 0   |              0   |                          0     |                            0    |
 
