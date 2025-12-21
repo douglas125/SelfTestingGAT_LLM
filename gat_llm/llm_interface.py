@@ -277,7 +277,10 @@ class LLMInterface:
                     "metadata": {"title": "🛠️", "status": "pending"},
                     "content": ", ".join([x["tool_name"] for x in self.lt.invoke_log]),
                 }
-            self.history_log[chat_id] = history + [msg, x]
+            self.history_log[chat_id] = history + [
+                self.llm.last_message,
+                {"role": "assistant", "content": x},
+            ]
             yield self._format_msg(x, msg, ui_history, extra_info=extra_info)
         # initial_ans = self._format_msg(x, msg, ui_history)
         # yield initial_ans
@@ -317,7 +320,10 @@ class LLMInterface:
 
             for x in ans2:
                 # pass
-                self.history_log[chat_id] = history + [msg, x]
+                self.history_log[chat_id] = history + [
+                    self.llm.last_message,
+                    {"role": "assistant", "content": x},
+                ]
                 yield self._format_msg(x, msg, ui_history)
             # yield self._format_msg(x, msg, ui_history)
 
@@ -334,7 +340,7 @@ class LLMInterface:
         history_to_append = []
         tool_results = []
         if hasattr(self.llm, "tool_use_added_msgs"):
-            history_to_append.append({"role": "user", "content": msg})
+            history_to_append.append(self.llm.last_message)
             tool_results.append("\n")
             for x in self.llm.tool_use_added_msgs:
                 history_to_append.append(x)

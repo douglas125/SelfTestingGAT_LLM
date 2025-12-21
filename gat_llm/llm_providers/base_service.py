@@ -34,6 +34,9 @@ class LLM_Service:
         call_list = self._prepare_call_list_from_history(
             system_prompt, msg, b64images, chat_history
         )
+        # keep last user message parsed, potentially with images
+        self.last_message = call_list[-1]
+
         prompt = self._prepare_prompt_from_list(call_list)
         self.last_prompt = str(prompt) + postpend
         if tools is None:
