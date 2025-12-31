@@ -52,6 +52,7 @@ class LLMInterface:
         output_mode="chat_bot",
         chat_log_folder="chat_logs",
         show_extra_info=True,
+        system_prompt_images=None,
     ):
         """Constructor
 
@@ -64,8 +65,18 @@ class LLMInterface:
             receive the whole history. Otherwise uses gradio chatinterface
         chat_log_folder: folder to save chat to. If None, does not save chat
         show_extra_info: show extra info like tools used and scratchpad in the UI?
+        system_prompt_images: images to include in the system prompt
         """
         self.system_prompt = system_prompt
+        if system_prompt_images is not None:
+            if not isinstance(system_prompt_images, list):
+                system_prompt_images = [system_prompt_images]
+            self.system_prompt_images_b64 = [
+                self._img2base64(x) for x in system_prompt_images
+            ]
+        else:
+            self.system_prompt_images_b64 = None
+
         self.llm = llm
         self.lt = llm_tools
         self.rpg = rpg
@@ -212,6 +223,15 @@ class LLMInterface:
         """Returns a copy of history but with None messages from users removed"""
         return str([x for x in history if x[0] is not None])
 
+    def _img2base64(self, image, img_format="JPEG"):
+        """Converts an image to base64"""
+        npimg = np.array(image, dtype=np.uint8)
+        pil_img = Image.fromarray(npimg)
+        buff = BytesIO()
+        pil_img.save(buff, format=img_format)
+        image_string = base64.b64encode(buff.getvalue()).decode("utf-8")
+        return image_string
+
     def chat_with_function_caller(self, msg, images, ui_history=[], username=""):
         """Performs conversation with the LLM agent
 
@@ -230,11 +250,7 @@ class LLMInterface:
                 if image is None:
                     image_strings.append(None)
                 else:
-                    npimg = np.array(image, dtype=np.uint8)
-                    pil_img = Image.fromarray(npimg)
-                    buff = BytesIO()
-                    pil_img.save(buff, format="JPEG")
-                    image_string = base64.b64encode(buff.getvalue()).decode("utf-8")
+                    image_string = self._img2base64(image)
                     image_strings.append(image_string)
 
         t0 = time.time()
@@ -262,6 +278,7 @@ class LLMInterface:
             extra_stop_sequences=self.extra_stop_sequences,
             tools=self.native_tools,
             tool_invoker_fn=self.lt.invoke_tool if self.lt is not None else None,
+            system_prompt_b64_imgs=self.system_prompt_images_b64,
         )
 
         extra_info = {
@@ -316,6 +333,7 @@ class LLMInterface:
                 chat_history=history,
                 postpend=cur_postpend if not self.rpg.use_native_tools else "",
                 extra_stop_sequences=self.extra_stop_sequences,
+                system_prompt_b64_imgs=self.system_prompt_images_b64,
             )
 
             for x in ans2:

@@ -79,6 +79,7 @@ def process_audio_func(
     mcp_servers,
     mcp_enable,
     use_speech_parameters,
+    sys_prompt_img,
     request: gr.Request,
 ):
     if use_speech_parameters:
@@ -105,6 +106,7 @@ def process_audio_func(
         allowed_tools,
         mcp_servers,
         mcp_enable,
+        sys_prompt_img,
         request,
     )
     for x in ans_gen:
@@ -123,6 +125,7 @@ def msg_forward_func(
     allowed_tools,
     mcp_servers,
     mcp_enable,
+    sys_prompt_img,
     request: gr.Request,
 ):
     if "unavailable" in selected_llm.lower():
@@ -169,7 +172,13 @@ def msg_forward_func(
         tool_descriptions = lt.get_tool_descriptions()
         system_prompt = rpg.prompt.replace("{{TOOLS}}", tool_descriptions)
 
-    li = LLMInterface(system_prompt=system_prompt, llm=llm, llm_tools=lt, rpg=rpg)
+    li = LLMInterface(
+        system_prompt=system_prompt,
+        llm=llm,
+        llm_tools=lt,
+        rpg=rpg,
+        system_prompt_images=sys_prompt_img,
+    )
     li.history_log = history_log
 
     # Call LLM
@@ -342,7 +351,11 @@ def main(max_audio_duration=120):
                 [image_input_1, image_input_2, image_input_3, chatbot, audio_msg]
             )
             scratchpad = gr.Textbox(label="Scratchpad", visible=False)
-            sys_prompt_txt = gr.Text(label="System prompt prepend", value="")
+            with gr.Row():
+                sys_prompt_txt = gr.Text(
+                    label="System prompt prepend", value="", scale=3
+                )
+                sys_prompt_img = gr.Image(label="System prompt image")
         raw_history = gr.JSON(label="Raw history", open=False)
 
         send_txt_event = gr.on(
@@ -360,6 +373,7 @@ def main(max_audio_duration=120):
                 chk_tools,
                 mcp_servers,
                 mcp_enable,
+                sys_prompt_img,
             ],
             outputs=[
                 msg2,
@@ -388,6 +402,7 @@ def main(max_audio_duration=120):
                 mcp_servers,
                 mcp_enable,
                 chk_speechparams,
+                sys_prompt_img,
             ],
             outputs=[
                 audio_msg,

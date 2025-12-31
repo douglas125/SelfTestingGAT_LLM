@@ -21,6 +21,7 @@ class LLM_Service:
         tool_invoker_fn=None,
         max_retries=3,
         cur_fail_sleep=60,
+        system_prompt_b64_imgs=None,
     ):
         """Calls the LLM in streaming mode
         Arguments:
@@ -32,7 +33,11 @@ class LLM_Service:
             extra_stop_sequences, list
         ), "extra_stop_sequences should be a list of strings"
         call_list = self._prepare_call_list_from_history(
-            system_prompt, msg, b64images, chat_history
+            system_prompt,
+            msg,
+            b64images,
+            chat_history,
+            sys_prompt_b64_images=system_prompt_b64_imgs,
         )
         # keep last user message parsed, potentially with images
         self.last_message = call_list[-1]
@@ -58,38 +63,9 @@ class LLM_Service:
                 cur_fail_sleep=cur_fail_sleep,
             )
 
-    def _prepare_call_list_from_history(
-        self,
-        system_prompt,
-        msg,
-        b64images,
-        chat_history,
-        context_reset_string="[|[PAST_FORGOTTEN]|]",
-    ):
-        """Prepares the prompt for the next interaction with the LLM.
-        This image preparation is suited for Anthropic's Claude
-        """
-        history_list = [
-            {"role": "system", "content": system_prompt},
-        ]
-        for x in chat_history:
-            # allows the LLM to determine that the past is no longer relevant, to free up context
-            if context_reset_string in str(x):
-                history_list = [
-                    history_list[0],
-                    {
-                        "role": "user",
-                        "content": str(x),
-                    },
-                ]
-            elif isinstance(x, dict):
-                history_list.append(x)
-            else:
-                history_list.append({"role": "user", "content": x[0]})
-                history_list.append({"role": "assistant", "content": str(x[1])})
-
+    def _prepare_msg_with_images(self, msg, b64images):
         if b64images is None:
-            history_list.append({"role": "user", "content": msg})
+            return [{"type": "text", "text": msg}]
         else:
             if not isinstance(b64images, list):
                 b64images = [b64images]
@@ -107,5 +83,42 @@ class LLM_Service:
                         },
                     )
             cur_content.append({"type": "text", "text": msg})
-            history_list.append({"role": "user", "content": cur_content})
+            return cur_content
+
+    def _prepare_call_list_from_history(
+        self,
+        system_prompt,
+        msg,
+        b64images,
+        chat_history,
+        context_reset_string="[|[PAST_FORGOTTEN]|]",
+        sys_prompt_b64_images=None,
+    ):
+        """Prepares the prompt for the next interaction with the LLM.
+        This image preparation is suited for Anthropic's Claude
+        """
+        sys_prompt_msg = self._prepare_msg_with_images(
+            system_prompt, sys_prompt_b64_images
+        )
+        history_list = [
+            {"role": "system", "content": sys_prompt_msg},
+        ]
+        for x in chat_history:
+            # allows the LLM to determine that the past is no longer relevant, to free up context
+            if context_reset_string in str(x):
+                history_list = [
+                    history_list[0],
+                    {
+                        "role": "user",
+                        "content": str(x),
+                    },
+                ]
+            elif isinstance(x, dict):
+                history_list.append(x)
+            else:
+                history_list.append({"role": "user", "content": x[0]})
+                history_list.append({"role": "assistant", "content": str(x[1])})
+
+        cur_content = self._prepare_msg_with_images(msg, b64images)
+        history_list.append({"role": "user", "content": cur_content})
         return history_list

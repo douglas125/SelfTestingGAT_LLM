@@ -103,22 +103,9 @@ class LLM_GPT_OpenAI(LLM_Service):
         ans = msg_list
         return ans
 
-    def _prepare_call_list_from_history(
-        self, system_prompt, msg, b64images, chat_history
-    ):
-        """Prepares the prompt for the next interaction with the LLM"""
-        history_list = [
-            {"role": "system", "content": system_prompt},
-        ]
-        for x in chat_history:
-            if isinstance(x, dict):
-                history_list.append(x)
-            else:
-                history_list.append({"role": "user", "content": x[0]})
-                history_list.append({"role": "assistant", "content": str(x[1])})
-
+    def _prepare_msg_with_images(self, msg, b64images):
         if b64images is None:
-            history_list.append({"role": "user", "content": msg})
+            return [{"type": "text", "text": msg}]
         else:
             if not isinstance(b64images, list):
                 b64images = [b64images]
@@ -134,7 +121,32 @@ class LLM_GPT_OpenAI(LLM_Service):
                         },
                     )
             cur_content.append({"type": "text", "text": msg})
-            history_list.append({"role": "user", "content": cur_content})
+            return cur_content
+
+    def _prepare_call_list_from_history(
+        self,
+        system_prompt,
+        msg,
+        b64images,
+        chat_history,
+        sys_prompt_b64_images=None,
+    ):
+        """Prepares the prompt for the next interaction with the LLM"""
+        sys_prompt_msg = self._prepare_msg_with_images(
+            system_prompt, sys_prompt_b64_images
+        )
+        history_list = [
+            {"role": "system", "content": sys_prompt_msg},
+        ]
+        for x in chat_history:
+            if isinstance(x, dict):
+                history_list.append(x)
+            else:
+                history_list.append({"role": "user", "content": x[0]})
+                history_list.append({"role": "assistant", "content": str(x[1])})
+
+        cur_content = self._prepare_msg_with_images(msg, b64images)
+        history_list.append({"role": "user", "content": cur_content})
         return history_list
 
     def invoke_streaming(
@@ -212,6 +224,7 @@ class LLM_GPT_OpenAI(LLM_Service):
                     llm_body_changed = False
                     word_count = len(re.findall(r"\w+", str(body["messages"])))
                     print(f"Invoking {self.llm_description}. Word count: {word_count}")
+                    print(body)
                     response = self.openai_client.chat.completions.create(**body)
 
                     # stream responses
