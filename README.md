@@ -335,6 +335,9 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 
 ## TBD
 
+- Adjust `read_local_file` to add some more text extensions
+- Adjust `read_local_file` to enclose MSOffice file contents with `<contents></contents>` (when Markitdown is used to read the file)
+
 ## 0.1.22
 
 - Add GPT 5.2

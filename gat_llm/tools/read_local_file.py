@@ -25,6 +25,11 @@ def extract_text(file) -> str:
         ".html",
         ".css",
         ".xml",
+        ".json",
+        ".yml",
+        ".yaml",
+        ".htm",
+        ".html",
     ]:
         with open(file, "r", encoding="utf-8") as f:
             ans = f.read()
@@ -32,6 +37,7 @@ def extract_text(file) -> str:
     elif extension in [".docx", ".pptx", ".xlsx", ".xls"]:
         md = MarkItDown()
         ans = md.convert(file).text_content
+        ans = f"<contents>\n{ans}\n</contents>"
     elif extension == ".pdf":
         ans = pdf_to_xml(file)
     elif extension == ".csv":
