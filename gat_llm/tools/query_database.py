@@ -104,15 +104,25 @@ def validate_sql_query(query: str) -> None:
     # Normalize query for checking (uppercase, remove extra whitespace)
     normalized = query.upper()
 
+    # Find all blocked keywords and their positions
+    # Report the first one that appears in the query
+    found_keywords = []
     for keyword in BLOCKED_SQL_KEYWORDS:
         # Use word boundary regex to avoid false positives
         # e.g., "UPDATED_AT" should not match "UPDATE"
         pattern = rf"\b{keyword}\b"
-        if re.search(pattern, normalized):
-            raise SQLValidationError(
-                f"Blocked SQL keyword detected: '{keyword}'. "
-                f"Only read-only SELECT queries are allowed."
-            )
+        match = re.search(pattern, normalized)
+        if match:
+            found_keywords.append((match.start(), keyword))
+
+    if found_keywords:
+        # Sort by position and report the first keyword found
+        found_keywords.sort(key=lambda x: x[0])
+        first_keyword = found_keywords[0][1]
+        raise SQLValidationError(
+            f"Blocked SQL keyword detected: '{first_keyword}'. "
+            f"Only read-only SELECT queries are allowed."
+        )
 
 
 class LLM_Database(ABC):
