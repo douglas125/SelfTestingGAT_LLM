@@ -44,8 +44,85 @@ sort_by: argument to SQL SORT BY
 max_results: integer N to use in "LIMIT N" at the end
 """
 from abc import ABC, abstractmethod
+import re
 
 import duckdb
+
+
+# SQL keywords that could modify data or database structure
+BLOCKED_SQL_KEYWORDS = {
+    # Data modification
+    "INSERT",
+    "UPDATE",
+    "DELETE",
+    "MERGE",
+    "REPLACE",
+    "TRUNCATE",
+    # Schema modification
+    "DROP",
+    "ALTER",
+    "CREATE",
+    "RENAME",
+    # Permission/access control
+    "GRANT",
+    "REVOKE",
+    # Stored procedures and execution
+    "EXECUTE",
+    "EXEC",
+    "CALL",
+    # DuckDB-specific dangerous operations
+    "ATTACH",
+    "DETACH",
+    "COPY",
+    "EXPORT",
+    "IMPORT",
+    "LOAD",
+    "INSTALL",
+    "PRAGMA",
+    "SET",
+    "VACUUM",
+    "CHECKPOINT",
+}
+
+
+class SQLValidationError(Exception):
+    """Raised when SQL query contains blocked keywords."""
+
+    pass
+
+
+def validate_sql_query(query: str) -> None:
+    """
+    Validate that a SQL query does not contain dangerous keywords.
+
+    Args:
+        query: The SQL query string to validate.
+
+    Raises:
+        SQLValidationError: If the query contains blocked keywords.
+    """
+    # Normalize query for checking (uppercase, remove extra whitespace)
+    normalized = query.upper()
+
+    # Find all blocked keywords and their positions
+    # Report the first one that appears in the query
+    found_keywords = []
+    for keyword in BLOCKED_SQL_KEYWORDS:
+        # Use word boundary regex to avoid false positives
+        # e.g., "UPDATED_AT" should not match "UPDATE"
+        pattern = rf"\b{keyword}\b"
+        match = re.search(pattern, normalized)
+        if match:
+            found_keywords.append((match.start(), keyword))
+
+    if found_keywords:
+        # Sort by position and report the first keyword found
+        found_keywords.sort(key=lambda x: x[0])
+        first_keyword = found_keywords[0][1]
+        raise SQLValidationError(
+            f"Blocked SQL keyword detected: '{first_keyword}'. "
+            f"Only read-only SELECT queries are allowed."
+        )
 
 
 class LLM_Database(ABC):
@@ -130,6 +207,9 @@ class SampleOrder_LLM_DB(LLM_Database):
         return ["tblSales"]
 
     def sql_query(self, query, max_desired_results=400):
+        # Validate query for dangerous keywords before processing
+        validate_sql_query(query)
+
         # handle when the LLM decides to use WITH
         if len(query) > 4 and query[0:4].lower() == "with":
             query = ", " + query[5:]
