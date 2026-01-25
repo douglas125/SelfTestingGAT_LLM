@@ -12,9 +12,15 @@ class ToolSpeechToText:
 
         self.tool_description = {
             "name": self.name,
-            "description": """Uses an automatic speech recognition tool to convert the provided audio into text in SRT format (subtitles).
-Unless requested by the user, do not attempt to read the produced SRT file because the transcription may be too long.
-Returns: path to a file containing a transcription of the audio in SRT format.
+            "description": """Uses an automatic speech recognition tool to convert the provided audio into text in JSON format.
+Unless requested by the user, do not attempt to read the produced file because the transcription may be too long.
+
+If the audio file is too large, or if the user wants to transcribe a video file, convert it to webm using the <webm_cmd></webm_cmd> before transcribing:
+<webm_cmd>ffmpeg -i <input_file_name> -vn -ac 1 -ar 16000 -c:a libopus -b:a 24k -y <output_file_name>.webm</webm_cmd>
+
+If the audio file is too long, adapt the <webm_cmd></webm_cmd> to split the audio file and send the splits for transcription.
+
+Returns: path to a file containing a transcription of the audio.
 Raises ValueError: if not able to read the audio or video file.""",
             "input_schema": {
                 "type": "object",
@@ -38,6 +44,7 @@ Raises ValueError: if not able to read the audio or video file.""",
         audio_file_path,
         language,
         return_path_to_file_only=True,
+        asr_model="gpt-4o-transcribe",
         **kwargs,
     ):
         """Creates a transcription of an audio file.
@@ -46,8 +53,9 @@ Raises ValueError: if not able to read the audio or video file.""",
           - audio_file_path: Path to the file that should be transcribed
           - language: language in ISO format (e.g. en, pt, es, it)
           - return_path_to_file_only: if True, writes a transcription file and returns it. If false, returns the transcription itself
+          - asr_model: which OpenAI model to use in the transcription. See https://platform.openai.com/docs/api-reference/audio/createTranscription
         Returns:
-          - The audio srt file or the full transcription
+          - The name of the file containing the transcription or the transcription text itself
         """
         os.makedirs("media", exist_ok=True)
         if len(kwargs) > 0:
@@ -61,12 +69,12 @@ Raises ValueError: if not able to read the audio or video file.""",
             return f"Audio file not found: {audio_file_path}"
 
         rng_num = rng.integers(low=0, high=900000)
-        target_file = f"media/transcript_{rng_num}.srt"
+        target_file = f"media/transcript_{rng_num}.json"
         try:
             with open(audio_file_path, "rb") as audio_file:
                 transcript = self.openai_client.audio.transcriptions.create(
-                    model="whisper-1",
-                    response_format="srt" if return_path_to_file_only else "text",
+                    model=asr_model,
+                    response_format="json",
                     file=audio_file,
                 )
             if return_path_to_file_only:
