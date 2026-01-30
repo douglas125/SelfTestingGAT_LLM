@@ -151,8 +151,9 @@ def analyze_voice(
 
 
 class ToolSpeechAnalysis:
-    def __init__(self):
+    def __init__(self, require_llm_postprocessing=True):
         self.name = "speech_analysis"
+        self.require_llm_postprocessing = require_llm_postprocessing
 
         self.tool_description = {
             "name": self.name,

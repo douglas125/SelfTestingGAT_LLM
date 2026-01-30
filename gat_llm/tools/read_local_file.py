@@ -139,9 +139,10 @@ def normalize_xml_content(xml_content):
 
 
 class ToolReadLocalFile:
-    def __init__(self, query_llm=None):
+    def __init__(self, query_llm=None, require_llm_postprocessing=True):
         self.name = "read_local_files"
         self.query_llm = query_llm
+        self.require_llm_postprocessing = require_llm_postprocessing
 
         self.tool_description = {
             "name": self.name,

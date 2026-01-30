@@ -153,9 +153,7 @@ class LLM_Nova_Bedrock(LLM_Service):
 
                     if self.cur_tool_spec is not None:
                         # tool use has been required. Let's do it
-                        # TODO: update upstream to reflect the inclusion of a response
-                        # TODO: probably rework gradio UI to re-instantiate things every chat, or keep an instance per chat ID
-                        tool_ans = tool_invoker_fn(
+                        tool_ans, require_llm_postprocessing = tool_invoker_fn(
                             self.cur_tool_spec["toolUse"]["name"],
                             return_results_only=True,
                             **self.cur_tool_spec["toolUse"]["input"],
@@ -206,7 +204,7 @@ class LLM_Nova_Bedrock(LLM_Service):
                         self.tool_use_added_msgs.append(assistant_msg)
                         self.tool_use_added_msgs.append(assistant_msg2)
                         self.tool_use_added_msgs.append(next_user_msg)
-                        llm_body_changed = True
+                        llm_body_changed = require_llm_postprocessing
 
                     # TODO: Include proper token count and pricing
                     ans_word_count = len(

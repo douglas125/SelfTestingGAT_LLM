@@ -71,8 +71,9 @@ LLMInterface (gat_llm/llm_interface.py) - orchestrates LLM calls with tool suppo
 
 ```python
 class ToolNewTool:
-    def __init__(self):
+    def __init__(self, require_llm_postprocessing=True):
         self.name = "new_tool_name"
+        self.require_llm_postprocessing = require_llm_postprocessing
         self.tool_description = {
             "name": self.name,
             "description": "Description of what the tool does",
@@ -88,6 +89,21 @@ class ToolNewTool:
     def __call__(self, param1, **kwargs):
         return result
 ```
+
+### Tool LLM Postprocessing
+
+Each tool has a `require_llm_postprocessing` property that controls whether the LLM should be called again after the tool executes:
+
+- **`True` (default)**: After tool execution, the LLM is called again to analyze and present the results to the user. Use this for tools that return raw data needing interpretation.
+- **`False`**: Tool output is returned directly to the UI without additional LLM processing. Use this for tools that generate self-contained outputs (images, audio) where the UI renders the result via `<path_to_image>` or `<path_to_audio>` tags.
+
+Tools with `require_llm_postprocessing=False`:
+- `make_qr_code`, `make_custom_plot`, `plot_with_graphviz` - generate images
+- `text_to_image`, `edit_image` - image generation
+- `text_to_speech` - generates audio
+
+Tools with `require_llm_postprocessing=True`:
+- All others, including tools returning `<path_to_file>` that need LLM explanation
 
 ### Adding a New LLM Provider
 

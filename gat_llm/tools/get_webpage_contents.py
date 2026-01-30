@@ -111,10 +111,13 @@ class MyBeautifulSoup(BeautifulSoup):
 
 
 class ToolGetUrlContent:
-    def __init__(self, query_llm, max_subpages_to_read=60):
+    def __init__(
+        self, query_llm, max_subpages_to_read=60, require_llm_postprocessing=True
+    ):
         self.name = "get_url_content"
         self.query_llm = query_llm
         self.max_subpages_to_read = max_subpages_to_read
+        self.require_llm_postprocessing = require_llm_postprocessing
 
         self.tool_description = {
             "name": self.name,

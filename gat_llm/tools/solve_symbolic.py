@@ -2,8 +2,9 @@ ans = None
 
 
 class ToolSolveSymbolic:
-    def __init__(self):
+    def __init__(self, require_llm_postprocessing=True):
         self.name = "solve_symbolic"
+        self.require_llm_postprocessing = require_llm_postprocessing
 
         self.tool_description = {
             "name": self.name,

@@ -2,8 +2,9 @@ import os
 
 
 class ToolWriteLocalFile:
-    def __init__(self):
+    def __init__(self, require_llm_postprocessing=True):
         self.name = "write_local_files"
+        self.require_llm_postprocessing = require_llm_postprocessing
 
         self.tool_description = {
             "name": self.name,

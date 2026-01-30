@@ -5,8 +5,9 @@ rng = np.random.default_rng()
 
 
 class ToolPlotWithGraphviz:
-    def __init__(self):
+    def __init__(self, require_llm_postprocessing=False):
         self.name = "plot_with_graphviz"
+        self.require_llm_postprocessing = require_llm_postprocessing
 
         self.save_code = "graph.write_png('media/graph.png')"
 

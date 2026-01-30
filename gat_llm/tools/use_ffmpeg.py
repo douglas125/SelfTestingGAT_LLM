@@ -2,8 +2,9 @@ import subprocess
 
 
 class ToolUseFFMPEG:
-    def __init__(self):
+    def __init__(self, require_llm_postprocessing=True):
         self.name = "use_ffmpeg"
+        self.require_llm_postprocessing = require_llm_postprocessing
 
         self.tool_description = {
             "name": self.name,

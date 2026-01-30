@@ -202,7 +202,7 @@ class LLM_Claude_Bedrock(LLM_Service):
                     cur_ans = x
 
                     if self.cur_tool_spec is not None:
-                        tool_ans = tool_invoker_fn(
+                        tool_ans, require_llm_postprocessing = tool_invoker_fn(
                             self.cur_tool_spec["name"],
                             return_results_only=True,
                             **self.cur_tool_spec["input"],
@@ -239,7 +239,7 @@ class LLM_Claude_Bedrock(LLM_Service):
                         # keep a log of messages that had to be appended due to tool use
                         self.tool_use_added_msgs.append(assistant_msg)
                         self.tool_use_added_msgs.append(next_user_msg)
-                        llm_body_changed = True
+                        llm_body_changed = require_llm_postprocessing
 
                     # TODO: Include proper token count and pricing
                     ans_word_count = len(

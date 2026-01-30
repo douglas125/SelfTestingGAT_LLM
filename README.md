@@ -338,6 +338,7 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 - Adjust `read_local_file` to add some more text extensions
 - Adjust `read_local_file` to enclose MSOffice file contents with `<contents></contents>` (when Markitdown is used to read the file)
 - Adjust `speech_to_text` to use `gpt-4o-transcribe` and handle limitations using ffmpeg (needs to be enabled as a tool)
+- All tools now have the `require_llm_postprocessing` property which controls whether execution can stop after the tool or if the LLM should be called again to analyze results
 
 ## 0.1.22
 

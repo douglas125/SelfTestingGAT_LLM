@@ -200,8 +200,6 @@ class LLMTools:
     def invoke_tool(self, tool_name, return_results_only=False, **kwargs):
         try:
             cur_tool = self.tool_mapping.get(tool_name)
-            # if 'error' in cur_tool.keys():
-            #     return f'Error: {cur_tool["error"]}'
             if cur_tool is not None:
                 t0 = time.time()
                 if (
@@ -226,16 +224,21 @@ class LLMTools:
                         # "result_length": len(ans),
                     }
                 )
+
                 if return_results_only:
-                    return ans
+                    return ans, cur_tool.require_llm_postprocessing
                 else:
-                    return self.call_return_string.replace(
-                        "{{TOOLNAME}}", tool_name
-                    ).replace("{{TOOLRESULTS}}", ans)
+                    return (
+                        self.call_return_string.replace(
+                            "{{TOOLNAME}}", tool_name
+                        ).replace("{{TOOLRESULTS}}", ans),
+                        cur_tool.require_llm_postprocessing,
+                    )
             else:
-                return f"Tool {tool_name} not found. Please check tool name. Available tools: {self.tool_mapping.keys()}"
+                return (
+                    f"Tool {tool_name} not found. Please check tool name. Available tools: {self.tool_mapping.keys()}",
+                    True,
+                )
         except Exception as e:
             print(f"Tool execution failed: {str(e)}")
-            return str(
-                e
-            )  # "Failed to invoke tool. Please try again, possibly in a different way."
+            return str(e), True

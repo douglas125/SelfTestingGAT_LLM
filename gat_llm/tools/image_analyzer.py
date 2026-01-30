@@ -12,9 +12,10 @@ rng = np.random.default_rng()
 class ToolImageAnalyzer:
     """Tool for analyzing and describing images content."""
 
-    def __init__(self, query_llm=None):
+    def __init__(self, query_llm=None, require_llm_postprocessing=True):
         self.name = "analyze_images"
         self.query_llm = query_llm
+        self.require_llm_postprocessing = require_llm_postprocessing
         self.tool_description = {
             "name": self.name,
             "description": """Analyzes the content of images and returns a detailed description.

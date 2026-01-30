@@ -2,8 +2,9 @@ import os
 
 
 class ToolReadLocalFolder:
-    def __init__(self):
+    def __init__(self, require_llm_postprocessing=True):
         self.name = "read_file_names_in_local_folder"
+        self.require_llm_postprocessing = require_llm_postprocessing
 
         self.tool_description = {
             "name": self.name,
