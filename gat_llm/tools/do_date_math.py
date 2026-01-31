@@ -3,8 +3,9 @@ import dateutil
 
 
 class ToolDoDateMath:
-    def __init__(self):
+    def __init__(self, require_llm_postprocessing=True):
         self.name = "do_date_math"
+        self.require_llm_postprocessing = require_llm_postprocessing
 
         self.tool_summary = f"""<tool_summary>
 <tool_name>{self.name}</tool_name>

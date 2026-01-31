@@ -7,9 +7,16 @@ rng = np.random.default_rng()
 
 
 class ToolMakeQRCode:
-    def __init__(self):
-        self.name = "make_qr_code"
+    def __init__(self, require_llm_postprocessing=False):
+        """
+        Constructor
 
+        Args:
+
+            - require_llm_postprocessing: Is it necessary to send the result of this tool for LLM postprocessing?
+        """
+        self.name = "make_qr_code"
+        self.require_llm_postprocessing = require_llm_postprocessing
         self.tool_description = {
             "name": self.name,
             "description": """Generates an image of a QR code given the text to be coded and the QR code configurations.

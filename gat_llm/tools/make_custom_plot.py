@@ -6,8 +6,9 @@ rng = np.random.default_rng()
 
 
 class ToolMakeCustomPlot:
-    def __init__(self):
+    def __init__(self, require_llm_postprocessing=False):
         self.name = "make_custom_plot"
+        self.require_llm_postprocessing = require_llm_postprocessing
 
         self.save_code = "plt.savefig('media/plot.jpg')"
 

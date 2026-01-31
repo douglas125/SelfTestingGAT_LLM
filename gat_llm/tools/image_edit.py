@@ -77,8 +77,9 @@ class ToolImageEdit:
                 f.write(img_content)
             yield f"Generating ..."
 
-    def __init__(self):
+    def __init__(self, require_llm_postprocessing=False):
         self.name = "edit_image"
+        self.require_llm_postprocessing = require_llm_postprocessing
 
         self.tool_description = {
             "name": self.name,

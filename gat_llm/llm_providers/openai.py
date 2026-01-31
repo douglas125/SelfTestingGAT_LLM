@@ -248,13 +248,14 @@ class LLM_GPT_OpenAI(LLM_Service):
                         ans_to_append = cur_ans
                         for cur_tool_spec in self.cur_tool_specs:
                             # tool use has been required. Let's do it
-                            # TODO: update upstream to reflect the inclusion of a response
-                            # TODO: probably rework gradio UI to re-instantiate things every chat, or keep an instance per chat ID
-                            tool_ans = tool_invoker_fn(
+                            tool_ans, require_llm_postprocessing = tool_invoker_fn(
                                 cur_tool_spec["tool_name"],
                                 return_results_only=True,
                                 **cur_tool_spec["input"],
                             )
+                            # If any tool requires LLM postprocessing, we need to call the LLM again
+                            if require_llm_postprocessing:
+                                llm_body_changed = True
                             if isinstance(tool_ans, types.GeneratorType):
                                 for partial_ans in tool_ans:
                                     yield partial_ans
@@ -296,7 +297,6 @@ class LLM_GPT_OpenAI(LLM_Service):
                             # keep a log of messages that had to be appended due to tool use
                             self.tool_use_added_msgs.append(assistant_msg)
                             self.tool_use_added_msgs.append(next_user_msg)
-                        llm_body_changed = True
 
                     # TODO: Include proper token count and pricing
                     ans_word_count = len(

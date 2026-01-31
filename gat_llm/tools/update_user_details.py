@@ -2,9 +2,10 @@ import os
 
 
 class ToolUpdateUserDetails:
-    def __init__(self):
+    def __init__(self, require_llm_postprocessing=True):
         self.requires_username = True
         self.name = "read_write_user_details"
+        self.require_llm_postprocessing = require_llm_postprocessing
 
         self.tool_description = {
             "name": self.name,

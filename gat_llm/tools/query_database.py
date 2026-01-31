@@ -239,10 +239,11 @@ WITH tblSales AS
 
 
 class ToolQueryLLMDB:
-    def __init__(self, LLM_Database, max_records=100):
+    def __init__(self, LLM_Database, max_records=100, require_llm_postprocessing=True):
         self.db = LLM_Database
         self.max_records = max_records
         self.name = f"query_database_{self.db.get_database_name()}"
+        self.require_llm_postprocessing = require_llm_postprocessing
 
         db_description = self.db.get_full_database_description()
 

@@ -2,8 +2,9 @@ import subprocess
 
 
 class ToolRunWithPython:
-    def __init__(self):
+    def __init__(self, require_llm_postprocessing=True):
         self.name = "run_with_python"
+        self.require_llm_postprocessing = require_llm_postprocessing
 
         self.tool_description = {
             "name": self.name,

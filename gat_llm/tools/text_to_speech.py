@@ -22,8 +22,9 @@ VOICE_MAP = {
 
 
 class ToolTextToSpeech:
-    def __init__(self):
+    def __init__(self, require_llm_postprocessing=False):
         self.name = "text_to_speech"
+        self.require_llm_postprocessing = require_llm_postprocessing
 
         self.tool_description = {
             "name": self.name,
