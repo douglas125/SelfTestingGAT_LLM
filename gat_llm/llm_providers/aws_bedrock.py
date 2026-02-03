@@ -18,7 +18,14 @@ class LLM_Claude_Bedrock(LLM_Service):
         """
         self.use_caching = use_caching
 
-        if model_size == "Sonnet 4":
+        if model_size == "Opus 4.5":
+            self.model_id = "us.anthropic.claude-opus-4-5-20251101-v1:0"
+            self.llm_description = (
+                "Anthropic Claude 4.5 Opus from AWS Bedrock (Large-size LLM)"
+            )
+            self.price_per_M_input_tokens = 5
+            self.price_per_M_output_tokens = 25
+        elif model_size == "Sonnet 4":
             self.model_id = "us.anthropic.claude-sonnet-4-20250514-v1:0"
             self.llm_description = (
                 "Anthropic Claude 4 Sonnet from AWS Bedrock (Medium-size LLM)"
