@@ -33,6 +33,7 @@ class LLM_Provider:
     outdated_llms = [
         "Claude 3.5 Sonnet - Anthropic",
         "Claude 3.5 Sonnet - Bedrock",
+        "Claude 3.7 Sonnet - Bedrock",
         "Claude 3 Opus - Anthropic",
         "Claude 3 Haiku - Anthropic",
         "Claude 3 Haiku - Bedrock",
@@ -112,7 +113,8 @@ class LLM_Provider:
         "Claude 4.5 Sonnet - Bedrock",
         "Claude 4.5 Haiku - Anthropic",
         "Claude 4.5 Haiku - Bedrock",
-        "Claude 3.7 Sonnet - Bedrock",
+        "Claude 4.5 Opus - Anthropic",
+        "Claude 4.5 Opus - Bedrock",
     ]
 
     def get_llm(bedrock_client, llm):
@@ -246,6 +248,8 @@ class LLM_Provider:
             return LLM_Claude_Anthropic(model_size="Haiku 3 Anthropic")
 
         # current Claude
+        elif llm == "Claude 4.5 Opus - Anthropic":
+            return LLM_Claude_Anthropic(model_size="Opus 4.5 Anthropic")
         elif llm == "Claude 4 Sonnet - Anthropic":
             return LLM_Claude_Anthropic(model_size="Sonnet 4 Anthropic")
         elif llm == "Claude 4.5 Sonnet - Anthropic":
@@ -254,6 +258,8 @@ class LLM_Provider:
             return LLM_Claude_Anthropic(model_size="Haiku 4.5 Anthropic")
         elif llm == "Claude 4 Opus - Anthropic":
             return LLM_Claude_Anthropic(model_size="Opus 4 Anthropic")
+        elif llm == "Claude 4.5 Opus - Bedrock":
+            return LLM_Claude_Bedrock(bedrock_client, model_size="Opus 4.5")
         elif llm == "Claude 4 Sonnet - Bedrock":
             return LLM_Claude_Bedrock(bedrock_client, model_size="Sonnet 4")
         elif llm == "Claude 4.5 Sonnet - Bedrock":
