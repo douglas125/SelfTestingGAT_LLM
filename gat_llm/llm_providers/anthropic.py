@@ -16,10 +16,10 @@ class LLM_Claude_Anthropic(LLM_Service):
         """
         self.use_caching = use_caching
         self.anthropic_client = anthropic.Anthropic()
-        if model_size == "Opus 4.5 Anthropic":
-            self.model_id = "claude-opus-4-5-20251101"
+        if model_size == "Opus 4.6 Anthropic":
+            self.model_id = "claude-opus-4-6"
             self.llm_description = (
-                "Anthropic Claude 4.5 Opus (Large-size LLM) - directly from Anthropic"
+                "Anthropic Claude 4.6 Opus (Large-size LLM) - directly from Anthropic"
             )
             self.price_per_M_input_tokens = 5
             self.price_per_M_output_tokens = 25

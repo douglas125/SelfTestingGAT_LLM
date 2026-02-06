@@ -113,8 +113,8 @@ class LLM_Provider:
         "Claude 4.5 Sonnet - Bedrock",
         "Claude 4.5 Haiku - Anthropic",
         "Claude 4.5 Haiku - Bedrock",
-        "Claude 4.5 Opus - Anthropic",
-        "Claude 4.5 Opus - Bedrock",
+        "Claude 4.6 Opus - Anthropic",
+        "Claude 4.6 Opus - Bedrock",
     ]
 
     def get_llm(bedrock_client, llm):
@@ -248,8 +248,8 @@ class LLM_Provider:
             return LLM_Claude_Anthropic(model_size="Haiku 3 Anthropic")
 
         # current Claude
-        elif llm == "Claude 4.5 Opus - Anthropic":
-            return LLM_Claude_Anthropic(model_size="Opus 4.5 Anthropic")
+        elif llm == "Claude 4.6 Opus - Anthropic":
+            return LLM_Claude_Anthropic(model_size="Opus 4.6 Anthropic")
         elif llm == "Claude 4 Sonnet - Anthropic":
             return LLM_Claude_Anthropic(model_size="Sonnet 4 Anthropic")
         elif llm == "Claude 4.5 Sonnet - Anthropic":
@@ -258,8 +258,8 @@ class LLM_Provider:
             return LLM_Claude_Anthropic(model_size="Haiku 4.5 Anthropic")
         elif llm == "Claude 4 Opus - Anthropic":
             return LLM_Claude_Anthropic(model_size="Opus 4 Anthropic")
-        elif llm == "Claude 4.5 Opus - Bedrock":
-            return LLM_Claude_Bedrock(bedrock_client, model_size="Opus 4.5")
+        elif llm == "Claude 4.6 Opus - Bedrock":
+            return LLM_Claude_Bedrock(bedrock_client, model_size="Opus 4.6")
         elif llm == "Claude 4 Sonnet - Bedrock":
             return LLM_Claude_Bedrock(bedrock_client, model_size="Sonnet 4")
         elif llm == "Claude 4.5 Sonnet - Bedrock":
