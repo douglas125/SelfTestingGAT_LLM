@@ -335,7 +335,7 @@ Use the utility functions in `self_tests/self_test_utils.py` to analyze the test
 
 ## TBD
 
-- Add Claude Opus 4.5 (Anthropic, Bedrock)
+- Add Claude Opus 4.5 (Anthropic, Bedrock) -> Moved to Opus 4.6
 - Adjust `read_local_file` to add some more text extensions
 - Adjust `read_local_file` to enclose MSOffice file contents with `<contents></contents>` (when Markitdown is used to read the file)
 - Adjust `speech_to_text` to use `gpt-4o-transcribe` and handle limitations using ffmpeg (needs to be enabled as a tool)
