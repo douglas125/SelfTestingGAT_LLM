@@ -16,6 +16,8 @@ from gat_llm.llm_invoker import LLM_Provider
         ("Claude 3 Haiku - Bedrock"),
         ("Claude 3 Sonnet - Bedrock"),
         ("Claude 3 Opus - Bedrock"),
+        ("Claude 4.5 Sonnet - Anthropic"),
+        ("Claude 4.5 Sonnet - Bedrock"),
         ("Claude 2.1"),
         ("Claude Instant 1.2"),
         ("Llama2 13b"),
